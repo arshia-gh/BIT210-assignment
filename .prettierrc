@@ -1,0 +1,25 @@
+{
+	"endOfLine": "crlf",
+	"overrides": [
+		{
+			"files": "*.js",
+			"options": {
+				"tabWidth": 4,
+				"useTabs": true,
+				"semi": false,
+				"singleQuote": true,
+				"bracketSpacing": true,
+				"arrowParens": "avoid"
+			}
+		},
+		{
+			"files": ["*.html", "*.css"],
+			"options": {
+				"tabWidth": 2,
+				"useTabs": true,
+				"htmlWhitespaceSensitivity": "strict",
+				"bracketSameLine": true
+			}
+		}
+	]
+}

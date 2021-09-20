@@ -23,6 +23,7 @@
   "author": "Arshia Gholami",
   "license": "MIT",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.15.7",
     "@babel/preset-env": "^7.15.6",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",

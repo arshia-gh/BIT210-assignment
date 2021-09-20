@@ -21,7 +21,7 @@
     "url": "https://github.com/arshia-gh/bit210-assignment"
   },
   "author": "Arshia Gholami",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.7",
     "@babel/preset-env": "^7.15.6",

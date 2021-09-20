@@ -7361,9 +7361,7 @@ var _bootstrap2 = _interopRequireDefault(require("bootstrap"));
 
 var _cookiesJs = _interopRequireDefault(require("cookies-js"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-console.log('Hello');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 },{"bootstrap":2,"cookies-js":3}]},{},[5])
 //# sourceMappingURL=bundle.js.map

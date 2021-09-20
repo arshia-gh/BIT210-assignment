@@ -22,6 +22,19 @@
   },
   "author": "Arshia Gholami",
   "license": "UNLICENSED",
+  "lint-staged": {
+    "**/*.js": "npx eslint --fix",
+    "**/*.{js, jsm, json, html, css}": "npx prettier --write"
+  },
+  "husky": {
+    "hooks": {
+      "prepare": "npx husky install",
+      "precommit": [
+        "npm run build:js",
+        "npm run precommits"
+      ]
+    }
+  },
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.7",
     "@babel/preset-env": "^7.15.6",
@@ -46,18 +59,5 @@
     "bootstrap": "^5.1.1",
     "bootstrap-icons": "^1.5.0",
     "cookies-js": "^1.2.3"
-  },
-  "lint-staged": {
-    "**/*.js": "npx eslint --fix",
-    "**/*.{js, jsm, json, html, css}": "npx prettier --write"
-  },
-  "husky": {
-    "hooks": {
-      "prepare": "npx husky install",
-      "precommit": [
-        "npm run build:js",
-        "npm run precommits"
-      ]
-    }
   }
 }

@@ -10,6 +10,7 @@
     }
   ],
   "scripts": {
+    "precommit": "npx lint-staged",
     "dev:watch:js": "watchify src/index.js -v -t [ babelify --presets [ @babel/preset-env ] ] -d | exorcist public/bundle.js.map > public/bundle.js",
     "dev:build:js": "browserify src/index.js -t [ babelify --presets [ @babel/preset-env ] ] -d | exorcist public/bundle.js.map > public/bundle.js",
     "build:js": "browserify src/index.js -t [ babelify --presets [ @babel/preset-env ] ] | uglifyjs -cm > public/bundle.min.js"
@@ -32,9 +33,14 @@
     "eslint-plugin-prettier": "^4.0.0",
     "exorcist": "^2.0.0",
     "git-branch-is": "^4.0.0",
+    "lint-staged": "^11.1.2",
     "prettier": "^2.4.1",
     "uglify-js": "^3.14.2",
     "watchify": "^4.0.0"
+  },
+  "lint-staged": {
+    "*.js": "npx eslint --cache --fix --debug",
+    "*.{js, html, css, json}": "prettier --write"
   },
   "dependencies": {
     "animejs": "^3.2.1",

@@ -23,8 +23,10 @@
   "author": "Arshia Gholami",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@babel/core": "^7.15.5",
     "@babel/eslint-parser": "^7.15.7",
     "@babel/preset-env": "^7.15.6",
+    "@popperjs/core": "^2.10.1",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "eslint": "^7.32.0",

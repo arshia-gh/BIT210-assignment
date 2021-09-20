@@ -7357,13 +7357,84 @@ process.umask = function() { return 0; };
 },{}],5:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Patient = exports.vaccinations = exports.Vaccination = exports.batches = exports.Batch = exports.vaccines = exports.Vaccine = void 0;
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Vaccine = function Vaccine(vaccineID, vaccineName, manufacturer) {
+  _classCallCheck(this, Vaccine);
+
+  this.vaccineID = vaccineID;
+  this.vaccineName = vaccineName;
+  this.manufacturer = manufacturer;
+};
+
+exports.Vaccine = Vaccine;
+var vaccines = [new Vaccine(1, "Pfizer", "Pfizer Biotech Ltd"), new Vaccine(2, "Sinovac", "Sinovac Biotech Ltd"), new Vaccine(3, "AstraZeneca", "AstraZeneca Biotech Ltd")];
+exports.vaccines = vaccines;
+
+var Batch = function Batch(batchNo, expiryDate, quantityAvailable, vaccine, healthcareCenter) {
+  _classCallCheck(this, Batch);
+
+  this.batchNo = batchNo;
+  this.expiryDate = expiryDate;
+  this.quantityAvailable = quantityAvailable;
+  this.quantityAdministered = 0;
+  this.vaccine = vaccine;
+  this.healthcareCenter = healthcareCenter;
+  this.vaccinations = [];
+};
+
+exports.Batch = Batch;
+var batches = [new Batch('PF01', '2021-03-15', 100, vaccines[0], 'ABC healthcare'), new Batch('SI01', '2021-04-20', 200, vaccines[1], 'ABC healthcare'), new Batch('PF02', '2021-01-12', 100, vaccines[0], 'Good healthcare')];
+exports.batches = batches;
+
+var Vaccination = function Vaccination(vaccinationID, appoinementDate, batch) {
+  _classCallCheck(this, Vaccination);
+
+  this.vaccinationID = vaccinationID;
+  this.appoinementDate = appoinementDate;
+  this.batch = batch;
+};
+
+exports.Vaccination = Vaccination;
+var vaccinations = [new Vaccination('v001', '2021-04-20', batches[0]), new Vaccination('v002', '2021-01-20', batches[1]), new Vaccination('v003', '2021-02-20', batches[0])];
+exports.vaccinations = vaccinations;
+
+var Patient = /*#__PURE__*/function () {
+  function Patient() {
+    _classCallCheck(this, Patient);
+  }
+
+  _createClass(Patient, [{
+    key: "requestVaccination",
+    value: function requestVaccination(appointmentDate, batch) {
+      this.vaccination = new Vaccination('v001', appointmentDate, batch);
+    }
+  }]);
+
+  return Patient;
+}();
+
+exports.Patient = Patient;
+
+},{}],6:[function(require,module,exports){
+"use strict";
+
 var _bootstrap2 = _interopRequireDefault(require("bootstrap"));
 
 var _cookiesJs = _interopRequireDefault(require("cookies-js"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+var _StaticClassesObject2 = _interopRequireDefault(require("./StaticClassesObject"));
 
-console.log('Hello');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"bootstrap":2,"cookies-js":3}]},{},[5])
+},{"./StaticClassesObject":5,"bootstrap":2,"cookies-js":3}]},{},[6])
 //# sourceMappingURL=bundle.js.map

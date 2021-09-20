@@ -2,7 +2,7 @@
     "parserOptions": {
         "requireConfigFile": false,
         "babelOptions": {
-        "presets": ["@babel/preset-env"]
+            "presets": ["@babel/preset-env"]
         },
         "ecmaVersion": 12,
         "sourceType": "module"

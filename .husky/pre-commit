@@ -1,9 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-current_branch=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD)
-if [ "$current_branch" == "main" ]; 
-then
-	npm run build:js
-	npm run precommit
-fi

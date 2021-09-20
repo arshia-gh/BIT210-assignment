@@ -13,7 +13,7 @@
         "es2021": true
     },
     "extends": ["eslint:recommended", "prettier"],
-    "plugins": ["prettier"],
+    "plugins": ["prettier", "compat", "import"],
     "rules": {
         // "prettier/prettier": "error",
         "no-unused-vars": ["warn", { "varsIgnorePattern": "^_" }],

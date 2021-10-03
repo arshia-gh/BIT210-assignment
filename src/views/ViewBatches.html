@@ -45,11 +45,58 @@
                 </template>
             </tbody>
         </table>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddBatchModal">
+       <span class="fa fa-plus"></span> Batch
+      </button>
+
     </div>
 
-    <script type="text/javascript" src="StaticClassesObject.js"></script>
+
+    <div class="modal fade" id="AddBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addBatchLabel">Add Batch</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" novalidate>
+                    <select class="form-select" id="vaccine-select" aria-label="Vaccine ID">
+                        <option disabled selected>Select a vaccine</option>
+                    </select>
+                    <hr/>
+                    <div class="form-floating my-3">
+                      <input required type="text" class="form-control" id="batchNoInput" placeholder="Batch Number">
+                      <label for="floatingInput">Batch Number</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input required type="date" class="form-control" id="expiryDateInput" placeholder="Expiry Date">
+                      <label for="floatingInput">Expiry Date</label>
+                    </div>
+                  </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <script type="text/javascript" src="../../src/PCVS.js"></script>
 
     <script>
+        const vaccineSelect = document.getElementById('vaccine-select');
+        vaccines.forEach(vaccine => {
+            const option = document.createElement('option');
+            option.value = vaccine.vaccineID;
+            option.innerHTML = vaccine.vaccineName;
+            vaccineSelect.appendChild(option);
+        });
+
+    
         const batchesTable = document.getElementById('batches-table');
 
         const AppendBatchToTable = (batch) => {
@@ -69,7 +116,7 @@
             batchesTable.appendChild(tr);
         }; 
 
-        batches.forEach(batch => AppendBatchToTable(batch));
+        // batches.forEach(batch => AppendBatchToTable(batch));
 
         batchesTable.addEventListener('click', (e) => {
             let tr = e.target.parentNode;
@@ -81,6 +128,8 @@
         })
 
     </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 </body>
 
 </html>

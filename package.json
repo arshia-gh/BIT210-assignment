@@ -1,4 +1,5 @@
 {
+  "main": "src/index.js",
   "name": "bit210-assignment",
   "version": "1.0.0",
   "type": "module",

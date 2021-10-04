@@ -4,5 +4,3 @@ import _StaticClassesObject from './StaticClassesObject'
 import _VaccineFetcher from './VaccineFetcher'
 
 _VaccineFetcher();
-
-console.log('ok');

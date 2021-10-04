@@ -14,7 +14,7 @@
     "precommit": "npx lint-staged",
     "prepare": "npx husky install",
     "dev:watch:js": "watchify src/index.js -v -t [ babelify --presets [ @babel/preset-env ] ] -d | exorcist public/bundle.js.map > public/bundle.js",
-    "dev:build:js": "browserify src/index.js -t [ babelify --presets [ @babel/preset-env ] ] -d | exorcist public/bundle.js.map > public/bundle.js",
+    "dev": "browserify src/index.js -t [ babelify --presets [ @babel/preset-env ] ] -d | exorcist public/bundle.js.map > public/bundle.js",
     "build:js": "browserify src/index.js -t [ babelify --presets [ @babel/preset-env ] ] | uglifyjs -cm > public/bundle.min.js"
   },
   "repository": {

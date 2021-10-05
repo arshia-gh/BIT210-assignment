@@ -1,10 +1,11 @@
-// dev
-export { default as resetLocalStorage } from './resetLocalStorage';
-export { default as seedLocalStorage } from './seedLocalStorage';
-// endDev
+import APIRequest from './request';
+import { METHOD, RESOURCE } from './utils';
+import { ProjectConfig } from 'javascript/config';
+import storage from './extendedLocalStorage';
 
-import API from './api';
-import { METHOD, RESOURCE } from './util';
+if (storage.isEmpty() || ProjectConfig.mode === 'development') {
+	storage.seed();
+}
 
-export { API as request, METHOD, RESOURCE };
-export default { request: API, METHOD, RESOURCE };
+export default { request: APIRequest, METHOD, RESOURCE };
+export { APIRequest as request, METHOD, RESOURCE };

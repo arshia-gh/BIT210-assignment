@@ -1,7 +1,6 @@
-import _bootstrap from 'bootstrap';
-import { seedLocalStorage } from './API';
-import x from './VaccineFetcher';
+import {} from 'bootstrap';
 
-seedLocalStorage().then(x());
-
-console.log(localStorage);
+// Main function
+document.addEventListener('DOMContentLoaded', () => {
+	(async () => {})();
+});

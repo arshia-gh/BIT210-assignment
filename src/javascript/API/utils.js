@@ -1,4 +1,8 @@
-import { APIConfig } from '../config';
+import { APIConfig } from 'javascript/config';
+
+/* [TODO]
+	[-] Modularize RESOURCE AND METHOD for better maintainability
+*/
 
 export const METHOD = {
 	POST: 0,
@@ -32,28 +36,5 @@ export const getResourceURL = (resource) => {
 		default:
 			throw new Error('Invalid resource');
 	}
-	return `${APIConfig.API_URL}/${selected}`;
-};
-
-function jsonParser(blob) {
-	let parsed = JSON.parse(blob);
-	if (typeof parsed === 'string') parsed = jsonParser(parsed);
-	return parsed;
-}
-
-export const getResource = (resourceURL) => {
-	return jsonParser(localStorage.getItem(resourceURL));
-};
-
-export const setResource = (resourceURL, value) => {
-	localStorage.setItem(resourceURL, JSON.stringify(value));
-	return true;
-};
-
-export default {
-	METHOD,
-	RESOURCE,
-	getResourceURL,
-	getResource,
-	setResource
+	return `${APIConfig.URL}/${selected}`;
 };

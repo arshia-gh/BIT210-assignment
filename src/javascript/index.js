@@ -6,3 +6,8 @@ seedLocalStorage().then(x());
 
 console.log(localStorage);
 new Modal(document.getElementById('AddBatchModal')).show();
+
+// Main function
+document.addEventListener('DOMContentLoaded', () => {
+	(async () => {})();
+});

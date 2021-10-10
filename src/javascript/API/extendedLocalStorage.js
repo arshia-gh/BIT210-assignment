@@ -22,6 +22,8 @@ const vaccinations = [
 	new Vaccination('v003', '2021-02-20', batches[0])
 ];
 
+
+
 const extendedLocalStorage = {
 	get(resourceURL) {
 		return JSON.parse(localStorage.getItem(resourceURL));

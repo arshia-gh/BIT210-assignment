@@ -1,13 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../scss/main.scss" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    
     <title>Batch</title>
+    <style>
+      #manage-vaccination-modal tbody td {
+        text-align: right;
+      }
+      
+      tbody th {
+        font-weight: normal;
+        color: gray
+      }
+    </style>
 </head>
+
 <body>
+    <div class="container p-3">
+        <h2>Batch Information</h2>
+        <h5>Batch No: </h5>
+        <h5>Expiry Date: </h5>
+        <p class="text-muted">Select a vaccination to view</p>
+        <p class="float-end badge bg-success"> <span class="fa fa-check pe-1"></span> Changes Applied</p>
+        <div id='table-container'></div>
+    </div>
+
+    <div class="modal fade" id="manage-vaccination-modal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addBatchLabel">Vaccination</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+              <!-- <p class="text-muted text-center">Patient Information</p> -->
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <td  colspan="2" class="text-muted">Patient Information</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th >Full Name</th>
+                    <td id="fullname">John Pizza</td>
+                  </tr>
+                  <tr>
+                    <th >IC/Passport Number</th>
+                    <td>0123434-45-4554</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table class="table mb-4">
+                <thead>
+                  <tr>
+                    <td  colspan="2" class="text-muted">Batch Information</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th >Batch Number</th>
+                    <td>PF01</td>
+                  </tr>
+                  <tr>
+                    <th >Expiry Date</th>
+                    <td>20/10/2021</td>
+                  </tr>
+                  <tr>
+                    <th >Vaccine Name</th>
+                    <td>Pfizer</td>
+                  </tr>
+                  <tr>
+                    <th >Manufactuerer</th>
+                    <td>0123434</td>
+                  </tr>  
+                </tbody>
+              </table>
+
+              <h6 class="text-center">Confirm Vaccination Administered</h6>
+
+              <form class="needs-validation" novalidate id='add-batch-form'>
+    
+    
+                <div class="form-floating my-3">
+                  <input required type="text" class="form-control" id="batchNoInput" placeholder="Batch Number"
+                    name="Comments">
+                  <label for="floatingInput">Comments...</label>
+                </div>
+    
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Confirm Administered</button>
+              </form>
+            </div>
+          </div>
+
     <script type="text/javascript" src="../javascript/index.js"></script>
     <script type="text/javascript" src="../javascript/batch.js"></script>
 </body>
+
 </html>

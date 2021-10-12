@@ -1,40 +1,90 @@
-import { APIConfig } from 'javascript/config';
+import Administrator from '../model/Administrator';
+import Batch from '../model/Batch';
+import HealthcareCenter from '../model/HealthcareCentre';
+import Patient from '../model/Patient';
+import Vaccination from '../model/Vaccination';
+import Vaccine from '../model/Vaccine';
 
-/* [TODO]
-	[-] Modularize RESOURCE AND METHOD for better maintainability
-*/
-
+/**
+ * @readonly
+ * @enum {number}
+ */
 export const METHOD = {
 	POST: 0,
 	GET: 1,
-	PUT: 2,
-	DELETE: 3
+	PATCH: 2
 };
 
+/**
+ * @readonly
+ * @enum {{URI: string, MODEL: Function}} available resources
+ */
 export const RESOURCE = {
-	PATIENTS: 0,
-	VACCINATIONS: 1,
-	VACCINES: 2,
-	BATCHES: 3
+	ADMINISTRATOR: {
+		URI: Administrator.name,
+		MODEL: Administrator
+	},
+	BATCH: {
+		URI: Batch.name,
+		MODEL: Batch
+	},
+	HEALTHCARE_CENTER: {
+		URI: HealthcareCenter.name,
+		MODEL: HealthcareCenter
+	},
+	PATIENT: {
+		URI: Patient.name,
+		MODEL: Patient
+	},
+	VACCINATION: {
+		URI: Vaccination.name,
+		MODEL: Vaccination
+	},
+	VACCINE: {
+		URI: Vaccine.name,
+		MODEL: Vaccine
+	}
 };
 
-export const getResourceURL = (resource) => {
-	let selected;
-	switch (resource) {
-		case RESOURCE.PATIENTS:
-			selected = 'patients';
-			break;
-		case RESOURCE.VACCINATIONS:
-			selected = 'vaccinations';
-			break;
-		case RESOURCE.VACCINES:
-			selected = 'vaccines';
-			break;
-		case RESOURCE.BATCHES:
-			selected = 'batches';
-			break;
-		default:
-			throw new Error('Invalid resource');
+/**
+ * @readonly
+ * @enum {{URI: string}}
+ */
+export const AUTH_RESOURCE = {
+	AUTHENTICATE: {
+		URI: 'authenticate',
+		METHOD: METHOD.GET
+	},
+	LOGIN: {
+		URI: 'login',
+		METHOD: METHOD.POST
+	},
+	LOGOUT: {
+		URI: 'logout',
+		METHOD: METHOD.GET
 	}
-	return `${APIConfig.URL}/${selected}`;
 };
+
+/**
+ * @readonly
+ * @enum {number}
+ */
+export const ERROR_CODE = {
+	BAD_REQUEST: 400,
+	UNAUTHORIZED: 401,
+	FORBIDDEN: 403,
+	NOT_FOUND: 404,
+	CONFLICT: 409
+};
+
+/**
+ * @param {RESOURCE} resource
+ * @return {boolean} a boolean value indicating whether the resource is valid
+ */
+export const isValidResource = (resource) => {
+	return RESOURCE_ARRAY.some((res) => resource === res);
+};
+
+export const RESOURCE_ARRAY = Object.values(RESOURCE).map(
+	(res) => res.URI
+);

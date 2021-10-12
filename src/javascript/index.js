@@ -1,6 +1,7 @@
-import {} from 'bootstrap';
+import main from './main';
 
-// Main function
 document.addEventListener('DOMContentLoaded', () => {
-	(async () => {})();
+	(async () => {
+		await main();
+	})();
 });

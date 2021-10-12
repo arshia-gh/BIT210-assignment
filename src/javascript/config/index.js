@@ -1,2 +1,3 @@
-export { default as APIConfig } from './APIConfig';
-export { default as ProjectConfig } from './ProjectConfig';
+export default {
+	mode: process.env.NODE_ENV || 'development'
+};

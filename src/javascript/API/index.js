@@ -1,11 +1,26 @@
-import APIRequest from './request';
-import { METHOD, RESOURCE } from './utils';
-import { ProjectConfig } from 'javascript/config';
+import { request, auth } from './Api';
+import { METHOD, RESOURCE, AUTH_RESOURCE, ERROR_CODE } from './utils';
+import config from '../config';
 import storage from './extendedLocalStorage';
+import seed from './seed';
 
-if (storage.isEmpty() || ProjectConfig.mode === 'development') {
-	storage.seed();
-}
-
-export default { request: APIRequest, METHOD, RESOURCE };
-export { APIRequest as request, METHOD, RESOURCE };
+export default {
+	request,
+	auth,
+	seed,
+	storage,
+	METHOD,
+	RESOURCE,
+	AUTH_RESOURCE,
+	ERROR_CODE
+};
+export {
+	request,
+	auth,
+	seed,
+	storage,
+	METHOD,
+	RESOURCE,
+	AUTH_RESOURCE,
+	ERROR_CODE
+};

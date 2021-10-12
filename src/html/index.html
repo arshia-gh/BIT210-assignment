@@ -9,15 +9,100 @@
 		<title>PCVS - Landing</title>
 
 		<link rel="stylesheet" href="../scss/main.scss" />
+		<script src="../javascript/main.js"></script>
 		<script src="../javascript/index.js"></script>
-		<script
-			type="module"
-			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-		></script>
-		<script
-			nomodule
-			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-		></script>
 	</head>
-	<body> </body>
+	<body>
+		<nav class="navbar navbar-expand-md navbar-light">
+			<div class="container-fluid">
+				<a
+					class="navbar-brand d-flex align-items-center"
+					href="/"
+					class="line-hi"
+					><img
+						src="../asset/svg/logo.svg"
+						alt="navbar logo"
+						class="me-1"
+					/><span class="fw-bold me-xl-1 me-md-0">PCVS</span
+					><span
+						class="
+							d-md-none d-xl-block
+							border-start
+							ps-1
+							fs-6
+							fw-light
+						"
+						style="color: var(--bs-gray-700)"
+						>Private Covid-19 Vaccination Service</span
+					></a
+				>
+				<button
+					class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#main-navbar"
+					aria-controls="main-navbar"
+					aria-expanded="false"
+					aria-label="Toggle main navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="main-navbar">
+					<ul class="navbar-nav me-auto">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#"
+								>Home</a
+							>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Link</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a
+								class="nav-link dropdown-toggle"
+								href="#"
+								id="navbarDropdown"
+								role="button"
+								data-bs-toggle="dropdown"
+								aria-expanded="false"
+							>
+								Dropdown
+							</a>
+							<ul
+								class="dropdown-menu"
+								aria-labelledby="navbarDropdown"
+							>
+								<li><a class="dropdown-item" href="#">Action</a></li>
+								<li
+									><a class="dropdown-item" href="#"
+										>Another action</a
+									></li
+								>
+								<li><hr class="dropdown-divider" /></li>
+								<li
+									><a class="dropdown-item" href="#"
+										>Something else here</a
+									></li
+								>
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link disabled">Disabled</a>
+						</li>
+					</ul>
+					<form class="d-flex">
+						<input
+							class="form-control me-2"
+							type="search"
+							placeholder="Search"
+							aria-label="Search"
+						/>
+						<button class="btn btn-outline-success" type="submit"
+							>Search</button
+						>
+					</form>
+				</div>
+			</div>
+		</nav>
+	</body>
 </html>

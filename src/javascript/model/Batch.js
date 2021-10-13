@@ -63,10 +63,12 @@ class Batch extends SimpleModel {
 	get vaccine() {
 		return (async () => {
 			if (this.#vaccine == null) {
-				this.#vaccine = await request(RESOURCE.VACCINE, {
-					method: METHOD.GET,
-					query: { uid: this.vaccineUID }
-				})[0];
+				this.#vaccine = (
+					await request(RESOURCE.VACCINE, {
+						method: METHOD.GET,
+						query: { uid: this.vaccineUID }
+					})
+				)[0];
 			}
 			return this.#vaccine;
 		})();
@@ -75,12 +77,11 @@ class Batch extends SimpleModel {
 	get healthcareCenter() {
 		return (async () => {
 			if (this.#healthcareCenter == null) {
-				this.#healthcareCenter = await request(
-					RESOURCE.HEALTHCARE_CENTER,
-					{
+				this.#healthcareCenter = (
+					await request(RESOURCE.HEALTHCARE_CENTER, {
 						method: METHOD.GET,
 						query: { uid: this.healthcareCenterUID }
-					}
+					})
 				)[0];
 			}
 			return this.#healthcareCenter;

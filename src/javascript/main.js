@@ -1,4 +1,4 @@
-import {} from 'bootstrap';
+import bootstrap from 'bootstrap';
 import config from './config';
 import { seed, storage } from './API';
 

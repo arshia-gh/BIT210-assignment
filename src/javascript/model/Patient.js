@@ -19,7 +19,7 @@ class Patient extends User {
 	) {
 		return await request(RESOURCE.PATIENT, {
 			method: METHOD.POST,
-			content: await new Patient(
+			content: new Patient(
 				username,
 				await Patient.hashPassword(password),
 				email,

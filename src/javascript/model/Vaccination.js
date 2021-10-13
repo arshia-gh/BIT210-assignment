@@ -48,10 +48,12 @@ class Vaccination extends SimpleModel {
 	get batch() {
 		return (async () => {
 			if (this.#batch == null) {
-				this.#batch = await request(RESOURCE.BATCH, {
-					method: METHOD.GET,
-					query: { uid: this.batchUID }
-				})[0];
+				this.#batch = (
+					await request(RESOURCE.BATCH, {
+						method: METHOD.GET,
+						query: { uid: this.batchUID }
+					})
+				)[0];
 			}
 			return this.#batch;
 		})();
@@ -60,10 +62,12 @@ class Vaccination extends SimpleModel {
 	get patient() {
 		return (async () => {
 			if (this.#patient == null) {
-				this.#patient = await request(RESOURCE.PATIENT, {
-					method: METHOD.GET,
-					query: { uid: this.patientUID }
-				})[0];
+				this.#patient = (
+					await request(RESOURCE.PATIENT, {
+						method: METHOD.GET,
+						query: { uid: this.patientUID }
+					})
+				)[0];
 			}
 			return this.#patient;
 		})();

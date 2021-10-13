@@ -1,6 +1,5 @@
 import { request, auth } from './Api';
 import { METHOD, RESOURCE, AUTH_RESOURCE, ERROR_CODE } from './utils';
-import config from '../config';
 import storage from './extendedLocalStorage';
 import seed from './seed';
 

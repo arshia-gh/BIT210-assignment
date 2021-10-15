@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     
+    <style>
+      table {
+        table-layout: fixed;
+      }
+    </style>
     <title>Batch</title>
 </head>
 
@@ -20,8 +25,9 @@
 
           </tr>
         </table>
-        <p class="text-muted">Select a vaccination to view</p>
-        <p class="float-end badge bg-success"> <span class="fa fa-check pe-1"></span> Changes Applied</p>
+        <p class="text-muted">Select a vaccination to view
+        <span id="changes-applied" class="float-end badge bg-success d-none"> <span class="fa fa-check pe-1"></span> Changes Applied</span>
+        </p>
         <div id='table-container'></div>
     </div>
 
@@ -55,49 +61,35 @@
 
               <!-- <div id="controls-placeholder"></div> -->
 
-              <div id='confirm-vaccination-controls'>
-                <h6 class="text-center mb-3">Confirm Vaccination Administered</h6>
-                <form class="needs-validation" novalidate id='confirm-vaccination-form'>
+              <div>
+                <h6 class="text-center mb-3" id="operation-title">Operation Title</h6>
+                <form id='manage-vaccination-form'>
                   <div class="form-floating my-3">
-                    <input required type="text" class="form-control" id="commentInput" placeholder="remarks"
-                      name="remarks">
-                    <label for="floatingInput">Remarks...</label>
-                  </div>
-                  <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary w-100">Confirm Administered</button>
-                  </div>
-                </form>
-              </div>
 
-              <!--second control template-->
-              <div id='accept-reject-controls'>
-                <h6 class="text-center mb-3">Approval of Appointment</h6>
-                <form  id='accept-reject-vaccination-form'>
-                 
-                  <!--accept/reject control-->
-                  <div class="btn-group w-100" role="group" aria-label="radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="rdbtn-accept" autocomplete="off" required>
+                  <div class="btn-group w-100" role="group" aria-label="radio toggle button group" id="status-button-group">
+                    <input type="radio" class="btn-check" name="status" value="accepted" id="rdbtn-accept" autocomplete="off" required>
                     <label class="btn btn-outline-primary" for="rdbtn-accept">Accept</label>
                   
-                    <input type="radio" class="btn-check" name="btnradio" id="rdbtn-reject" autocomplete="off">
+                    <input type="radio" class="btn-check" name="status" value="rejected" id="rdbtn-reject" autocomplete="off">
                     <label class="btn btn-outline-primary" for="rdbtn-reject">Reject</label>
                   </div>
-                  
-                  <div class="form-floating my-3">
-                    <input type="text" class="form-control" id="commentInput" placeholder="remarks"
-                      name="remarks">
-                    <label for="floatingInput">Remarks...</label>
-                  </div>
 
+                  <div class="form-floating my-3">
+                    <input type="text" class="form-control" placeholder="remarks" name="remarks" id="remarks-input">
+                    <label for="floatingInput">Remarks</label>
+                  </div>
+                  
                   <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    <button type="submit" class="btn btn-primary w-100" id='submit-button'>Submit</button>
+                  </div>
                 </form>
               </div>
+
+            
              
             </div>
           </div>
 
-    <script type="text/javascript" src="../javascript/index.js"></script>
     <script type="text/javascript" src="../javascript/batch.js"></script>
 </body>
 

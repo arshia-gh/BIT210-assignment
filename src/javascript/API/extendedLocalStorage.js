@@ -122,7 +122,7 @@ const extendedLocalStorage = {
 			);
 		}
 		let toUpdateRow = retrievedRows[toUpdateIndex];
-		toUpdateRow = { ...toUpdateRow, data };
+		toUpdateRow = { ...toUpdateRow, ...data };
 		retrievedRows[toUpdateIndex] = toUpdateRow;
 
 		this.set(resource, retrievedRows);

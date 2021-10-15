@@ -19,28 +19,20 @@
 
 <body>
   <div class="container p-3">
-    <h2>Batches List</h2>
-    <p>Select a batch to view</p>
+    <h1 id="healthcare-center-name">Healthcare Centre name</h1>
+    <h5 id="healthcare-center-address" class="text-muted fw-light fst-italic">Healthcare Centre address</h5>
+    <hr/>
+    <h3>Batches List</h3>
+    <p>Select a batch to view 
+      <span id="batch-added-badge" class="float-end badge bg-success d-none"> </span>
+    </p>
     <div id='table-container'></div>
-    <!-- <table class="table table-striped rounded overflow-hidden">
-            <tr class="bg-secondary text-light">
-                <th>Batch No</th>
-                <th>Vaccine Name</th>
-                <th>No. of Pending Appointment</th>
-            </tr>
-            <tbody id="batches-table">
-                <template>
-
-                </template>
-            </tbody>
-        </table> -->
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddBatchModal">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-batch-modal">
       <span class="fa fa-plus"></span> Batch
     </button>
   </div>
 
-  <div class="modal fade" id="AddBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
+  <div class="modal fade" id="add-batch-modal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -78,19 +70,14 @@
             </div>
 
             <div class="d-flex justify-content-center">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
           </form>
         </div>
-        <!-- <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div> -->
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="../javascript/index.js"></script>
-  <script type="text/javascript" src="../javascript/batches.js"></script>
 
+  <script type="text/javascript" src="../javascript/batches.js"></script>
 
   <!--bootstrap validator-->
   <script>

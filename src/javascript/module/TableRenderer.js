@@ -55,7 +55,7 @@ export const createTable = (objects, objKey, headers, onRowClick) => {
     return table;
 }
 
-const appendToTable = (obj, key, table) => {
+export const appendToTable = (obj, key, table) => {
     const tr = document.createElement("tr");
     tr.className = 'hoverable-row';
     tr.setAttribute('role', 'button');

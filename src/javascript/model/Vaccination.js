@@ -74,15 +74,14 @@ class Vaccination extends SimpleModel {
 	}
 
 	async setStatus(status, remarks) {
-		if (
-			(status === 'rejected' || status === 'accepted') &&
-			remarks != null
-		) {
+		if (['accepted', 'rejected', 'administered'].includes(status))
+		{
 			this.status = status;
 			this.remarks = remarks || '';
 			return await request(RESOURCE.VACCINATION, {
 				content: { ...this },
-				method: METHOD.PATCH
+				method: METHOD.PATCH,
+				query: {'vaccinationID' : this.vaccinationID}
 			});
 		}
 	}

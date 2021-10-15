@@ -1,3 +1,4 @@
+import main from './main';
 import { Modal } from "bootstrap";
 import { request, METHOD, RESOURCE } from "./API";
 import {
@@ -8,20 +9,33 @@ import {
 
 const batchInfoContainer = document.getElementById('batch-info-container');
 
-const vaccinationApprovalControls = document.getElementById("accept-reject-controls");
-const vaccinationConfirmationControls = document.getElementById("confirm-vaccination-controls");
-
-const vaccinationApprovalForm = document.getElementById('accept-reject-vaccination-form');
-const vaccinationConfirmationForm = document.getElementById("confirm-vaccination-form");
-
+const manageVaccinationForm = document.getElementById('manage-vaccination-form');
 const manageVaccinationModal = document.getElementById("manage-vaccination-modal");
 const modalObject = new Modal(manageVaccinationModal);
 
-(async () => {
+const statusButtonGroup = document.getElementById('status-button-group');
+const rdbAccept = document.getElementById('rdbtn-accept');
+const remarksInput = document.getElementById('remarks-input');
+const btnSubmit = document.getElementById('submit-button');
+const operationTitle = document.getElementById('operation-title');
+
+const changesAppliedBadge = document.getElementById('changes-applied');
+
+statusButtonGroup.onchange = _ => {
+  const isAccepting = rdbAccept.checked;
+  remarksInput.disabled = isAccepting;
+  btnSubmit.innerHTML = (isAccepting ? "Accept" : "Reject") + " Appointment";
+}
+
+let batch, vaccinations;
+
+document.addEventListener('DOMContentLoaded', async () => {
+	await main();
+  
   const params = new URLSearchParams(window.location.search)
   const batchNo = params.get('batchNo');
-  const data = await request(METHOD.GET, RESOURCE.BATCHES, {parameters: {'batchNo':batchNo}})
-  const batch = await data[0];
+  const data = await request(RESOURCE.BATCH, {query: {'batchNo':batchNo}})
+  batch = await data[0];
 
   const batchInfo = {
     'Batch Number' : batch.batchNo,
@@ -35,67 +49,102 @@ const modalObject = new Modal(manageVaccinationModal);
     batchInfoContainer.appendChild(h5);
   })
 
-  const vaccinations = await request(METHOD.GET, RESOURCE.VACCINATIONS);
-  const vaccinationsToRender = vaccinations.map((vaccination) => ({
+  vaccinations = await batch.vaccinations;
+
+  renderBatchTable(getVaccinationToRender());
+})
+
+function getVaccinationToRender() {
+  return vaccinations.map((vaccination) => ({
     vaccinationID: vaccination.vaccinationID,
     appointmentDate: vaccination.appointmentDate,
     status: vaccination.status,
   }));
+}
 
+function renderBatchTable(info) {
   renderTable(
     "table-container",
-    vaccinationsToRender,
+    info,
     "vaccinationID",
     ["Vaccination ID", "Appointment Date", "Status"],
-    onVaccinationSelected
-  );
-})();
+    onVaccinationSelected)
+}
+
 
 const getModalVaccinationID = _ => manageVaccinationModal.getAttribute('data-vaccinationID');
 
 async function showManageVaccinationModal(vaccinationID) {
-  modalObject.show();
 
-  const data = await request(METHOD.GET, RESOURCE.VACCINATIONS, {
-    parameters: { vaccinationID: vaccinationID },
+  const data = await request(RESOURCE.VACCINATION, {
+    query: { 'vaccinationID': vaccinationID }
   });
 
   const vaccination = await data[0];
-
   updateModalWith(vaccination);
-  // request(METHOD.GET, RESOURCE.VACCINATIONS, {parameters: {'vaccinationID': vaccinationID}})
-  // .then(vaccination => {
-  //   // showManageVaccinationModal(vaccination);
-  // })
+  modalObject.show();
 }
 
 function onVaccinationSelected(vaccinationID) {
   showManageVaccinationModal(vaccinationID);
 }
 
-function updateModalWith(vaccination) {
+async function updateModalWith(vaccination) {
+  manageVaccinationForm.reset();
+  manageVaccinationModal.setAttribute('data-vaccinationID', vaccination.vaccinationID)
+
   const patientTbody = document.getElementById("patient-info-tbody");
-  // const patient = await request(METHOD.GET, RESOURCE.PATIENTS, {parameters: {'username' : vaccinationID}})[0];
+  const rawData = await request(RESOURCE.PATIENT, {query: {'username' : vaccination.patientUID}});
+  const patient = await rawData[0];
+
+  const patientInfo = {
+    "Full Name" : patient.fullName,
+    "IC/Passport" : patient.ICPassport
+  }
+
+  fillTbody(patientTbody, patientInfo);
+
   const batchTbody = document.getElementById("batch-info-tbody");
-  // const batch = await request(METHOD.GET, RESOURCE.BATCHES, {parameters: {'batchNo' : vaccination.batchNo}})[0];
+  
   const batchInfo = {
-    "Batch Number": vaccination.batch.batchNo,
-    "Expiry Date": vaccination.batch.expiryDate,
-    "Vaccine Name": vaccination.batch.vaccine.vaccineName,
-    Manufacturer: vaccination.batch.vaccine.manufacturer,
+    "Batch Number": batch.batchNo,
+    "Expiry Date": batch.expiryDate,
+    "Vaccine Name": (await batch.vaccine).vaccineName,
+    "Manufacturer": (await batch.vaccine).manufacturer,
   };
 
   fillTbody(batchTbody, batchInfo);
 
-  const controlPlaceholder = document.getElementById("controls-placeholder");
-  let isPending = vaccination.status === 'Pending';
-  // const controlID = status === 'Pending' ? 'accept-reject' : 'confirm-administered';
-  vaccinationApprovalControls.style.display = isPending ? 'block' : 'none';//vaccinationApprovalControls : vaccinationConfirmationControls;
-  vaccinationConfirmationControls.style.display = isPending ? 'none' : 'block';
-  vaccinationApprovalForm.reset();
-  vaccinationConfirmationForm.reset();
-  // const targetControl = isPending ? vaccinationApprovalControls : vaccinationConfirmationControls;
-  manageVaccinationModal.setAttribute('data-vaccinationID', vaccination.vaccinationID)
+  btnSubmit.style.display = 'block';
+
+  switch(vaccination.status) {
+    case 'pending': //show approval
+      showStatusGroup();
+      btnSubmit.innerHTML = "Update Status";
+      operationTitle.innerHTML = "Approval of Appointment"
+      break
+    case 'accepted': //show confirmal
+      showStatusGroup(false);
+      statusButtonGroup.style.display = 'none';
+      statusButtonGroup.disabled = 'true';
+      btnSubmit.innerHTML = "Confirm Administered"
+      operationTitle.innerHTML = "Confirm Vaccination Administered"
+      remarksInput.disabled = false;
+      break
+      case 'rejected':
+      case 'administered'://show nonthing but disabled remarks
+      showStatusGroup(false);
+      statusButtonGroup.style.display = btnSubmit.style.display = 'none';
+      remarksInput.value = vaccination.remarks ? vaccination.remarks : "No remarks was recorded.";
+      operationTitle.innerHTML = `This vaccination has been ${vaccination.status}.`;
+      remarksInput.disabled = true;
+      break
+  }
+}
+
+function showStatusGroup(show = true) {
+  statusButtonGroup.style.display = show ? 'inline-flex' : 'none';
+  rdbAccept.required = show;
 }
 
 function fillTbody(tbody, obj) {
@@ -114,23 +163,24 @@ function fillTbody(tbody, obj) {
   });
 }
 
-// manageVaccinationModal.show();
-// const batchesTable = document.getElementById('batches-table');
-
-vaccinationApprovalForm.onsubmit = (e) => {
+manageVaccinationForm.onsubmit = (e) => {
   e.preventDefault();
-  alert(getModalVaccinationID());
+  const vaccination = vaccinations.find(vaccination => vaccination.vaccinationID === getModalVaccinationID());
+  const isPending = vaccination.status === 'pending';
+  const status = isPending ? manageVaccinationForm['status'].value : "administered";
+  const remarks = manageVaccinationForm['remarks'].value;
+  
+  vaccination.setStatus(status, remarks).then( _ => {
+    renderBatchTable(getVaccinationToRender());
+    modalObject.hide();
+    showChangesApplied();
+  })
 }
 
-vaccinationConfirmationForm.onsubmit = (e) => {
-  e.preventDefault();
-  alert(getModalVaccinationID());
+function showChangesApplied() {
+  changesAppliedBadge.classList.remove('d-none')
+
+  setTimeout(() => {
+    changesAppliedBadge.classList.add('d-none')
+  }, 2000);
 }
-
-
-
-
-// manageVaccinationForm.onsubmit = (e) => {
-//   e.preventDefault();
-
-// };

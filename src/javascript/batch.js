@@ -24,7 +24,7 @@ const changesAppliedBadge = document.getElementById('changes-applied');
 statusButtonGroup.onchange = _ => {
   const isAccepting = rdbAccept.checked;
   remarksInput.disabled = isAccepting;
-  btnSubmit.innerHTML = (isAccepting ? "Accept" : "Reject") + " Appointment";
+  btnSubmit.innerHTML = (isAccepting ? "Confirm" : "Reject") + " Appointment";
 }
 
 let batch, vaccinations;
@@ -118,12 +118,12 @@ async function updateModalWith(vaccination) {
   btnSubmit.style.display = 'block';
 
   switch(vaccination.status) {
-    case 'pending': //show approval
+    case 'pending': //show approval form
       showStatusGroup();
       btnSubmit.innerHTML = "Update Status";
       operationTitle.innerHTML = "Approval of Appointment"
       break
-    case 'accepted': //show confirmal
+    case 'confirm': //show confirmation for administer
       showStatusGroup(false);
       statusButtonGroup.style.display = 'none';
       statusButtonGroup.disabled = 'true';

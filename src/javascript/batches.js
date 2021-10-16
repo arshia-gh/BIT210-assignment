@@ -13,8 +13,10 @@ const centreAddressLabel = document.getElementById('healthcare-center-address');
 const batchAddedBadge = document.getElementById('batch-added-badge');
 const tableContainer = document.getElementById('table-container')
 const addBatchForm = document.getElementById('add-batch-form');
+const duplicateAlert = document.getElementById('duplicate-batch-alert');
 const addBatchModal = document.getElementById('add-batch-modal');
 const modalObj = new Modal(addBatchModal);
+// modalObj.show();
 
 let centre;
 
@@ -69,12 +71,6 @@ vaccineSelect.onchange = e => {
 addBatchForm.onsubmit = async e => {
     e.preventDefault();
     
-    // const formData = new FormData(e.currentTarget);
-    // const options = {};
-
-    // for(const [key, value] of formData.entries()){
-    //   options[key] = value;
-    // }
     const batchNo = addBatchForm['batchNo'].value;
     const expiryDate = addBatchForm['expiryDate'].value;
     const vaccineID = addBatchForm['vaccineID'].value;
@@ -84,20 +80,17 @@ addBatchForm.onsubmit = async e => {
     const vaccine = await vaccineResult[0];
     
     centre.createBatch(batchNo, expiryDate, vaccine, quantityAvailable)
-    .then(res => {
-        if(res.message) {
-            console.log(res.message);
-        }
-        else {
-            const batch = {'batchNo' : res.batchNo, 'expiryDate' : res.expiryDate, '' : 0}
-            appendToTable(batch, 'batchNo', tableContainer.firstChild.childNodes[1])
-            modalObj.hide();
-            addBatchForm.reset();
-            showBatchAdded(batch.batchNo); //res will be the batch object this point
-        }
-    });
-
-    // console.log(options);
+    .then(res => { //res will be the batch object this point
+        const batch = {'batchNo' : res.batchNo, 'expiryDate' : res.expiryDate, '' : 0}
+        appendToTable(batch, 'batchNo', tableContainer.firstChild.childNodes[1]) //refers to tbody
+        modalObj.hide();
+        addBatchForm.reset();
+        showBatchAdded(batch.batchNo); 
+    })
+    .catch(() => {
+        duplicateAlert.innerHTML = `Batch number ${batchNo} already exists for ${vaccine.vaccineName}` 
+        duplicateAlert.classList.remove('d-none');
+    })
 }
 
 function showBatchAdded(batchNo) {

@@ -20,16 +20,16 @@ export const renderTable = (containerID, objects, objKey, headers, onRowClick) =
 export const createTable = (objects, objKey, headers, onRowClick) => {
     const table = document.createElement("table");
     //[TODO] make table scrollable with fixed header
-    table.className = "table table-striped rounded overflow-hidden table-responsive"; //not using add() because there's no previous class retained
+    table.className = "table rounded overflow-hidden table-hover table-responsive shadow"; //not using add() because there's no previous class retained
 
     const thead = document.createElement("thead");
+    thead.className = "table-primary";
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
     table.appendChild(tbody);
 
     const headerRow = document.createElement("tr");
-    headerRow.className = "bg-secondary text-light";
 
     for(const header of headers) {
         const th = document.createElement('th');
@@ -41,14 +41,18 @@ export const createTable = (objects, objKey, headers, onRowClick) => {
     thead.appendChild(headerRow);
     table.appendChild(tbody);
 
-    objects.forEach(obj => appendToTable(obj, objKey, tbody)); //this insert rows to table
-   
+    if(objects.length) //if theres any data
+        objects.forEach(obj => appendToTable(obj, objKey, tbody)); //this insert rows to table
+    else {
+        appendToTable({'prop' : 'No data recorded'}, null, tbody);
+        table.classList.remove('table-hover');
+    }
+
     table.addEventListener('click', (e) => {
         let tr = e.target.parentNode;
         let rowID = tr.getAttribute('data-' + objKey);
         if (rowID) {
             onRowClick(rowID)
-            // let selectedBatch = vaccines.find(batch => batch.batchNo === batchNo);
         }
     })
 
@@ -57,7 +61,6 @@ export const createTable = (objects, objKey, headers, onRowClick) => {
 
 export const appendToTable = (obj, key, table) => {
     const tr = document.createElement("tr");
-    tr.className = 'hoverable-row';
     tr.setAttribute('role', 'button');
     tr.setAttribute('data-' + key, obj[key]);
 

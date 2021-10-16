@@ -20,7 +20,7 @@ export const renderTable = (containerID, objects, objKey, headers, onRowClick) =
 export const createTable = (objects, objKey, headers, onRowClick) => {
     const table = document.createElement("table");
     //[TODO] make table scrollable with fixed header
-    table.className = "table rounded overflow-hidden table-hover table-responsive shadow"; //not using add() because there's no previous class retained
+    table.className = "table rounded table-light overflow-hidden table-hover table-responsive shadow"; //not using add() because there's no previous class retained
 
     const thead = document.createElement("thead");
     thead.className = "table-primary";

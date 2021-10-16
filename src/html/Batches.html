@@ -18,24 +18,112 @@
 </head>
 
 <style>
+  #background-filter {
+    z-index: -1;
+    opacity: 88%;
+    width: 100%;
+    height: 50vh;
+    width: 100%;
+  }
+
+  #background-cover {
+    z-index: -2;
+    width: 100%;
+    height: 50%;
+    background-size: cover;
+  }
+
+  #user-avatar {
+    background-size: cover;
+    width: 50%;
+  }
+  
 </style>
+<header class="container-md">
+  <nav class="navbar navbar-expand-md navbar-light">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <!-- <img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" /> -->
+      <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span
+        class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar"
+      aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
 
 <body>
-  <div class="container p-3">
-    <!-- <img src="https://static.vecteezy.com/system/resources/previews/002/043/042/original/vaccine-illustration-injection-and-vaccine-bottle-covid-19-vaccine-virus-vaccine-fight-coronavirus-flat-illustration-design-healthcare-theme-design-vector.jpg"/> -->
+  <main class="container">
+    <div class="row">
+      <div class="col-3 bg-light py-5">
+        <aside>
+          <div class="border rounded p-3 bg-white">
+            <h6 class="text-muted">Progress</h6>
+            <ul>
+              <li>Manage Batches</li>
+              <li>Manage Vaccination</li>
+            </ul>
+          </div>
+          <!--user info-->
+          <div class="border rounded bg-white my-3 p-3">
+            <h6 class="text-muted">User Information</h6>
+            <ul class="list-group list-group-flush mt-3 px-3 text-center">
+              <li class="list-group-item">
+                <img id="user-avatar"
+                  src="https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png" />
+              </li>
+              <li class="list-group-item">John durian</li>
+              <li class="list-group-item">H1239832 </li>
+              <li class="list-group-item">John durian@gmail.com</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
 
-    <h1 id="healthcare-center-name">Healthcare Centre name</h1>
-    <h5 id="healthcare-center-address" class="text-muted fw-light fst-italic">Healthcare Centre address</h5>
-    <hr />
-    <h3>Batches List</h3>
-    <p>Select a batch to view
-      <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#add-batch-modal">
-        <span class="fa fa-plus"></span> Batch
-      </button>
-      <span id="batch-added-badge" class="float-end badge bg-success mx-3 p-2"></span>
-    </p>
-    <div id='table-container'></div>
-  </div>
+      <div class="col-9 position-relative">
+        <img id="background-cover" class="bg-info position-absolute"
+          src="https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg" />
+        <div id="background-filter" class="bg-dark position-absolute"></div>
+
+        <div class="container text-white pt-5">
+          <h1 id="healthcare-center-name">Healthcare Centre name</h1>
+          <h5 id="healthcare-center-address" class="fw-light fst-italic">Healthcare Centre address</h5>
+        <div>
+
+        <div class="container bg-white rounded shadow text-dark py-3 mt-5">
+          <h3>Batches List</h3>
+          <p>Select a batch to view
+            <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal"
+              data-bs-target="#add-batch-modal">
+              <span class="fa fa-plus"></span> Batch
+            </button>
+            <span id="batch-added-badge" class="float-end badge bg-success mx-3 p-2"></span>
+          </p>
+
+
+          <div id='table-container'></div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </main>
+
+
+
 
   <div class="modal fade" id="add-batch-modal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -131,5 +219,9 @@
     })()
   </script>
 </body>
+
+<footer class="bg-dark text-center">
+  <p class="text-muted py-3">PCVS - copyright&copy; 2021</p>
+</footer>
 
 </html>

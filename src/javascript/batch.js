@@ -123,7 +123,7 @@ async function updateModalWith(vaccination) {
       btnSubmit.innerHTML = "Update Status";
       operationTitle.innerHTML = "Approval of Appointment"
       break
-    case 'confirm': //show confirmation for administer
+    case 'confirmed': //show confirmation for administer
       showStatusGroup(false);
       statusButtonGroup.style.display = 'none';
       statusButtonGroup.disabled = 'true';

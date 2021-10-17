@@ -5,7 +5,7 @@ const STATUS = {
 	PENDING: 'pending',
 	REJECTED: 'rejected',
 	CONFIRMED: 'confirmed',
-	ADMINISTRATED: 'administrated'
+	ADMINISTERED: 'administered'
 };
 
 class Vaccination extends SimpleModel {
@@ -70,25 +70,26 @@ class Vaccination extends SimpleModel {
 
 	async setStatus(status, remarks = '') {
 		if (
-			(this.status === STATUS.CONFIRMED && status === STATUS.ADMINISTRATED) ||
+			(this.status === STATUS.CONFIRMED && status === STATUS.ADMINISTERED) ||
 			([STATUS.CONFIRMED, STATUS.REJECTED].includes(status) &&
 				this.status === STATUS.PENDING)
 		) {
 			if (status === STATUS.CONFIRMED) {
 				remarks = '';
 			}
-			if (remarks == null || typeof remarks !== remarks) remarks = '';
+			if (remarks == null) remarks = '';
 			const updatedObj = await request(RESOURCE.VACCINATION, {
 				content: { ...this, status, remarks },
 				method: METHOD.PATCH,
 				query: { uid: this.uid }
 			});
+			
 			this.status = updatedObj.status;
 			this.remarks = updatedObj.remarks;
 
 			// update the batch
 			const batch = await this.batch;
-			if (this.status === STATUS.ADMINISTRATED) {
+			if (this.status === STATUS.ADMINISTERED) {
 				await batch.setQuantityAdministrated(batch.quantityAdministered + 1);
 			} else if (this.status === STATUS.REJECTED) {
 				await batch.setQuantityAvailable(batch.quantityAvailable + 1);

@@ -1,12 +1,8 @@
 import {Modal} from 'bootstrap';
 import main from './main';
-import {request, METHOD, RESOURCE} from './API'
-import { renderTable, appendToTable, createTable } from './module/TableRenderer';
-import {Batch} from './model/Batch'
+import {request, RESOURCE} from './API'
+import { renderTable, appendToTable } from './module/TableRenderer';
 
-// new Modal(document.getElementById('AddBatchModal')).show();
-
-// const batchesTable = document.getElementById('batches-table');
 const vaccineSelect = document.getElementById('vaccine-select');
 const centreNameLabel = document.getElementById('healthcare-center-name');
 const centreAddressLabel = document.getElementById('healthcare-center-address');
@@ -16,7 +12,11 @@ const addBatchForm = document.getElementById('add-batch-form');
 const duplicateAlert = document.getElementById('duplicate-batch-alert');
 const addBatchModal = document.getElementById('add-batch-modal');
 const modalObj = new Modal(addBatchModal);
-// modalObj.show();
+
+addBatchModal.addEventListener('show.bs.modal', () => {
+    duplicateAlert.classList.add('d-none');
+    addBatchForm.reset();
+})
 
 let centre;
 

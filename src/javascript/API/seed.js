@@ -52,11 +52,7 @@ export default async () => {
 	const vaccines = [
 		await Vaccine.create('PF', 'Pfizer', 'Pfizer Biotech Ltd'),
 		await Vaccine.create('SI', 'Sinovac', 'Sinovac Biotech Ltd'),
-		await Vaccine.create(
-			'AS',
-			'AstraZeneca',
-			'AstraZeneca Biotech Ltd'
-		)
+		await Vaccine.create('AS', 'AstraZeneca', 'AstraZeneca Biotech Ltd')
 	];
 	const batches = [
 		await Batch.create(
@@ -73,13 +69,7 @@ export default async () => {
 			healthcareCenters[0].uid,
 			200
 		),
-		await Batch.create(
-			'02',
-			'2021-01-12',
-			vaccines[0].uid,
-			healthcareCenters[1].uid,
-			100
-		)
+		await Batch.create('02', '2021-01-12', vaccines[0].uid, healthcareCenters[1].uid, 100)
 	];
 
 	const patient = [
@@ -107,23 +97,8 @@ export default async () => {
 	];
 
 	const vaccinations = [
-		await Vaccination.create(
-			'v001',
-			'2021-04-20',
-			batches[0].uid,
-			patient[0].uid
-		),
-		await Vaccination.create(
-			'v002',
-			'2021-01-20',
-			batches[1].uid,
-			patient[1].uid
-		),
-		await Vaccination.create(
-			'v003',
-			'2021-02-20',
-			batches[0].uid,
-			patient[2].uid
-		)
+		await patient[0].createVaccination('v001', '2021-04-20', batches[0]),
+		await patient[1].createVaccination('v002', '2021-01-20', batches[1]),
+		await patient[2].createVaccination('v003', '2021-02-20', batches[0])
 	];
 };

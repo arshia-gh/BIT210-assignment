@@ -60,6 +60,24 @@ class Batch extends SimpleModel {
 		});
 	}
 
+	async setQuantityAdministrated(newValue) {
+		this.quantityAdministered = newValue;
+		return await request(RESOURCE.BATCH, {
+			content: this,
+			method: METHOD.PATCH,
+			query: { uid: this.uid }
+		});
+	}
+
+	async setQuantityAvailable(newValue) {
+		this.quantityAvailable = newValue;
+		return await request(RESOURCE.BATCH, {
+			content: this,
+			method: METHOD.PATCH,
+			query: { uid: this.uid }
+		});
+	}
+
 	get vaccine() {
 		return (async () => {
 			if (this.#vaccine == null) {

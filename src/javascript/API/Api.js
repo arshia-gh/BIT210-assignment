@@ -1,11 +1,5 @@
 import ApiError from './ApiError';
-import {
-	RESOURCE,
-	AUTH_RESOURCE,
-	METHOD,
-	ERROR_CODE,
-	isValidResource
-} from './utils';
+import { RESOURCE, AUTH_RESOURCE, METHOD, ERROR_CODE, isValidResource } from './utils';
 import storage from './extendedLocalStorage';
 import Administrator from '../model/Administrator';
 import Patient from '../model/Patient';
@@ -49,11 +43,7 @@ export const request = async (
 			results = storage.read(resource.URI, options.query);
 			break;
 		case METHOD.PATCH:
-			results = storage.update(
-				resource.URI,
-				options.content,
-				options.query
-			);
+			results = storage.update(resource.URI, options.content, options.query);
 			break;
 		default:
 			throw new ApiError('Invalid method', BAD_REQUEST);
@@ -61,7 +51,7 @@ export const request = async (
 	if (Array.isArray(results)) {
 		return results.map(resource.MODEL.fromParsedJson);
 	}
-	return results;
+	return resource.MODEL.fromParsedJson(results);
 };
 
 /**

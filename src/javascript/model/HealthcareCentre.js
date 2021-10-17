@@ -15,7 +15,7 @@ class HealthcareCenter extends SimpleModel {
 	 * @param {string} address
 	 */
 	constructor(centerName, address) {
-		super(centerName.replace(/\s/, '-'));
+		super(centerName);
 		this.centerName = centerName;
 		this.address = address;
 		this.#administrators = null;
@@ -29,13 +29,7 @@ class HealthcareCenter extends SimpleModel {
 		});
 	}
 
-	async createAdministrator(
-		username,
-		password,
-		email,
-		fullName,
-		staffID
-	) {
+	async createAdministrator(username, password, email, fullName, staffID) {
 		const administrators = await this.administrators;
 		const createdAdmin = await Administrator.create(
 			username,

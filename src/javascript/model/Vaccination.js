@@ -1,17 +1,17 @@
 import { request, RESOURCE, METHOD } from '../API';
 import SimpleModel from './SimpleModel';
 
+const STATUS = {
+	PENDING: 'pending',
+	REJECTED: 'rejected',
+	CONFIRMED: 'confirmed',
+	ADMINISTRATED: 'administrated'
+};
+
 class Vaccination extends SimpleModel {
 	#batch;
 	#patient;
-	constructor(
-		vaccinationID,
-		appointmentDate,
-		status,
-		remarks,
-		batchUID,
-		patientUID
-	) {
+	constructor(vaccinationID, appointmentDate, status, remarks, batchUID, patientUID) {
 		super(vaccinationID);
 		this.vaccinationID = vaccinationID;
 		this.appointmentDate = appointmentDate;
@@ -26,17 +26,12 @@ class Vaccination extends SimpleModel {
 		this.#patient = null;
 	}
 
-	static async create(
-		vaccinationID,
-		appointmentDate,
-		batchUID,
-		patientUID
-	) {
+	static async create(vaccinationID, appointmentDate, batchUID, patientUID) {
 		return request(RESOURCE.VACCINATION, {
 			content: new Vaccination(
 				vaccinationID,
 				appointmentDate,
-				'pending',
+				STATUS.PENDING,
 				null,
 				batchUID,
 				patientUID
@@ -73,17 +68,33 @@ class Vaccination extends SimpleModel {
 		})();
 	}
 
-	async setStatus(status, remarks) {
-		if (['accepted', 'rejected', 'administered'].includes(status))
-		{
-			this.status = status;
-			this.remarks = remarks || '';
-			return await request(RESOURCE.VACCINATION, {
-				content: { ...this },
+	async setStatus(status, remarks = '') {
+		if (
+			(this.status === STATUS.CONFIRMED && status === STATUS.ADMINISTRATED) ||
+			([STATUS.CONFIRMED, STATUS.REJECTED].includes(status) &&
+				this.status === STATUS.PENDING)
+		) {
+			if (status === STATUS.CONFIRMED) {
+				remarks = '';
+			}
+			if (remarks == null || typeof remarks !== remarks) remarks = '';
+			const updatedObj = await request(RESOURCE.VACCINATION, {
+				content: { ...this, status, remarks },
 				method: METHOD.PATCH,
-				query: {'vaccinationID' : this.vaccinationID}
+				query: { uid: this.uid }
 			});
+			this.status = updatedObj.status;
+			this.remarks = updatedObj.remarks;
+
+			// update the batch
+			const batch = await this.batch;
+			if (this.status === STATUS.ADMINISTRATED) {
+				await batch.setQuantityAdministrated(batch.quantityAdministered + 1);
+			} else if (this.status === STATUS.REJECTED) {
+				await batch.setQuantityAvailable(batch.quantityAvailable + 1);
+			}
 		}
+		return this;
 	}
 
 	static fromParsedJson(obj) {

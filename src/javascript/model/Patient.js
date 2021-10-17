@@ -10,13 +10,7 @@ class Patient extends User {
 		this.#vaccinations = null;
 	}
 
-	static async create(
-		username,
-		password,
-		email,
-		fullName,
-		ICPassport
-	) {
+	static async create(username, password, email, fullName, ICPassport) {
 		return await request(RESOURCE.PATIENT, {
 			method: METHOD.POST,
 			content: new Patient(
@@ -40,6 +34,7 @@ class Patient extends User {
 		);
 		vaccinations.push(createdVaccination);
 		batchVaccinations.push(createdVaccination);
+		batch.setQuantityAvailable(batch.quantityAvailable - 1);
 		return createdVaccination;
 	}
 
@@ -51,7 +46,6 @@ class Patient extends User {
 					query: { patientUID: this.uid }
 				});
 				this.#vaccinations = [];
-				console.log(rows);
 				rows.forEach((row) => {
 					this.#vaccinations.push(row);
 				});

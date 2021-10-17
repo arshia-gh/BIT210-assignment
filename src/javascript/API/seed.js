@@ -77,28 +77,7 @@ export default async () => {
 			100
 		),
 		await Batch.create(
-			'0232',
-			'2021-01-12',
-			vaccines[0].uid,
-			healthcareCenters[0].uid,
-			100
-		),
-		await Batch.create(
-			'022',
-			'2021-01-12',
-			vaccines[0].uid,
-			healthcareCenters[0].uid,
-			100
-		),
-		await Batch.create(
-			'0223',
-			'2021-01-12',
-			vaccines[0].uid,
-			healthcareCenters[0].uid,
-			100
-		),
-		await Batch.create(
-			'02323',
+			'20',
 			'2021-01-12',
 			vaccines[0].uid,
 			healthcareCenters[0].uid,

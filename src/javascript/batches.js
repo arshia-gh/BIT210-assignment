@@ -1,5 +1,5 @@
 import {Modal} from 'bootstrap';
-import main from './main';
+import main, {fillUserData} from './main';
 import {request, RESOURCE} from './API'
 import { renderTable, appendToTable } from './module/TableRenderer';
 
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const username = 'admin_test_1'; // [TODO] find from session later
     const adminResult = await request(RESOURCE.ADMINISTRATOR, {query: {'username' : username}});
     const admin = await adminResult[0];
+    fillUserData(admin);
     centre = await admin.healthcareCenter;
     centreNameLabel.innerHTML = centre.centerName;
     centreAddressLabel.innerHTML = centre.address;

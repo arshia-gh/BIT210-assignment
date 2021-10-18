@@ -21,6 +21,8 @@ const operationTitle = document.getElementById('operation-title');
 
 const changesAppliedBadge = document.getElementById('changes-applied');
 
+const getModalVaccinationID = _ => manageVaccinationModal.getAttribute('data-vaccinationID');
+
 statusButtonGroup.onchange = _ => {
   const isAccepting = rdbAccept.checked;
   remarksInput.disabled = isAccepting;
@@ -31,7 +33,9 @@ let batch, vaccinations;
 
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
-  
+
+
+  //find the batchNo
   const params = new URLSearchParams(window.location.search)
   const batchNo = params.get('batchNo');
   const data = await request(RESOURCE.BATCH, {query: {'batchNo':batchNo}})
@@ -43,6 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     'Quantity Available' : batch.quantityAvailable - batch.quantityAdministered
   }
 
+  //fill the batch info onto UI
   Object.keys(batchInfo).forEach((key) => {
     const h5 = document.createElement('td');
     h5.innerHTML = key + ' : ' + batchInfo[key];
@@ -54,6 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderBatchTable(getVaccinationToRender());
 })
 
+/**
+ * gets the global vaccinations and select required attribute from it
+ * @returns a array of vaccination objects with id, appointmentDate and status only
+ */
 function getVaccinationToRender() {
   return vaccinations.map((vaccination) => ({
     vaccinationID: vaccination.vaccinationID,
@@ -62,6 +71,7 @@ function getVaccinationToRender() {
   }));
 }
 
+//render vaccinations table to UI
 function renderBatchTable(info) {
   renderTable(
     "table-container",
@@ -70,9 +80,6 @@ function renderBatchTable(info) {
     ["Vaccination ID", "Appointment Date", "Status"],
     onVaccinationSelected)
 }
-
-
-const getModalVaccinationID = _ => manageVaccinationModal.getAttribute('data-vaccinationID');
 
 async function showManageVaccinationModal(vaccinationID) {
 
@@ -89,6 +96,7 @@ function onVaccinationSelected(vaccinationID) {
   showManageVaccinationModal(vaccinationID);
 }
 
+//this method fill the infomation inside modal with vaccinations
 async function updateModalWith(vaccination) {
   manageVaccinationForm.reset();
   manageVaccinationModal.setAttribute('data-vaccinationID', vaccination.vaccinationID)

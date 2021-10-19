@@ -12,14 +12,8 @@
   <title>Batch</title>
 
   <style>
-    #table-container table {
+    #tableContainer table {
       table-layout: fixed;
-    }
-
-    #user-avatar {
-      object-fit: cover;
-      width: 100%;
-      max-width: 115px;
     }
   </style>
 
@@ -84,16 +78,16 @@
         <div class="container p-3">
           <h2>Batch Information</h2>
           <table class="table">
-            <tr id="batch-info-container"></tr>
+            <tr id="batchInfoContainer"></tr>
           </table>
           <div class="container bg-white rounded shadow text-dark py-3 my-3">
             <h3>Vaccination List</h3>
             <p class="text-muted">Select a vaccination to view
-              <span id="changes-applied" class="float-end badge bg-success d-none"> <span
+              <span id="changesAppliedBadge" class="float-end badge bg-success d-none"> <span
                   class="fa fa-check pe-1"></span>
                 Changes Applied</span>
             </p>
-            <div id='table-container'></div>
+            <div id='tableContainer'></div>
           </div>
         </div>
       </div>
@@ -109,7 +103,7 @@
   </footer>
 
   <!--Modal-->
-  <div class="modal fade" id="manage-vaccination-modal" tabindex="-1" aria-labelledby="addBatchLabel"
+  <div class="modal fade" id="manageVaccinationModal" tabindex="-1" aria-labelledby="addBatchLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -141,15 +135,15 @@
           <!-- <div id="controls-placeholder"></div> -->
 
           <div>
-            <h6 class="text-center mb-3" id="operation-title">Operation Title</h6>
-            <form id='manage-vaccination-form'>
+            <h6 class="text-center mb-3" id="operationTitle">Operation Title</h6>
+            <form id='manageVaccinationForm'>
               <div class="form-floating my-3">
 
                 <div class="btn-group w-100" role="group" aria-label="radio toggle button group"
-                  id="status-button-group">
-                  <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbtn-accept"
+                  id="statusButtonGroup">
+                  <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbAccept"
                     autocomplete="off" required>
-                  <label class="btn btn-outline-primary" for="rdbtn-accept">Confirm</label>
+                  <label class="btn btn-outline-primary" for="rdbAccept">Confirm</label>
 
                   <input type="radio" class="btn-check" name="status" value="rejected" id="rdbtn-reject"
                     autocomplete="off">
@@ -162,7 +156,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary w-100" id='submit-button'>Submit</button>
+                  <button type="submit" class="btn btn-primary w-100" id='submitButton'>Submit</button>
                 </div>
             </form>
           </div>

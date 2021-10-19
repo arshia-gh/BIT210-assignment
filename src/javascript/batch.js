@@ -5,18 +5,18 @@ import { renderTable } from "./module/TableRenderer";
 
 let batch, vaccinations;
 
-const batchInfoContainer = document.getElementById('batch-info-container');
+const batchInfoContainer = document.getElementById('batchInfoContainer');
 
-const manageVaccinationForm = document.getElementById('manage-vaccination-form');
-const manageVaccinationModal = document.getElementById("manage-vaccination-modal");
+const manageVaccinationForm = document.getElementById('manageVaccinationForm');
+const manageVaccinationModal = document.getElementById("manageVaccinationModal");
 const modalObject = new Modal(manageVaccinationModal);
 
-const statusButtonGroup = document.getElementById('status-button-group');
-const rdbAccept = document.getElementById('rdbtn-accept');
+const statusButtonGroup = document.getElementById('statusButtonGroup');
+const rdbAccept = document.getElementById('rdbAccept');
 const remarksInput = document.getElementById('remarks-input');
-const btnSubmit = document.getElementById('submit-button');
-const operationTitle = document.getElementById('operation-title');
-const changesAppliedBadge = document.getElementById('changes-applied');
+const btnSubmit = document.getElementById('submitButton');
+const operationTitle = document.getElementById('operationTitle');
+const changesAppliedBadge = document.getElementById('changesAppliedBadge');
 
 const getModalVaccinationID = _ => manageVaccinationModal.getAttribute('data-vaccinationID');
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await findBatch(batchNo);
   renderBatchInfo(batch);
   vaccinations = await batch.vaccinations; //load batch vaccinations into global variable
-  renderBatchTable(getVaccinationsInfo());
+  renderVaccinationTable(getVaccinationsInfo());
 })
 
 statusButtonGroup.onchange = _ => {
@@ -53,7 +53,7 @@ manageVaccinationForm.onsubmit = (e) => {
   console.table(batch);  renderBatchInfo(batch);
 
     });
-    renderBatchTable(getVaccinationsInfo());
+    renderVaccinationTable(getVaccinationsInfo());
     modalObject.hide();
     showChangesApplied();
   })
@@ -173,9 +173,9 @@ function renderBatchInfo(batch) {
   })
 }
 
-function renderBatchTable(info) { //this methods render vaccinations table to UI
+function renderVaccinationTable(info) { //this methods render vaccinations table to UI
   renderTable(
-    "table-container",
+    "tableContainer",
     info,
     "vaccinationID",
     ["Vaccination ID", "Appointment Date", "Status"],

@@ -5,27 +5,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="../scss/main.scss" />
+  <link rel="stylesheet" href="../../scss/main.scss" />
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
   <title>List of batches</title>
 
   <style>
-    #background-filter {
-      z-index: -1;
-      opacity: 88%;
-      width: 100%;
-      height: 50vh;
-    }
-
-    #background-cover {
-      z-index: -2;
-      width: 100%;
-      height: 50%;
-      background-size: cover;
-    }
-
+    
     #user-avatar {
       object-fit: cover;
       width: 100%;
@@ -35,30 +22,28 @@
 
 </head>
 
-<body class="d-flex flex-column">
-  <header class="container-md">
-    <nav class="navbar navbar-expand-md navbar-light">
-      <a class="navbar-brand d-flex align-items-center" href="/">
-        <img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
-        <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span
-          class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar"
-        aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+<body class="d-flex flex-column min-vh-100">
+  <nav class="navbar navbar-expand-md navbar-light container-md">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img src="../../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
+      <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span
+        class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar"
+      aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
   <main class="container flex-grow-1">
     <div class="row">
@@ -81,27 +66,23 @@
                 src="https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png" />
             </figure>
             <ul id="userinfo" class="col-9 col-lg-12 list-group list-group-flush mt-3 px-3 text-break text-center">
-              <li class="list-group-item">John durian</li>
-              <li class="list-group-item">H1239832 </li>
-              <li class="list-group-item">johndurian@gmail.com</li>
+              <li class="list-group-item">Not logged in</li>
             </ul>
           </div>
         </aside>
       </div>
 
-      <div class="col-12 col-lg-9 position-relative overflow-hidden">
-        <img id="background-cover" class="bg-info position-absolute"
-          src="https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg" />
-        <div id="background-filter" class="bg-dark position-absolute"></div>
+      <div class="col-12 col-lg-9" style="min-height: 50vh">
 
-        <div class="container text-white mt-5">
+        <section class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken" 
+          style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg)">
 
-          <h1 id="healthcare-center-name">Healthcare Centre name</h1>
-          <h5 id="healthcare-center-address" class="fw-light fst-italic">Healthcare Centre address</h5>
+          <h1 id="healthcare-center-name" class="text-white">Healthcare Centre name</h1>
+          <h5 id="healthcare-center-address" class="text-white fw-light fst-italic">Healthcare Centre address</h5>
 
-          <div class="container bg-white rounded shadow text-dark py-3 my-5">
+          <article class="container bg-white rounded shadow text-dark py-3 my-5">
             <h3>Batches List</h3>
-            <p>Select a batch to view
+            <p class="text-muted">Select a batch to view
               <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal"
                 data-bs-target="#add-batch-modal">
                 <span class="fa fa-plus"></span> Batch
@@ -109,9 +90,10 @@
               <span id="batch-added-badge" class="float-end badge bg-success mx-3 p-2"></span>
             </p>
             <div id='table-container'></div>
-          </div>
-        </div>
+          </article>
+        </section>
       </div>
+
     </div>
   </main>
 
@@ -188,6 +170,7 @@
 
                 <div class="d-flex justify-content-center">
                   <button type="submit" class="btn btn-primary w-100" id="submit-button">Add</button>
+                </div>
               </form>
             </div>
           </div>
@@ -196,28 +179,8 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="../javascript/batches.js"></script>
+  <script type="text/javascript" src="../../javascript/batches.js"></script>
 
-  <!--bootstrap validator [Deprecated]-->
-  <!-- <script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {
-      'use strict'
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.querySelectorAll('.needs-validation')
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-          }, false)
-        })
-    })()
-  </script> -->
 </body>
 
 </html>

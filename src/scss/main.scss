@@ -21,6 +21,11 @@ $carousel-transition-duration: 0.2s;
     text-decoration: none;
     color: gray;
 
+	&:hover {
+		color: #0d6efd; //link-blue
+	}
+}
+
 .bg-filter-darken {
 	background-repeat: no-repeat;
 	background-position: top;

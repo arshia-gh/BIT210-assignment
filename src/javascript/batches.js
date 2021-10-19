@@ -1,6 +1,6 @@
 import {Modal} from 'bootstrap';
 import main, {fillUserData} from './main';
-import {request, RESOURCE} from './API'
+import {auth, AUTH_RESOURCE, request, RESOURCE} from './API'
 import { renderTable, appendToTable } from './module/TableRenderer';
 
 const vaccineSelect = document.getElementById('vaccine-select');
@@ -23,9 +23,7 @@ let centre;
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 
-    const username = 'admin_test_1'; // [TODO] find from session later
-    const adminResult = await request(RESOURCE.ADMINISTRATOR, {query: {'username' : username}});
-    const admin = await adminResult[0];
+    const admin = await auth(AUTH_RESOURCE.AUTHENTICATE);
     fillUserData(admin);
     centre = await admin.healthcareCenter;
     centreNameLabel.innerHTML = centre.centerName;
@@ -49,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             {'batchNo': batch.batchNo,
             'expiryDate': batch.expiryDate,
             "noOfPendingAppointment": (await batch.vaccinations)
-            .filter(vaccination => vaccination.status === 'Pending').length})
+            .filter(vaccination => vaccination.status === 'pending').length})
         )
      )
 
@@ -57,6 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         location = location.origin + '/batch.html?batchNo=' + batchNo;
     }
 
+    //render the table to UI
     renderTable('table-container', batchesToRender, 'batchNo',
     ['Batch Number', 'Expiry Date', 'No of Pending Appointment'],
     onBatchSelected);
@@ -82,7 +81,7 @@ addBatchForm.onsubmit = async e => {
     
     centre.createBatch(batchNo, expiryDate, vaccine, quantityAvailable)
     .then(res => { //res will be the batch object this point
-        const batch = {'batchNo' : res.batchNo, 'expiryDate' : res.expiryDate, '' : 0}
+        const batch = {'batchNo' : res.batchNo, 'expiryDate' : res.expiryDate, 'noOfPendingAppointment' : 0}
         appendToTable(batch, 'batchNo', tableContainer.firstChild.childNodes[1]) //refers to tbody
         modalObj.hide();
         addBatchForm.reset();

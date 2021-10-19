@@ -71,7 +71,7 @@ const createTable = (objects, objKey, headers, onRowClick, renderKey) => {
 	return table;
 };
 
-export const appendToTable = (obj, key, table, renderKey) => {
+export const appendToTable = (obj, key, table, renderKey = true) => {
 	const tr = document.createElement('tr');
 	tr.setAttribute('role', 'button');
 	tr.setAttribute('data-' + key, obj[key]);

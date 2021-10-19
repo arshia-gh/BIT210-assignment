@@ -7,11 +7,11 @@ import Administrator from '../model/Administrator';
 import { fillUserData } from '../main';
 
 class AuthForm {
-	constructor(redirect = false) {
+	constructor(fn) {
 		// find the form elements
 		this.registrationForm = document.getElementById('registrationForm');
 		this.loginForm = document.getElementById('loginForm');
-		this.redirect = redirect;
+		this.fn = fn;
 
 		// find the modals
 		this.registrationModal = document.getElementById('registrationModal');
@@ -116,8 +116,7 @@ class AuthForm {
 
 			let hcObject = await request(RESOURCE.HEALTHCARE_CENTER, {
 				query: { centerName: hcName }
-			})?.at(0);
-
+			});
 			let newUser;
 
 			try {
@@ -160,11 +159,10 @@ class AuthForm {
 				if (user instanceof Administrator) {
 					dashboardURL = 'administrator.html';
 				}
-				if (!this.redirect) {
+				if (this.fn == null) {
 					window.location.replace(`/dashboard/${dashboardURL}`);
 				} else {
-					Modal.getOrCreateInstance(this.loginModal).hide();
-					fillUserData();
+					this.fn(user);
 				}
 			} catch (error) {
 				this.loginForm.reset();

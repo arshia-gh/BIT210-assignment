@@ -16,7 +16,7 @@
 		/>
 		<script src="../javascript/index.js"></script>
 	</head>
-	<body>
+	<body class="d-flex flex-column" style="min-height: 100vh">
 		<!-- Modals -->
 		<div
 			class="modal fade"
@@ -311,9 +311,10 @@
 			</div>
 		</div>
 		<!-- Modals -->
-		<header class="container-xl vh-100 pb-5 d-flex flex-column">
-			<nav class="navbar navbar-expand-md navbar-light">
-				<a class="navbar-brand d-flex align-items-center" href="/"
+
+		<nav class="navbar navbar-expand-md navbar-light">
+			<div class="container-xl">
+				<a class="navbar-brand d-flex align-items-center" href="/index.html"
 					><img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" /><span
 						class="fw-bold"
 						>PCVS</span
@@ -343,7 +344,9 @@
 						</li>
 					</ul>
 				</div>
-			</nav>
+			</div>
+		</nav>
+		<main class="container-xl flex-grow-1">
 			<div
 				class="row d-flex flex-grow-1 justify-content-xl-between justify-content-center"
 			>
@@ -354,7 +357,7 @@
 						hero-svg-background-xl
 						d-flex
 						align-items-center
-						px-3
+						p-3
 						rounded-3
 					"
 				>
@@ -365,9 +368,9 @@
 						>
 						<hr />
 						<p class="lead"
-							>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque quae quod
-							beatae sit maiores, animi quasi quaerat non ullam quisquam veniam illo
-							consectetur aliquam esse velit nostrum placeat enim laboriosam.</p
+							>PCVS was designed to create a safe and reliable platform for healthcare
+							centers providing private vaccination and patient who are interested in
+							receiving vaccine safely.</p
 						>
 						<div>
 							<button
@@ -394,7 +397,7 @@
 										class="w-25 mx-auto d-block"
 									/>
 									<p class="text-center"
-										>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p
+										>PCVS being web-based made the whole process effortless</p
 									>
 								</div>
 								<div class="carousel-item">
@@ -404,7 +407,7 @@
 										class="w-25 mx-auto d-block"
 									/>
 									<p class="text-center"
-										>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p
+										>Private vaccination was never this safe and fast</p
 									>
 								</div>
 								<div class="carousel-item">
@@ -414,7 +417,7 @@
 										class="w-25 mx-auto d-block"
 									/>
 									<p class="text-center"
-										>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p
+										>PCVS by far is one of the greatest vaccination management systems</p
 									>
 								</div>
 								<div class="carousel-item">
@@ -424,7 +427,7 @@
 										class="w-25 mx-auto d-block"
 									/>
 									<p class="text-center"
-										>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p
+										>PCVS greatness lies in the simplicity they offer</p
 									>
 								</div>
 							</div>
@@ -457,9 +460,14 @@
 					/>
 				</div>
 			</div>
-		</header>
-		<footer class="bg-dark text-center">
-			<p class="text-muted py-3">PCVS - copyright&copy; 2021</p>
+		</main>
+		<footer class="bg-dark">
+			<section class="container-md py-2 text-white text-center">
+				<h2 class="h2 m-0">PCVS</h2>
+				<p class="fs-4 fw-light m-0">Private Covid-19 Vaccination Service </p>
+				<hr />
+				<small class="text-muted">PCVS - copyright&copy; 2021</small>
+			</section>
 		</footer>
 	</body>
 </html>

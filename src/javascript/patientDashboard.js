@@ -1,13 +1,15 @@
 import { request, RESOURCE } from './API';
-import { common, fillUserData } from './main';
+import main, { fillUserData } from './main';
 import User from './model/User';
 import { renderTable } from './module/TableRenderer';
 import AuthForm from './module/AuthForm';
 import { Modal } from 'bootstrap';
 
 document.addEventListener('DOMContentLoaded', async () => {
-	await common();
-	const authForm = await new AuthForm(false).init();
+	await main();
+	const authForm = await new AuthForm((user) => {
+		fillUserData(crtUser);
+	}).init();
 	await fillUserData();
 
 	const logoutBtn = document.getElementById('logoutBtn');
@@ -37,6 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const renderContent = async (toRenderTable, rowId) => {
 		switch (toRenderTable) {
 			case 'vaccines':
+				pageTitle.textContent = 'Vaccine';
+				pageSubtitle.textContent = 'Please select a vaccine from the table below';
 				return render(
 					retrievedData.vaccine.map((vaccine) => ({
 						vaccineID: vaccine.vaccineID,
@@ -48,6 +52,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'healthcareCenter'
 				);
 			case 'healthcareCenter':
+				pageTitle.textContent = 'Healthcare Center';
+				pageSubtitle.textContent =
+					'Please select a healthcare center from the table below';
 				userSelection.vaccine = retrievedData.vaccine.find((vac) => vac.uid === rowId);
 				retrievedData.healthcareCenter = await Promise.all(
 					(
@@ -63,6 +70,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'batchAbstract'
 				);
 			case 'batchAbstract':
+				pageTitle.textContent = 'Batch';
+				pageSubtitle.textContent = 'Please select a batch from the table below';
 				userSelection.healthcareCenter = retrievedData.healthcareCenter.find(
 					(hc) => hc.uid === rowId
 				);
@@ -87,7 +96,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'batch'
 				);
 			case 'batch':
-				if (!(await fillUserData())) {
+				try {
+					const crtUser = await User.authenticate();
+					fillUserData(crtUser);
+				} catch (err) {
 					Modal.getOrCreateInstance(authForm.loginModal).show();
 				}
 		}

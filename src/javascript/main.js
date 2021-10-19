@@ -1,6 +1,5 @@
-import bootstrap from 'bootstrap';
+import {} from 'bootstrap';
 import { seed, storage } from './API';
-import User from './model/User';
 
 export default async () => {
 	if (storage.isEmpty()) {

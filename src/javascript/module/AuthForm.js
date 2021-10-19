@@ -114,15 +114,15 @@ class AuthForm {
 
 			let hcObject = await request(RESOURCE.HEALTHCARE_CENTER, {
 				query: { centerName: hcName }
-			});
+			})?.at(0);
 
 			let dashboardURL = 'patient';
 			let newUser;
 
 			try {
-				if (userType.value === 'administrator') {
+				if (userType === 'administrator') {
 					if (hcObject.length === 0) {
-						hcObject = HealthcareCenter.create(hcName, hcAddress);
+						hcObject = await HealthcareCenter.create(hcName, hcAddress);
 					}
 					newUser = await hcObject.createAdministrator(
 						username,

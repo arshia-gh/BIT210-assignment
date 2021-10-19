@@ -3,18 +3,18 @@ import main, {fillUserData} from './main';
 import {auth, AUTH_RESOURCE, request, RESOURCE} from './API'
 import { renderTable, appendToTable } from './module/TableRenderer';
 
-const vaccineSelect = document.getElementById('vaccine-select');
-const centreNameLabel = document.getElementById('healthcare-center-name');
-const centreAddressLabel = document.getElementById('healthcare-center-address');
-const batchAddedBadge = document.getElementById('batch-added-badge');
-const tableContainer = document.getElementById('table-container')
-const addBatchForm = document.getElementById('add-batch-form');
-const duplicateAlert = document.getElementById('duplicate-batch-alert');
-const addBatchModal = document.getElementById('add-batch-modal');
+const vaccineSelect = document.getElementById('vaccineSelect');
+const centreNameLabel = document.getElementById('healthcareCenterName');
+const centreAddressLabel = document.getElementById('healthcareCenterAddress');
+const batchAddedBadge = document.getElementById('batchAddedBadge');
+const tableContainer = document.getElementById('tableContainer')
+const addBatchForm = document.getElementById('addBatchForm');
+const duplicatedAlert = document.getElementById('duplicatedBatchAlert');
+const addBatchModal = document.getElementById('addBatchModal');
 const modalObj = new Modal(addBatchModal);
 
 addBatchModal.addEventListener('show.bs.modal', () => {
-    duplicateAlert.classList.add('d-none');
+    duplicatedAlert.classList.add('d-none');
     addBatchForm.reset();
 })
 
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     //render the table to UI
-    renderTable('table-container', batchesToRender, 'batchNo',
+    renderTable('tableContainer', batchesToRender, 'batchNo',
     ['Batch Number', 'Expiry Date', 'No of Pending Appointment'],
     onBatchSelected);
 });
@@ -88,8 +88,8 @@ addBatchForm.onsubmit = async e => {
         showBatchAdded(batch.batchNo); 
     })
     .catch(() => {
-        duplicateAlert.innerHTML = `Batch number ${batchNo} already exists for ${vaccine.vaccineName}` 
-        duplicateAlert.classList.remove('d-none');
+        duplicatedAlert.innerHTML = `Batch number ${batchNo} already exists for ${vaccine.vaccineName}` 
+        duplicatedAlert.classList.remove('d-none');
     })
 }
 

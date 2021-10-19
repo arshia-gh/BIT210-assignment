@@ -10,15 +10,6 @@
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
   <title>List of batches</title>
-
-  <style>
-    #user-avatar {
-      object-fit: cover;
-      width: 100%;
-      max-width: 115px;
-    }
-  </style>
-
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -78,19 +69,19 @@
         <section class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken"
           style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg)">
 
-          <h1 id="healthcare-center-name" class="text-white">Healthcare Centre name</h1>
-          <h5 id="healthcare-center-address" class="text-white fw-light fst-italic">Healthcare Centre address</h5>
+          <h1 id="healthcareCenterName" class="text-white">Healthcare Centre name</h1>
+          <h5 id="healthcareCenterAddress" class="text-white fw-light fst-italic">Healthcare Centre address</h5>
 
           <article class="container bg-white rounded shadow text-dark py-3 my-5">
             <h3>Batches List</h3>
             <p class="text-muted">Select a batch to view
               <button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal"
-                data-bs-target="#add-batch-modal">
+                data-bs-target="#addBatchModal">
                 <span class="fa fa-plus"></span> Batch
               </button>
-              <span id="batch-added-badge" class="float-end badge bg-success mx-3 p-2"></span>
+              <span id="batchAddedBadge" class="float-end badge bg-success mx-3 p-2"></span>
             </p>
-            <div id='table-container'></div>
+            <div id='tableContainer'></div>
           </article>
         </section>
       </div>
@@ -108,7 +99,7 @@
   </footer>
 
   <!--Modal-->
-  <div class="modal fade" id="add-batch-modal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
+  <div class="modal fade" id="addBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="row">
@@ -138,8 +129,8 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-              <form id='add-batch-form'>
-                <select class="form-select" id="vaccine-select" aria-label="Vaccine ID" required name="vaccineID">
+              <form id='addBatchForm'>
+                <select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" required name="vaccineID">
                   <option selected hidden value="">Select a vaccine</option>
                 </select>
 
@@ -154,7 +145,7 @@
                     name="batchNo">
                   <label for="floatingInput">Batch Number</label>
                 </div>
-                <div class="alert alert-danger d-none" id="duplicate-batch-alert"></div>
+                <div class="alert alert-danger d-none" id="duplicatedBatchAlert"></div>
 
 
                 <div class="form-floating my-3">
@@ -170,7 +161,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary w-100" id="submit-button">Add</button>
+                  <button type="submit" class="btn btn-primary w-100" id="submitButton">Add</button>
                 </div>
               </form>
             </div>

@@ -1,32 +1,95 @@
 import { request, RESOURCE } from './API';
-import main from './main';
-import HealthcareCenter from './model/HealthcareCenter';
+import { common, fillUserData } from './main';
 import User from './model/User';
-import Vaccine from './model/Vaccine';
 import { renderTable } from './module/TableRenderer';
+import AuthForm from './module/AuthForm';
+import { Modal } from 'bootstrap';
 
 document.addEventListener('DOMContentLoaded', async () => {
-	await main();
+	await common();
+	const authForm = await new AuthForm(false).init();
+	await fillUserData();
 
-	const tableContainerID = 'tableContainer';
+	const logoutBtn = document.getElementById('logoutBtn');
+	logoutBtn.addEventListener('click', async () => {
+		await User.logout();
+		window.location.reload();
+	});
+
 	const pageTitle = document.getElementById('pageTitle');
 	const pageSubtitle = document.getElementById('pageSubtitle');
 	const backButton = document.getElementById('backButton');
 
-	const vaccines = await request(RESOURCE.VACCINE);
-
-	const currentSelection = {
-		vaccine: await request(RESOURCE.VACCINATION),
+	const retrievedData = {
+		vaccine: await request(RESOURCE.VACCINE),
 		healthcareCenter: null,
 		batch: null,
 		patient: null
 	};
 
-	const renderContent = (toRenderTable, rowID) => {
+	const userSelection = {
+		vaccine: null,
+		healthcareCenter: null,
+		batch: null,
+		appointmentDate: null
+	};
+
+	const renderContent = async (toRenderTable, rowId) => {
 		switch (toRenderTable) {
 			case 'vaccines':
-				return render(currentSelection.vaccine, ['Vaccine Name', 'Manufacturer']);
+				return render(
+					retrievedData.vaccine.map((vaccine) => ({
+						vaccineID: vaccine.vaccineID,
+						vaccineName: vaccine.vaccineName,
+						manufacturer: vaccine.manufacturer
+					})),
+					['Vaccine Name', 'Manufacturer'],
+					'vaccineID',
+					'healthcareCenter'
+				);
 			case 'healthcareCenter':
+				userSelection.vaccine = retrievedData.vaccine.find((vac) => vac.uid === rowId);
+				retrievedData.healthcareCenter = await Promise.all(
+					(
+						await request(RESOURCE.BATCH, {
+							query: { vaccineUID: rowId }
+						})
+					).map((batch) => batch.healthcareCenter)
+				);
+				return render(
+					retrievedData.healthcareCenter,
+					['Center Name', 'Center Address'],
+					'uid',
+					'batchAbstract'
+				);
+			case 'batchAbstract':
+				userSelection.healthcareCenter = retrievedData.healthcareCenter.find(
+					(hc) => hc.uid === rowId
+				);
+				const foundBatches = await request(RESOURCE.BATCH, {
+					query: {
+						vaccineUID: userSelection.vaccine.uid,
+						healthcareCenterUID: userSelection.healthcareCenter.uid
+					}
+				});
+				retrievedData.batch = foundBatches.filter((batch) => {
+					return batch.quantityAvailable > 0;
+				});
+				return render(
+					retrievedData.batch.map((batch) => ({
+						uid: batch.uid,
+						batchNo: batch.batchNo,
+						vaccineName: userSelection.vaccine.vaccineName,
+						healthcareCenterName: userSelection.healthcareCenter.centerName
+					})),
+					['Batch Number', 'Vaccine Name', 'Center Name'],
+					'uid',
+					'batch'
+				);
+			case 'batch':
+				if (!(await fillUserData())) {
+					Modal.getOrCreateInstance(authForm.loginModal).show();
+				}
 		}
 	};
 
@@ -35,101 +98,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 	 * @param {Function} obj
 	 * @param {string[]} headers
 	 */
-	const render = (obj, headers) => {
-		const filteredObj = oObject.keys(obj).reduce((prev, crt) => {
-			if (obj[crt] !== obj.uid && crt !== 'uid') prev[key] = obj[key];
-			return prev;
-		}, {});
+	const render = (objects, headers, key, nextToRender) => {
 		renderTable(
 			'tableContainer',
-			filteredObj,
-			'uid',
+			objects,
+			key,
 			headers,
-			(rowId) => renderContent(obj.name, rowId),
+			(rowId) => renderContent(nextToRender, rowId),
 			false
 		);
 	};
 
-	/**
-	 * @param {Vaccine[]} vaccines
-	 */
-	const renderVaccines = (vaccines) => {
-		pageTitle.textContent = 'Vaccines';
-		pageSubtitle.textContent = 'Please select a vaccine from the table below';
-		renderTable(
-			tableContainerID,
-			vaccines.map(({ vaccineID, vaccineName, manufacturer }) => ({
-				vaccineID,
-				vaccineName,
-				manufacturer
-			})),
-			'vaccineID',
-			['vaccineID', 'Vaccine name', 'Manufacturer'],
-			async (rowID) => {
-				newVaccination.vaccineUID = rowID;
-				healthcareCenters = await Promise.all(
-					(
-						await request(RESOURCE.BATCH, {
-							query: { vaccineUID: rowID }
-						})
-					).map(async (batch) => await batch.healthcareCenter)
-				);
-				renderHealthcareCenters(healthcareCenters);
-				backButton.dataset.prevTable = 'vaccines';
-			},
-			false
-		);
-	};
-
-	/**
-	 *
-	 * @param {HealthcareCenter[]} healthcareCenters
-	 */
-	const renderHealthcareCenters = (healthcareCenters) => {
-		pageTitle.textContent = 'Healthcare Centers';
-		pageSubtitle.textContent = 'Please select a healthcare center from the table below';
-		renderTable(
-			tableContainerID,
-			healthcareCenters.map(({ centerName, address }) => ({
-				centerName,
-				address
-			})),
-			'centerName',
-			['Center name', 'Center address'],
-			async (rowID) => {
-				batches = await request(RESOURCE.BATCH, {
-					query: { vaccineUID: newVaccination.vaccineUID, healthcareCenterUID: rowID }
-				});
-				renderBatches(
-					batches,
-					healthcareCenters.find(({ uid }) => uid === rowID).centerName
-				);
-				backButton.dataset.prevTable = 'healthcareCenters';
-			}
-		);
-	};
-
-	const renderBatches = async (batches, healthcareCenterName) => {
-		pageTitle.textContent = 'Batches';
-		pageSubtitle.textContent = 'Please select a batch from the table below';
-		renderTable(
-			tableContainerID,
-			batches.map((batch) => ({
-				batchNo: batch.batchNo,
-				batches: healthcareCenterName
-			})),
-			'batchNo',
-			['Batch Number', 'Center Name'],
-			async (rowID) => {
-				newVaccination.batchUID = rowID;
-				try {
-					currentUser = User.authenticate();
-					newVaccination.patientUID = currentUser.uid;
-				} catch (e) {}
-				backButton.dataset.prevTable = 'healthcareCenters';
-			}
-		);
-	};
-
-	renderVaccines(vaccines);
+	renderContent('vaccines');
 });

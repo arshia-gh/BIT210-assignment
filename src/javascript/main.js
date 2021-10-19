@@ -1,7 +1,8 @@
 import {} from 'bootstrap';
 import { seed, storage } from './API';
+import User from './model/User';
 
-export default async () => {
+export const common = async () => {
 	if (storage.isEmpty()) {
 		storage.clear();
 		await seed();
@@ -31,15 +32,28 @@ export default async () => {
 	})();
 };
 
-export const fillUserData = (user) => {
-	const ul = document.getElementById('userInfo'); //the <ul>
-	const specialInfo = user.constructor.name === 'Patient' ? 'ICPassport' : 'staffID';
-	ul.innerHTML = ''; //remove all child
+export const fillUserData = async () => {
+	const logoutDiv = document.getElementById('logout');
+	const loginRegisterDiv = document.getElementById('loginRegister');
+	try {
+		const user = await User.authenticate();
+		const ul = document.getElementById('userInfo'); //the <ul>
+		const specialInfo = user.constructor.name === 'Patient' ? 'ICPassport' : 'staffID';
+		ul.innerHTML = ''; //remove all child
 
-	for (const info of ['fullName', specialInfo, 'email']) {
-		const li = document.createElement('li');
-		li.className = "list-group-item";
-		li.innerHTML = user[info];
-		ul.append(li);
+		for (const info of ['fullName', specialInfo, 'email']) {
+			const li = document.createElement('li');
+			li.className = 'list-group-item';
+			li.innerHTML = user[info];
+			ul.append(li);
+		}
+
+		loginRegisterDiv.classList.add('d-none');
+		logoutDiv.classList.remove('d-none');
+		return true;
+	} catch (ignore) {
+		loginRegisterDiv.classList.remove('d-none');
+		logoutDiv.classList.add('d-none');
+		return false;
 	}
-}
+};

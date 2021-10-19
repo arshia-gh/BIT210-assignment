@@ -2,8 +2,8 @@
  *
  * @param {string} containerID - the id of the container of this table
  * @param {array} objects - the list of object to be created as table row
- * @param {string[]} headers - the column headers
  * @param {string} objKey - the key or id used to identify the table row when creating
+ * @param {string[]} headers - the column headers
  * @param {function} onRowClick - the callback function to invoke when a row is clicked
  */
 export const renderTable = (
@@ -26,7 +26,8 @@ export const renderTable = (
 const createTable = (objects, objKey, headers, onRowClick, renderKey) => {
 	const table = document.createElement('table');
 	//[TODO] make table scrollable with fixed header
-    table.className = "table rounded table-white overflow-hidden table-hover table-responsive shadow"; //not using add() because there's no previous class retained
+	table.className =
+		'table rounded table-white overflow-hidden table-hover table-responsive shadow'; //not using add() because there's no previous class retained
 
 	const thead = document.createElement('thead');
 	thead.className = 'table-primary';
@@ -38,8 +39,6 @@ const createTable = (objects, objKey, headers, onRowClick, renderKey) => {
 	const headerRow = document.createElement('tr');
 
 	for (const header of headers) {
-		console.log(header);
-		console.log(objKey);
 		if ((!renderKey && header !== objKey) || renderKey) {
 			const th = document.createElement('th');
 			th.innerHTML = header;

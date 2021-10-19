@@ -4,12 +4,14 @@ import HealthcareCenter from '../model/HealthcareCenter';
 import Patient from '../model/Patient';
 import User from '../model/User';
 import Administrator from '../model/Administrator';
+import { fillUserData } from '../main';
 
 class AuthForm {
-	constructor() {
+	constructor(redirect) {
 		// find the form elements
 		this.registrationForm = document.getElementById('registrationForm');
 		this.loginForm = document.getElementById('loginForm');
+		this.redirect = redirect;
 
 		// find the modals
 		this.registrationModal = document.getElementById('registrationModal');
@@ -123,9 +125,8 @@ class AuthForm {
 				if (userType === 'administrator') {
 					if (hcObject.length === 0) {
 						hcObject = await HealthcareCenter.create(hcName, hcAddress);
-					}
-					else hcObject = hcObject[0];
-					
+					} else hcObject = hcObject[0];
+
 					newUser = await hcObject.createAdministrator(
 						username,
 						password,
@@ -157,16 +158,16 @@ class AuthForm {
 
 			let dashboardURL = 'patient.html';
 			try {
-				console.log(
-					await request(RESOURCE.PATIENT, {
-						query: { uid: username }
-					})
-				);
 				const user = await User.login(username, password);
 				if (user instanceof Administrator) {
 					dashboardURL = 'administrator.html';
 				}
-				window.location.replace(`dashboard/${dashboardURL}`);
+				if (this.redirect) {
+					window.location.replace(`/dashboard/${dashboardURL}`);
+				} else {
+					Modal.getOrCreateInstance(this.loginModal).hide();
+					fillUserData();
+				}
 			} catch (error) {
 				this.loginForm.reset();
 				this.setError(this.login.alert, error.message);

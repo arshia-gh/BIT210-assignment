@@ -1,5 +1,5 @@
 import { request, RESOURCE } from './API';
-import main from './main';
+import { common } from './main';
 import AuthForm from './module/AuthForm';
 
 document.addEventListener('DOMContentLoaded', async () => {

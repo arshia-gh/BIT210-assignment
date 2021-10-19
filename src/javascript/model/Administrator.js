@@ -1,5 +1,5 @@
 import User from './User';
-import HealthcareCenter from './HealthcareCentre';
+import HealthcareCenter from './HealthcareCenter';
 import { request, RESOURCE, METHOD } from '../API';
 
 /**
@@ -18,28 +18,14 @@ class Administrator extends User {
 	 * @param {HealthcareCenter} healthcareCenter - admin's responsible healthcare center
 	 * @param {string} staffID - admin staff id
 	 */
-	constructor(
-		username,
-		password,
-		email,
-		fullName,
-		staffID,
-		healthcareCenterUID
-	) {
+	constructor(username, password, email, fullName, staffID, healthcareCenterUID) {
 		super(username, password, email, fullName);
 		this.staffID = staffID;
 		this.healthcareCenterUID = healthcareCenterUID;
 		this.#healthcareCenter = null;
 	}
 
-	static async create(
-		username,
-		password,
-		email,
-		fullName,
-		staffID,
-		healthcareCenterUID
-	) {
+	static async create(username, password, email, fullName, staffID, healthcareCenterUID) {
 		return await request(RESOURCE.ADMINISTRATOR, {
 			method: METHOD.POST,
 			content: new Administrator(

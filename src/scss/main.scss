@@ -1,4 +1,14 @@
-@import './custom';
+$blue: #3e53ad;
+$green: #6aaa84;
+$red: #ff4e00;
+$orange: #ffb300;
+
+$enable-negative-margins: true;
+$min-contrast-ratio: 2.6;
+$carousel-transition-duration: 0.2s;
+
+@import '../../node_modules/bootstrap/scss/functions';
+@import '../../node_modules/bootstrap/scss/variables';
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
 @import './style';
 
@@ -11,7 +21,41 @@
     text-decoration: none;
     color: gray;
 
-    &:hover {
-        color: $primary;
-    }
+.bg-filter-darken {
+	background-repeat: no-repeat;
+	background-position: top;
+	background-size: cover;
+	background-color: rgba($dark, 0.8);
+	background-blend-mode: multiply;
+}
+
+.table-background-1 {
+	background-image: url(https://images.unsplash.com/photo-1605289982774-9a6fef564df8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80);
+}
+
+.hero-svg-background-xl {
+	@media screen and (min-width: map-get($grid-breakpoints, xl)) {
+		background-image: url('../asset/svg/patternpad.svg');
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+}
+
+.blob-svg-background {
+	@media screen and (min-width: map-get($grid-breakpoints, xl)) {
+		background-image: url('../asset/svg/blob.svg');
+		background-position: bottom;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+}
+
+.carousel-control-sm,
+.carousel-control-sm {
+	.carousel-control-prev-icon,
+	.carousel-control-next-icon {
+		width: $carousel-control-icon-width * 0.75;
+		height: $carousel-control-icon-width * 0.75;
+	}
 }

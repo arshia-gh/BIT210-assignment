@@ -1,6 +1,8 @@
+import { request, RESOURCE } from './API';
 import main from './main';
+import AuthForm from './module/AuthForm';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
-	// code
+	const authForm = await new AuthForm().init();
 });

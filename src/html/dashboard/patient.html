@@ -24,14 +24,7 @@
 		aria-labelledby="loginModalLabel"
 		aria-hidden="true"
 	>
-		<div
-			class="
-				modal-dialog
-				modal-dialog-scrollable
-				modal-dialog-centered
-				modal-fullscreen-md-down
-			"
-		>
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="loginModalLabel">Login</h5>
@@ -56,6 +49,7 @@
 									name="username"
 									required
 								/>
+								<span class="invalid-feedback"> Username is required </span>
 								<label for="usernameLoginInput" class="ps-4">Username</label>
 							</p>
 							<p class="form-floating mb-3 col-12">
@@ -64,7 +58,10 @@
 									class="form-control"
 									id="passwordLoginInput"
 									placeholder="password"
+									name="password"
+									required
 								/>
+								<span class="invalid-feedback"> Password is required </span>
 								<label for="passwordLoginInput" class="ps-4">Password</label>
 							</p>
 						</fieldset>
@@ -73,6 +70,7 @@
 						Don't have an account?
 						<a
 							class="text-start"
+							data-registration-type="patient"
 							data-bs-toggle="modal"
 							data-bs-target="#registrationModal"
 							href="#"
@@ -98,15 +96,7 @@
 		aria-labelledby="registrationModalLabel"
 		aria-hidden="true"
 	>
-		<div
-			class="
-				modal-dialog
-				modal-dialog-scrollable
-				modal-dialog-centered
-				modal-lg
-				modal-fullscreen-md-down
-			"
-		>
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="registrationModalLabel">Registration</h5>
@@ -118,7 +108,14 @@
 					></button>
 				</div>
 				<div class="modal-body">
-					<form id="registrationForm" class="container-fluid needs-validation" novalidate>
+					<div class="alert alert-danger d-none" id="alertRegistrationForm"> ... </div>
+					<form
+						id="registrationForm"
+						class="container-fluid needs-validation"
+						novalidate
+						method="post"
+						action="#"
+					>
 						<div
 							class="btn-group mb-3 w-100"
 							role="group"
@@ -162,13 +159,12 @@
 									name="healthcareName"
 									placeholder="Healthcare Center"
 									list="healthcareDatalist"
+									required
 								/>
 								<label for="healthcareNameInput" class="ps-4"
 									>Healthcare Center Name</label
 								>
-								<span class="invalid-feedback">
-									healthcare center name cannot be empty
-								</span>
+								<span class="invalid-feedback"> Invalid healthcare center name </span>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input
@@ -177,6 +173,7 @@
 									id="healthcareAddressInput"
 									name="healthcareAddress"
 									placeholder="Healthcare Center"
+									required
 								/>
 								<label for="healthcareAddressInput" class="ps-4"
 									>Healthcare Center Address</label
@@ -201,13 +198,14 @@
 									id="usernameInput"
 									placeholder="username"
 									name="username"
+									pattern="^[a-zA-Z_]{3,}$"
 									required
 								/>
 								<label for="usernameInput" class="ps-4">Username</label>
+								<span class="invalid-feedback"> Invalid username </span>
 								<span class="form-text">
 									* username must be unique <br />
 									* username can only contain letters and underscore <br />
-									* username must start and end with a letter <br />
 									* username must be between 3 and 25 character long
 								</span>
 							</p>
@@ -215,14 +213,17 @@
 								<input
 									type="password"
 									class="form-control"
-									id="password_input"
+									id="passwordInput"
 									name="password"
 									placeholder="password"
+									pattern="^(?=.*[A-Z]+).{12,}$"
+									required
 								/>
-								<label for="password_input" class="ps-4">Password</label>
+								<label for="passwordInput" class="ps-4">Password</label>
+								<span class="invalid-feedback"> Invalid password </span>
 								<span class="form-text">
-									* password must contain at least one uppercase letter * password must be
-									at least 12 character long
+									* password must contain at least one uppercase letter <br />
+									* password must be at least 12 character long
 								</span>
 							</p>
 						</fieldset>
@@ -235,7 +236,10 @@
 									id="fullnameInput"
 									name="fullName"
 									placeholder="Michael Jackson"
+									pattern="^[a-zA-Z\s]{3,}$"
+									required
 								/>
+								<span class="invalid-feedback"> Invalid name </span>
 								<label for="fullnameInput" class="ps-4">Name</label>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6" id="ICPassport_form_control">
@@ -245,7 +249,9 @@
 									id="ICPassportInput"
 									name="ICPassport"
 									placeholder="H9609867"
+									required
 								/>
+								<span class="invalid-feedback"> IC / Passport is required </span>
 								<label for="ICPassportInput" class="ps-4">IC / Passport</label>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6" id="staff_id_form_control">
@@ -256,7 +262,9 @@
 									placeholder="ST2000"
 									name="staffId"
 									aria-hidden="true"
+									required
 								/>
+								<span class="invalid-feedback"> Staff ID is required </span>
 								<label for="staffIdInput" class="ps-4">Staff ID</label>
 							</p>
 							<p class="form-floating mb-3 col-12">
@@ -266,7 +274,9 @@
 									id="emailInput"
 									name="emailAddress"
 									placeholder="name@example.com"
+									required
 								/>
+								<span class="invalid-feedback"> Invalid email address </span>
 								<label for="emailInput" class="ps-4">Email address</label>
 							</p>
 						</fieldset>
@@ -298,7 +308,7 @@
 	</div>
 	<!-- Modals -->
 	<body class="d-flex flex-column" style="min-height: 100vh">
-		<nav class="navbar navbar-expand-md navbar-light bg-light mb-5">
+		<nav class="navbar navbar-expand-md navbar-light">
 			<div class="container-md">
 				<a class="navbar-brand d-flex align-items-center" href="/"
 					><img src="../../asset/svg/logo.svg" alt="navbar logo" class="me-1" /><span
@@ -333,58 +343,56 @@
 			</div>
 		</nav>
 		<main class="container-md flex-grow-1">
-			<div class="row align-items-start">
-				<div class="col-3">
-					<aside class="p-3 rounded-3 bg-light mb-3 shadow-sm">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="#">Manage Batches</a></li>
-							<li class="breadcrumb-item active">Manage Vaccination</li>
-						</ol>
+			<div class="row mb-4">
+				<aside class="col-12 col-lg-3 p-3 bg-light rounded">
+					<aside class="border rounded p-3 bg-white">
+						<h6 class="text-muted">Location</h6>
+						<nav style="--bs-breadcrumb-divider: '➤'" aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="#">Select Batches</a></li>
+								<li class="breadcrumb-item active">Manage Vaccination</li>
+							</ol>
+						</nav>
 					</aside>
-					<aside class="p-3 rounded-3 bg-light shadow-sm">
-						<figure>
-							<div class="w-50 mx-auto">
+					<aside class="border rounded bg-white p-3 mt-3">
+						<h6 class="text-muted">User Information</h6>
+						<figure class="row mt-3 justify-content-center align-items-center">
+							<div class="col-lg-6 col-3">
 								<img
-									class="img-fluid"
 									id="user-avatar"
+									class="img-fluid"
 									src="https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png"
 								/>
 							</div>
-							<caption class="container">
-								<ul class="list-group list-group-flush text-center p-3">
-									<li class="list-group-item bg-light">John Pizza</li>
-									<li class="list-group-item bg-light">H1239832</li>
-									<li class="list-group-item bg-light">john_pizza@gmail.com</li>
+							<footer class="col-9 col-lg-12 mt-3">
+								<ul
+									id="userInfo"
+									class="list-group list-group-flushtext-break text-center"
+								>
+									<li class="list-group-item">John durian</li>
+									<li class="list-group-item">H1239832 </li>
+									<li class="list-group-item">johndurian@gmail.com</li>
 								</ul>
-							</caption>
+							</footer>
 						</figure>
 					</aside>
-				</div>
+				</aside>
+				<div class="col-12 col-lg-9" style="min-height: 50vh">
+					<section
+						class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken table-background-1"
+					>
+						<h1 class="h2 text-white" id="pageTitle">Center Name</h1>
+						<p class="fs-4 fw-light text-white" id="pageSubtitle">...</p>
+						<article class="rounded shadow bg-white p-3 mt-5">
+							<button class="btn btn-warning" type="button">
+								<i class="fas fa-backspace"></i>
+								Back
+							</button>
 
-				<section
-					class="col-9 pb-5 p-3 bg-light rounded-3 shadow-sm position-relative"
-					style="
-						background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-							url(https://images.unsplash.com/photo-1605289982774-9a6fef564df8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80);
-						background-repeat: no-repeat;
-						background-position: top;
-						background-size: cover;
-					"
-				>
-					<h1 class="h2 text-white" id="pageTitle">Center Name</h1>
-					<p class="fs-4 fw-light text-white" id="pageSubtitle">...</p>
-					<div
-						id="tableContainer"
-						class="position-absolute top-100 start-50 translate-middle-x mt-n4 w-75"
-					>
-					</div>
-					<button
-						class="position-absolute top-100 start-0 mt-n4 ms-5 btn btn-warning"
-						id="backButton"
-						data-current-table="vaccine"
-						>Back</button
-					>
-				</section>
+							<div id="tableContainer" class="mt-2"></div>
+						</article>
+					</section>
+				</div>
 			</div>
 		</main>
 		<footer class="bg-dark">

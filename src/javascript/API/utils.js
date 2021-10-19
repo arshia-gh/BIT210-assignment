@@ -1,6 +1,6 @@
 import Administrator from '../model/Administrator';
 import Batch from '../model/Batch';
-import HealthcareCenter from '../model/HealthcareCentre';
+import HealthcareCenter from '../model/HealthcareCenter';
 import Patient from '../model/Patient';
 import Vaccination from '../model/Vaccination';
 import Vaccine from '../model/Vaccine';
@@ -85,6 +85,4 @@ export const isValidResource = (resource) => {
 	return RESOURCE_ARRAY.some((res) => resource === res);
 };
 
-export const RESOURCE_ARRAY = Object.values(RESOURCE).map(
-	(res) => res.URI
-);
+export const RESOURCE_ARRAY = Object.values(RESOURCE).map((res) => res.URI);

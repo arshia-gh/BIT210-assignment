@@ -1,10 +1,33 @@
 import bootstrap from 'bootstrap';
-import config from './config';
 import { seed, storage } from './API';
+import User from './model/User';
 
 export default async () => {
-	if (storage.isEmpty() || config.mode === 'development') {
+	if (storage.isEmpty()) {
 		storage.clear();
 		await seed();
 	}
+
+	(function () {
+		'use strict';
+
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		var forms = document.querySelectorAll('.needs-validation');
+
+		// Loop over them and prevent submission
+		Array.prototype.slice.call(forms).forEach(function (form) {
+			form.addEventListener(
+				'submit',
+				function (event) {
+					if (!form.checkValidity()) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+
+					form.classList.add('was-validated');
+				},
+				false
+			);
+		});
+	})();
 };

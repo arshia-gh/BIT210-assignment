@@ -28,10 +28,13 @@ const batchNo = new URLSearchParams(window.location.search).get('batchNo');
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 	const admin = await auth(AUTH_RESOURCE.AUTHENTICATE);
+  
+  if (admin) { 
+		fillUserData(admin);
+		toggleLogout(true);	
+		attachLogoutListener('/index.html');
+	}
 
-	attachLogoutListener('/index.html');
-	fillUserData(admin);
-	toggleLogout(true);
 	await findBatch(batchNo);
 	renderBatchInfo(batch);
 	vaccinations = await batch.vaccinations; //load batch vaccinations into global variable

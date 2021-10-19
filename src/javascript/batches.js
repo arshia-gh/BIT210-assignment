@@ -27,9 +27,13 @@ let centre;
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 	const admin = await auth(AUTH_RESOURCE.AUTHENTICATE);
-	attachLogoutListener('/index.html');
-	fillUserData(admin);
-	toggleLogout(true);
+	
+	if (admin) { 
+		fillUserData(admin);
+		toggleLogout(true);	
+		attachLogoutListener('/index.html');
+	}
+
 	centre = await admin.healthcareCenter;
 	centreNameLabel.innerHTML = centre.centerName;
 	centreAddressLabel.innerHTML = centre.address;

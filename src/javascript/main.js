@@ -47,20 +47,20 @@ export const fillUserData = async (user) => {
 
 export const toggleLogout = (show) => {
 	const logoutDiv = document.getElementById('logout');
-	logoutDiv.classList[show ? 'remove' : 'add']('d-hide');
+	logoutDiv.classList[show ? 'remove' : 'add']('d-none');
 };
 
 export const toggleLoginRegister = () => {
 	const loginRegister = document.getElementById('loginRegister');
-	loginRegister.classList[show ? 'remove' : 'add']('d-hide');
+	loginRegister.classList[show ? 'remove' : 'add']('d-none');
 };
 
 export const attachLogoutListener = (url) => {
 	const logoutBtn = document.getElementById('logoutBtn');
 	if (logoutBtn != null) {
-		logoutBtn.addEventListener('click', async () => {
+		logoutBtn.onclick = async () => {
 			await User.logout();
 			window.location.replace(url);
-		});
+		};
 	}
 };

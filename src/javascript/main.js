@@ -1,8 +1,8 @@
-import {} from 'bootstrap';
+import bootstrap from 'bootstrap';
 import { seed, storage } from './API';
 import User from './model/User';
 
-export const common = async () => {
+export default async () => {
 	if (storage.isEmpty()) {
 		storage.clear();
 		await seed();
@@ -32,28 +32,35 @@ export const common = async () => {
 	})();
 };
 
-export const fillUserData = async () => {
+export const fillUserData = async (user) => {
+	const ul = document.getElementById('userInfo'); //the <ul>
+	const specialInfo = user.constructor.name === 'Patient' ? 'ICPassport' : 'staffID';
+	ul.innerHTML = ''; //remove all child
+
+	for (const info of ['fullName', specialInfo, 'email']) {
+		const li = document.createElement('li');
+		li.className = 'list-group-item';
+		li.innerHTML = user[info];
+		ul.append(li);
+	}
+};
+
+export const toggleLogout = (show) => {
 	const logoutDiv = document.getElementById('logout');
-	const loginRegisterDiv = document.getElementById('loginRegister');
-	try {
-		const user = await User.authenticate();
-		const ul = document.getElementById('userInfo'); //the <ul>
-		const specialInfo = user.constructor.name === 'Patient' ? 'ICPassport' : 'staffID';
-		ul.innerHTML = ''; //remove all child
+	logoutDiv.classList[show ? 'remove' : 'add']('d-hide');
+};
 
-		for (const info of ['fullName', specialInfo, 'email']) {
-			const li = document.createElement('li');
-			li.className = 'list-group-item';
-			li.innerHTML = user[info];
-			ul.append(li);
-		}
+export const toggleLoginRegister = () => {
+	const loginRegister = document.getElementById('loginRegister');
+	loginRegister.classList[show ? 'remove' : 'add']('d-hide');
+};
 
-		loginRegisterDiv.classList.add('d-none');
-		logoutDiv.classList.remove('d-none');
-		return true;
-	} catch (ignore) {
-		loginRegisterDiv.classList.remove('d-none');
-		logoutDiv.classList.add('d-none');
-		return false;
+export const attachLogoutListener = (url) => {
+	const logoutBtn = document.getElementById('logoutBtn');
+	if (logoutBtn != null) {
+		logoutBtn.addEventListener('click', async () => {
+			await User.logout();
+			window.location.replace(url);
+		});
 	}
 };

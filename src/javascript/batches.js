@@ -9,9 +9,13 @@ const centreAddressLabel = document.getElementById('healthcareCenterAddress');
 const batchAddedBadge = document.getElementById('batchAddedBadge');
 const tableContainer = document.getElementById('tableContainer')
 const addBatchForm = document.getElementById('addBatchForm');
+const expiryDateInput = document.getElementById('expiryDateInput');
 const duplicatedAlert = document.getElementById('duplicatedBatchAlert');
 const addBatchModal = document.getElementById('addBatchModal');
 const modalObj = new Modal(addBatchModal);
+
+const todayDate = new Date().toISOString().split('T')[0];
+expiryDateInput.setAttribute('min', todayDate);
 
 addBatchModal.addEventListener('show.bs.modal', () => {
     duplicatedAlert.classList.add('d-none');

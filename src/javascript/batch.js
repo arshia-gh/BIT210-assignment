@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await findBatch(batchNo);
   renderBatchInfo(batch);
   vaccinations = await batch.vaccinations; //load batch vaccinations into global variable
-  renderBatchTable(getVaccinationsInfo());
+  renderVaccinationTable(getVaccinationsInfo());
 })
 
 statusButtonGroup.onchange = _ => {
@@ -53,7 +53,7 @@ manageVaccinationForm.onsubmit = (e) => {
   console.table(batch);  renderBatchInfo(batch);
 
     });
-    renderBatchTable(getVaccinationsInfo());
+    renderVaccinationTable(getVaccinationsInfo());
     modalObject.hide();
     showChangesApplied();
   })
@@ -173,7 +173,7 @@ function renderBatchInfo(batch) {
   })
 }
 
-function renderBatchTable(info) { //this methods render vaccinations table to UI
+function renderVaccinationTable(info) { //this methods render vaccinations table to UI
   renderTable(
     "tableContainer",
     info,

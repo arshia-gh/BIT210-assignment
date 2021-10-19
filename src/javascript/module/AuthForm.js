@@ -120,10 +120,12 @@ class AuthForm {
 			let newUser;
 
 			try {
-				if (userType.value === 'administrator') {
+				if (userType === 'administrator') {
 					if (hcObject.length === 0) {
-						hcObject = HealthcareCenter.create(hcName, hcAddress);
+						hcObject = await HealthcareCenter.create(hcName, hcAddress);
 					}
+					else hcObject = hcObject[0];
+					
 					newUser = await hcObject.createAdministrator(
 						username,
 						password,

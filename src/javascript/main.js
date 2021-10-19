@@ -32,7 +32,7 @@ export default async () => {
 };
 
 export const fillUserData = (user) => {
-	const ul = document.getElementById('userinfo'); //the <ul>
+	const ul = document.getElementById('userInfo'); //the <ul>
 	const specialInfo = user.constructor.name === 'Patient' ? 'ICPassport' : 'staffID';
 	ul.innerHTML = ''; //remove all child
 

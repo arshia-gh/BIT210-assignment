@@ -50,7 +50,7 @@ export const toggleLogout = (show) => {
 	logoutDiv.classList[show ? 'remove' : 'add']('d-none');
 };
 
-export const toggleLoginRegister = () => {
+export const toggleLoginRegister = (show) => {
 	const loginRegister = document.getElementById('loginRegister');
 	loginRegister.classList[show ? 'remove' : 'add']('d-none');
 };

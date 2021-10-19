@@ -69,7 +69,20 @@ export default async () => {
 			healthcareCenters[0].uid,
 			200
 		),
-		await Batch.create('02', '2021-01-12', vaccines[0].uid, healthcareCenters[1].uid, 100)
+		await Batch.create(
+			'02',
+			'2021-01-12',
+			vaccines[0].uid,
+			healthcareCenters[1].uid,
+			100
+		),
+		await Batch.create(
+			'20',
+			'2021-01-12',
+			vaccines[0].uid,
+			healthcareCenters[0].uid,
+			100
+		)
 	];
 
 	const patient = [

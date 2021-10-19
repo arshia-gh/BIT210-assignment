@@ -124,6 +124,8 @@ class AuthForm {
 					if (hcObject.length === 0) {
 						hcObject = await HealthcareCenter.create(hcName, hcAddress);
 					}
+					else hcObject = hcObject[0];
+					
 					newUser = await hcObject.createAdministrator(
 						username,
 						password,

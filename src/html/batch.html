@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../scss/main.scss" />
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+  <title>Batch</title>
+
+  <style>
+    #table-container table {
+      table-layout: fixed;
+    }
+
+    #user-avatar {
+      object-fit: cover;
+      width: 100%;
+      max-width: 115px;
+    }
+  </style>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <header class="container-md">
+    <nav class="navbar navbar-expand-md navbar-light">
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
+        <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span
+          class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar"
+        aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="./index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./dashboard/administrator.html">Dashboard</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container flex-grow-1">
+    <div class="row">
+      <div class="col-12 col-lg-3 bg-light py-3">
+        <aside class="border rounded p-3 pb-1 mt-3 bg-white">
+          <h6 class="text-muted">Location</h6>
+          <nav style="--bs-breadcrumb-divider: '➤';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="./dashboard/administrator.html">Select Batches</a></li>
+              <li class="breadcrumb-item active">Manage Vaccination</li>
+            </ol>
+          </nav>
+        </aside>
+
+        <!--user info-->
+        <aside class="border rounded bg-white p-3 mt-3">
+          <h6 class="text-muted">User Information</h6>
+          <figure class="row mt-3 justify-content-center align-items-center">
+            <div class="col-lg-6 col-3">
+              <img id="user-avatar" class="img-fluid"
+                src="https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png"/>
+            </div>
+            <footer class="col-9 col-lg-12 mt-3">
+              <ul id="userInfo" class="list-group list-group-flush text-break text-center">
+                <li class="list-group-item">Not logged in</li>
+              </ul>
+            </footer>
+          </figure>
+        </aside>
+      </div>
+
+      <div class="col-12 col-lg-9 position-relative overflow-hidden">
+        <div class="container p-3">
+          <h2>Batch Information</h2>
+          <table class="table">
+            <tr id="batch-info-container"></tr>
+          </table>
+          <div class="container bg-white rounded shadow text-dark py-3 my-3">
+            <h3>Vaccination List</h3>
+            <p class="text-muted">Select a vaccination to view
+              <span id="changes-applied" class="float-end badge bg-success d-none"> <span
+                  class="fa fa-check pe-1"></span>
+                Changes Applied</span>
+            </p>
+            <div id='table-container'></div>
+          </div>
+        </div>
+      </div>
+  </main>
+
+  <footer class="bg-dark">
+    <section class="container-md py-2 text-white text-center">
+      <h2 class="h2 m-0">PCVS</h2>
+      <p class="fs-4 fw-light m-0">Private Covid-19 Vaccination Service </p>
+      <hr />
+      <small class="text-muted">PCVS - copyright&copy; 2021</small>
+    </section>
+  </footer>
+
+  <!--Modal-->
+  <div class="modal fade" id="manage-vaccination-modal" tabindex="-1" aria-labelledby="addBatchLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBatchLabel">Vaccination</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <table class="table">
+            <thead>
+              <tr>
+                <td colspan="2" class="text-muted">Patient Information</td>
+              </tr>
+            </thead>
+            <tbody id="patient-info-tbody">
+            </tbody>
+          </table>
+
+          <table class="table mb-4">
+            <thead>
+              <tr>
+                <td colspan="2" class="text-muted">Batch Information</td>
+              </tr>
+            </thead>
+            <tbody id="batch-info-tbody">
+            </tbody>
+          </table>
+
+          <!-- <div id="controls-placeholder"></div> -->
+
+          <div>
+            <h6 class="text-center mb-3" id="operation-title">Operation Title</h6>
+            <form id='manage-vaccination-form'>
+              <div class="form-floating my-3">
+
+                <div class="btn-group w-100" role="group" aria-label="radio toggle button group"
+                  id="status-button-group">
+                  <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbtn-accept"
+                    autocomplete="off" required>
+                  <label class="btn btn-outline-primary" for="rdbtn-accept">Confirm</label>
+
+                  <input type="radio" class="btn-check" name="status" value="rejected" id="rdbtn-reject"
+                    autocomplete="off">
+                  <label class="btn btn-outline-primary" for="rdbtn-reject">Reject</label>
+                </div>
+
+                <div class="form-floating my-3">
+                  <input type="text" class="form-control" placeholder="remarks" name="remarks" id="remarks-input">
+                  <label for="floatingInput">Remarks</label>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary w-100" id='submit-button'>Submit</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="../javascript/batch.js"></script>
+</body>
+
+</html>

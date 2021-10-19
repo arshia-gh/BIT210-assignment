@@ -10,6 +10,21 @@ $carousel-transition-duration: 0.2s;
 @import '../../node_modules/bootstrap/scss/functions';
 @import '../../node_modules/bootstrap/scss/variables';
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';
+@import './style';
+
+.breadcrumb-item.active {
+    font-weight: 600;
+    color: black;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+
+	&:hover {
+		color: #0d6efd; //link-blue
+	}
+}
 
 .bg-filter-darken {
 	background-repeat: no-repeat;

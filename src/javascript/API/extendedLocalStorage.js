@@ -38,6 +38,8 @@ export const findRowIndex = (rows, query) => {
 	});
 };
 
+
+
 const extendedLocalStorage = {
 	/**
 	 * to retrieve a resource

@@ -4,7 +4,6 @@ import HealthcareCenter from '../model/HealthcareCenter';
 import Patient from '../model/Patient';
 import User from '../model/User';
 import Administrator from '../model/Administrator';
-import { fillUserData } from '../main';
 
 class AuthForm {
 	constructor(fn) {

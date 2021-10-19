@@ -350,6 +350,7 @@
 						<div class="progress">
 							<div
 								class="progress-bar"
+								id="progressBar"
 								role="progressbar"
 								aria-valuenow="0"
 								aria-valuemin="0"
@@ -379,7 +380,7 @@
 								>
 									<li class="list-group-item">Not logged in</li>
 								</ul>
-								<div id="loginRegister d-hide">
+								<div id="loginRegister">
 									<button
 										class="btn btn-success"
 										data-registration-type="patient"
@@ -406,22 +407,35 @@
 						<h1 class="h2 text-white" id="pageTitle">Center Name</h1>
 						<p class="fs-4 fw-light text-white" id="pageSubtitle">...</p>
 						<article class="rounded shadow bg-white p-3 mt-5">
-							<button class="btn btn-warning" type="button">
-								<i class="fas fa-backspace"></i>
-								Back
-							</button>
-
+							<a class="btn btn-warning" id="resetButton" href="/dashboard/patient.html">
+								<i class="fas fa-undo"></i>
+								Reset
+							</a>
+							<button
+								class="btn btn-success d-none"
+								id="appointmentDateBtn"
+								form="appointmentDateForm"
+								>Submit</button
+							>
 							<div id="tableContainer" class="mt-2"></div>
-							<div class="form-floating mb-3 d-none" id="appointmentDate">
-								<input
-									type="date"
-									class="form-control"
-									value="2021-01-01"
-									id="appointmentDateInp"
-									placeholder="Expiry Date"
-								/>
-								<label for="floatingInput">Appointment Date</label>
-							</div>
+							<form
+								id="appointmentDateForm"
+								class="needs-validation d-none mt-3"
+								novalidate
+							>
+								<div class="form-floating" id="appointmentDate">
+									<input
+										type="date"
+										class="form-control"
+										value="2021-01-01"
+										name="date"
+										id="appointmentDateInp"
+										placeholder="Expiry Date"
+										required
+									/>
+									<label for="appointmentDateInp">Appointment Date</label>
+								</div>
+							</form>
 						</article>
 					</section>
 				</div>

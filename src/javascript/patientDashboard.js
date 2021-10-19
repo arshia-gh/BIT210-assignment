@@ -1,5 +1,10 @@
 import { request, RESOURCE } from './API';
-import main, { fillUserData } from './main';
+import main, {
+	attachLogoutListener,
+	fillUserData,
+	toggleLoginRegister,
+	toggleLogout
+} from './main';
 import User from './model/User';
 import { renderTable } from './module/TableRenderer';
 import AuthForm from './module/AuthForm';
@@ -8,19 +13,29 @@ import { Modal } from 'bootstrap';
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 	const authForm = await new AuthForm((user) => {
-		fillUserData(crtUser);
+		fillUserData(user);
+		Modal.getOrCreateInstance(authForm.loginModal).hide();
+		toggleLoginRegister(false);
+		toggleLogout(true);
 	}).init();
-	await fillUserData();
 
-	const logoutBtn = document.getElementById('logoutBtn');
-	logoutBtn.addEventListener('click', async () => {
-		await User.logout();
-		window.location.reload();
-	});
+	attachLogoutListener('/dashboard/patient.html');
+
+	try {
+		const crtUser = await User.authenticate();
+		fillUserData(crtUser);
+		toggleLoginRegister(false);
+		toggleLogout(true);
+	} catch (error) {
+		toggleLoginRegister(true);
+	}
 
 	const pageTitle = document.getElementById('pageTitle');
 	const pageSubtitle = document.getElementById('pageSubtitle');
-	const backButton = document.getElementById('backButton');
+	const resetButton = document.getElementById('resetButton');
+	const appointmentDateForm = document.getElementById('appointmentDateForm');
+	const appointmentDateFormBtn = document.getElementById('appointmentDateBtn');
+	const progressBar = document.getElementById('progressBar');
 
 	const retrievedData = {
 		vaccine: await request(RESOURCE.VACCINE),
@@ -36,9 +51,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 		appointmentDate: null
 	};
 
+	const toggleAppDateForm = (show) => {
+		document
+			.getElementById('tableContainer')
+			.classList[!show ? 'remove' : 'add']('d-none');
+		appointmentDateForm.classList[show ? 'remove' : 'add']('d-none');
+		appointmentDateFormBtn.classList[show ? 'remove' : 'add']('d-none');
+	};
+
+	toggleAppDateForm(false);
+
+	appointmentDateForm.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		userSelection.appointmentDate = appointmentDateForm['appointmentDateInp'];
+		const user = await User.authenticate();
+		user.createVaccination(
+			Date.now().toString(),
+			userSelection.appointmentDate.value,
+			userSelection.batch
+		);
+		resetButton.innerHTML = 'Request vaccination';
+		renderContent('vaccination');
+	});
+
 	const renderContent = async (toRenderTable, rowId) => {
+		toggleAppDateForm(false);
 		switch (toRenderTable) {
 			case 'vaccines':
+				progressBar.style.width = '0%';
 				pageTitle.textContent = 'Vaccine';
 				pageSubtitle.textContent = 'Please select a vaccine from the table below';
 				return render(
@@ -52,6 +92,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'healthcareCenter'
 				);
 			case 'healthcareCenter':
+				progressBar.style.width = '20%';
+
 				pageTitle.textContent = 'Healthcare Center';
 				pageSubtitle.textContent =
 					'Please select a healthcare center from the table below';
@@ -70,6 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'batchAbstract'
 				);
 			case 'batchAbstract':
+				progressBar.style.width = '40%';
+
 				pageTitle.textContent = 'Batch';
 				pageSubtitle.textContent = 'Please select a batch from the table below';
 				userSelection.healthcareCenter = retrievedData.healthcareCenter.find(
@@ -96,12 +140,51 @@ document.addEventListener('DOMContentLoaded', async () => {
 					'batch'
 				);
 			case 'batch':
+				progressBar.style.width = '60%';
+				userSelection.batch = retrievedData.batch.find((batch) => batch.uid === rowId);
+
 				try {
 					const crtUser = await User.authenticate();
+					console.log(crtUser);
 					fillUserData(crtUser);
+					return render(
+						[
+							{
+								uid: userSelection.batch.uid,
+								batchNo: userSelection.batch.batchNo,
+								expiryDate: userSelection.batch.expiryDate,
+								quantityAvailable: userSelection.batch.quantityAvailable
+							}
+						],
+						['Batch Number', 'Expiry Date', 'Available Qty'],
+						'uid',
+						'appointmentDate'
+					);
 				} catch (err) {
 					Modal.getOrCreateInstance(authForm.loginModal).show();
 				}
+				break;
+			case 'appointmentDate':
+				pageTitle.textContent = 'Appointment Date';
+				pageSubtitle.textContent = 'Please select the appointment date';
+				progressBar.style.width = '80%';
+				toggleAppDateForm(true);
+				break;
+			case 'vaccination':
+				progressBar.style.width = '0%';
+				pageTitle.textContent = 'Vaccinations Status';
+				pageSubtitle.textContent = 'Current status of your vaccination appointments';
+				const vaccinations = await request(RESOURCE.VACCINATION, {
+					query: { patientUID: (await User.authenticate()).uid }
+				});
+				render(
+					vaccinations.map((vacs) => ({
+						appointmentDate: vacs.appointmentDate,
+						status: vacs.status,
+						remarks: vacs.remarks
+					})),
+					['Appointment Date', 'Status', 'Remarks']
+				);
 		}
 	};
 

@@ -50,7 +50,7 @@ export const toggleLogout = (show) => {
 	logoutDiv.classList[show ? 'remove' : 'add']('d-none');
 };
 
-export const toggleLoginRegister = () => {
+export const toggleLoginRegister = (show) => {
 	const loginRegister = document.getElementById('loginRegister');
 	loginRegister.classList[show ? 'remove' : 'add']('d-none');
 };
@@ -60,7 +60,8 @@ export const attachLogoutListener = (url) => {
 	if (logoutBtn != null) {
 		logoutBtn.onclick = async () => {
 			await User.logout();
-			window.location.replace(url);
+			if (typeof url === 'function') url();
+			else window.location.replace(url);
 		};
 	}
 };

@@ -38,8 +38,6 @@ export const findRowIndex = (rows, query) => {
 	});
 };
 
-
-
 const extendedLocalStorage = {
 	/**
 	 * to retrieve a resource
@@ -77,25 +75,15 @@ const extendedLocalStorage = {
 	 * @param {*} data - data to be added to the collection
 	 */
 	create(resource, data) {
-		if (data == null)
-			throw new ApiError(
-				'Data must be defined',
-				ERROR_CODE.BAD_REQUEST
-			);
+		if (data == null) throw new ApiError('Data must be defined', ERROR_CODE.BAD_REQUEST);
 		if (data.uid == null)
-			throw new ApiError(
-				'UID Must be defined',
-				ERROR_CODE.BAD_REQUEST
-			);
+			throw new ApiError('UID Must be defined', ERROR_CODE.BAD_REQUEST);
 
 		/** @type {rows} */
 		const retrievedRows = this.get(resource);
 
 		if (findRowIndex(retrievedRows, { uid: data.uid }) !== -1) {
-			throw new ApiError(
-				`An entry with the same uid exist`,
-				ERROR_CODE.CONFLICT
-			);
+			throw new ApiError(`An entry with the same uid exist`, ERROR_CODE.CONFLICT);
 		}
 
 		retrievedRows.push(data);
@@ -116,10 +104,7 @@ const extendedLocalStorage = {
 		const retrievedRows = this.get(resource);
 		const toUpdateIndex = findRowIndex(retrievedRows, query);
 		if (toUpdateIndex === -1) {
-			throw new ApiError(
-				`Entry with requested uid was not found`,
-				ERROR_CODE.NOT_FOUND
-			);
+			throw new ApiError(`Entry with requested uid was not found`, ERROR_CODE.NOT_FOUND);
 		}
 		let toUpdateRow = retrievedRows[toUpdateIndex];
 		toUpdateRow = { ...toUpdateRow, ...data };
@@ -135,23 +120,16 @@ const extendedLocalStorage = {
 			throw new ApiError('not authorized', ERROR_CODE.UNAUTHORIZED);
 		}
 		return retrievedSession.type === RESOURCE.ADMINISTRATOR.MODEL.name
-			? RESOURCE.ADMINISTRATOR.MODEL.fromParsedJson(
-					retrievedSession.user
-			  )
+			? RESOURCE.ADMINISTRATOR.MODEL.fromParsedJson(retrievedSession.user)
 			: RESOURCE.PATIENT.MODEL.fromParsedJson(retrievedSession.user);
 	},
 
 	login(username, password) {
 		const retrievedSession = this.get(SESSION_URI);
-		for (const resource of [
-			RESOURCE.ADMINISTRATOR,
-			RESOURCE.PATIENT
-		]) {
+		for (const resource of [RESOURCE.ADMINISTRATOR, RESOURCE.PATIENT]) {
 			const retrievedData = this.get(resource.URI);
 			const foundUser = retrievedData.find((user) => {
-				return (
-					user.username === username && user.password === password
-				);
+				return user.username === username && user.password === password;
 			});
 			if (foundUser != null) {
 				this.set(SESSION_URI, {

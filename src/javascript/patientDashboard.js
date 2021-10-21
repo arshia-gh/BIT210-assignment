@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		toggleLogout(true);
 	}).init();
 
-	attachLogoutListener('/dashboard/patient.html');
+	attachLogoutListener('./patient.html');
 
 	try {
 		const crtUser = await User.authenticate();
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 				try {
 					const crtUser = await User.authenticate();
-					console.log(crtUser);
+
 					fillUserData(crtUser);
 					return render(
 						[

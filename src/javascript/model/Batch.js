@@ -63,7 +63,7 @@ class Batch extends SimpleModel {
 	async setQuantityAdministrated(newValue) {
 		this.quantityAdministered = newValue;
 		return await request(RESOURCE.BATCH, {
-			content: this,
+			content: { ...this },
 			method: METHOD.PATCH,
 			query: { uid: this.uid }
 		});
@@ -72,7 +72,7 @@ class Batch extends SimpleModel {
 	async setQuantityAvailable(newValue) {
 		this.quantityAvailable = newValue;
 		return await request(RESOURCE.BATCH, {
-			content: this,
+			content: { ...this },
 			method: METHOD.PATCH,
 			query: { uid: this.uid }
 		});

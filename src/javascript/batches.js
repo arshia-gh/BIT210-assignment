@@ -27,11 +27,11 @@ let centre;
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 	const admin = await auth(AUTH_RESOURCE.AUTHENTICATE);
-	
-	if (admin) { 
+
+	if (admin) {
 		fillUserData(admin);
-		toggleLogout(true);	
-		attachLogoutListener('/index.html');
+		toggleLogout(true);
+		attachLogoutListener('./index.html');
 	}
 
 	centre = await admin.healthcareCenter;
@@ -62,7 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 	);
 
 	function onBatchSelected(batchNo) {
-		location = location.origin + '/batch.html?batchNo=' + batchNo;
+		const origin = location.href.split(/\//).slice(0, -1).join('/'); // remove the last resource from the url; eg. google.com/test => google.com
+		location = origin + '/batch.html?batchNo=' + batchNo;
 	}
 
 	//render the table to UI

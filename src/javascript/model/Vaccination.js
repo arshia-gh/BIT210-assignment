@@ -83,7 +83,7 @@ class Vaccination extends SimpleModel {
 				method: METHOD.PATCH,
 				query: { uid: this.uid }
 			});
-			
+
 			this.status = updatedObj.status;
 			this.remarks = updatedObj.remarks;
 

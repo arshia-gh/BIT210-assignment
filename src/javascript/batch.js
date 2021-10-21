@@ -28,11 +28,11 @@ const batchNo = new URLSearchParams(window.location.search).get('batchNo');
 document.addEventListener('DOMContentLoaded', async () => {
 	await main();
 	const admin = await auth(AUTH_RESOURCE.AUTHENTICATE);
-  
-  if (admin) { 
+
+	if (admin) {
 		fillUserData(admin);
-		toggleLogout(true);	
-		attachLogoutListener('/index.html');
+		toggleLogout(true);
+		attachLogoutListener('./index.html');
 	}
 
 	await findBatch(batchNo);
@@ -57,11 +57,11 @@ manageVaccinationForm.onsubmit = (e) => {
 	const remarks = manageVaccinationForm['remarks'].value;
 
 	vaccination.setStatus(status, remarks).then((_) => {
-		findBatch(batchNo).then(() => {
-			console.table(batch);
+		findBatch(batchNo).then(async () => {
 			renderBatchInfo(batch);
+			vaccinations = await batch.vaccinations;
+			renderVaccinationTable(getVaccinationsInfo());
 		});
-		renderVaccinationTable(getVaccinationsInfo());
 		modalObject.hide();
 		showChangesApplied();
 	});
@@ -79,7 +79,7 @@ function getVaccinationsInfo() {
 //load batch into global variable
 async function findBatch(batchNo) {
 	const data = await request(RESOURCE.BATCH, { query: { batchNo: batchNo } });
-	batch = await data[0];
+	batch = data[0];
 }
 
 function onVaccinationSelected(vaccinationID) {

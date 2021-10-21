@@ -35,11 +35,7 @@ class Vaccine extends SimpleModel {
 	}
 
 	static fromParsedJson(obj) {
-		return new Vaccine(
-			obj.vaccineID,
-			obj.vaccineName,
-			obj.manufacturer
-		);
+		return new Vaccine(obj.vaccineID, obj.vaccineName, obj.manufacturer);
 	}
 }
 

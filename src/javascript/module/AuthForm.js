@@ -159,7 +159,7 @@ class AuthForm {
 					dashboardURL = 'administrator.html';
 				}
 				if (this.fn == null) {
-					window.location.replace(`/dashboard/${dashboardURL}`);
+					window.location.replace(`./${dashboardURL}`);
 				} else {
 					this.fn(user);
 				}

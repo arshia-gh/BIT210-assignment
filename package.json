@@ -10,8 +10,8 @@
 		}
 	],
 	"scripts": {
-		"dev": "parcel ./src/html/index.html ./src/html/batch.html ./src/html/dashboard/administrator.html ./src/html/dashboard/patient.html --port 5080",
-		"build": "parcel build ./src/html/**/*.html"
+		"dev": "parcel src/html/index.html src/html/batch.html src/html/administrator.html src/html/patient.html --port 5080",
+		"build": "parcel build src/html/**/*.html --public-url ./ --no-minify"
 	},
 	"repository": {
 		"type": "git",

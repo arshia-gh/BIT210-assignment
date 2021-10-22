@@ -103,8 +103,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 						await request(RESOURCE.BATCH, {
 							query: { vaccineUID: rowId }
 						})
-					).map((batch) => batch.healthcareCenter)
+					)
+					.map((batch) => batch.healthcareCenter)
 				);
+
+				retrievedData.healthcareCenter = retrievedData.healthcareCenter.filter((thing, index, self) =>
+					index === self.findIndex((t) => (t.centerName === thing.centerName)))
+					
 				return render(
 					retrievedData.healthcareCenter,
 					['Center Name', 'Center Address'],

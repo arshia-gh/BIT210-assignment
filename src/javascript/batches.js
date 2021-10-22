@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const batchesToRender = await Promise.all(
 		batches.map(async (batch) => ({
 			batchNo: batch.batchNo,
-			expiryDate: batch.expiryDate,
+			vaccineName: (await batch.vaccine).vaccineName,
 			noOfPendingAppointment: (
 				await batch.vaccinations
 			).filter((vaccination) => vaccination.status === 'pending').length
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		'tableContainer',
 		batchesToRender,
 		'batchNo',
-		['Batch Number', 'Expiry Date', 'No of Pending Appointment'],
+		['Batch Number', 'Vaccine Name', 'No of Pending Appointment'],
 		onBatchSelected
 	);
 });

@@ -7,8 +7,8 @@ DROP TABLE IF EXISTS Vaccines;
 CREATE TABLE Vaccines
 (
     vaccineID    CHAR(2) PRIMARY KEY,
-    manufacturer VARCHAR(255)        NOT NULL,
-    vaccineName  VARCHAR(255) UNIQUE NOT NULL
+    vaccineName  VARCHAR(255) UNIQUE NOT NULL,
+    manufacturer VARCHAR(255)        NOT NULL
 );
 
 CREATE TABLE HealthcareCentres

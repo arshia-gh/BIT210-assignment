@@ -8,6 +8,12 @@ function find_vaccine($vaccine_id)
 	return queryOne($sql);
 }
 
+function find_vaccination($vaccination_id)
+{
+	$sql = "SELECT * FROM vaccinations WHERE vaccinationID = '$vaccination_id'";
+	return queryOne($sql);
+}
+
 function get_all_vaccines()
 {
 	$sql = "SELECT * FROM vaccines";
@@ -17,7 +23,9 @@ function get_all_vaccines()
 function query($sql)
 {
 	global $db;
+
 	$result = mysqli_query($db, $sql);
+
 	if ($result === false)
 		throw new ErrorException(mysqli_error($db), mysqli_errno($db));
 
@@ -34,9 +42,20 @@ function queryAll($sql)
 	return mysqli_fetch_all(query($sql), MYSQLI_ASSOC);
 }
 
-function set_vaccination_status($vaccination_id, $status)
+function set_vaccination_status_and_remarks($vaccination_id, $status, $remarks = null)
 {
-	$sql = "UPDATE VACCINATIONS SET status = '$status' WHERE vaccinationID = $vaccination_id";
+	$remarks = '' ? `'$remarks'` : null; 
+	$sql = "UPDATE VACCINATIONS SET status = '$status', remark = $remarks WHERE vaccinationID = $vaccination_id";
+	return query($sql);
+}
+
+function decreases_batch_quantity_available($batchNo) {
+	$sql = "UPDATE Batch SET quantityAvailable = quantityAvailable - 1 WHERE batchNo = '$batchNo'";
+	return query($sql);
+}
+
+function increases_batch_quantity_administered($batchNo) {
+	$sql = "UPDATE Batch SET quantityAdministered = quantityAdministered + 1 WHERE batchNo = '$batchNo'";
 	return query($sql);
 }
 
@@ -69,9 +88,19 @@ function find_vaccinations_of_batch($batchNo)
 	return queryAll($sql);
 }
 
-// function confirm_appointment($vaccinationID) {
+function confirm_appointment($vaccinationID, $batchNo) {
+	set_vaccination_status_and_remarks($vaccinationID, 'confirmed');
+	decreases_batch_quantity_available($batchNo);
+}
 
-// }
+function reject_appointment($vaccinationID, $remarks) {
+	set_vaccination_status_and_remarks($vaccinationID, 'confirmed', $remarks);
+}
+
+function confirm_vaccination_administered($vaccinationID, $remarks, $batchNo) {
+	set_vaccination_status_and_remarks($vaccinationID, 'administered', $remarks);
+	increases_batch_quantity_administered($batchNo);
+}
 
 function print_table($result)
 {

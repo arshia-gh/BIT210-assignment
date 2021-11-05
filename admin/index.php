@@ -78,7 +78,7 @@
 					<figure class="row mt-3 justify-content-center align-items-center">
 					<div class="col-lg-6 col-3">
 						<img id="user-avatar" class="img-fluid"
-						src="../asset/img/male_man_people_person_avatar_white_tone_icon_159363.png"/>
+						src="../asset/img/male_man_people_person_avatar_white_tone_icon.png"/>
 					</div>
 					<footer class="col-9 col-lg-12 mt-3">
 						<ul id="userInfo" class="list-group list-group-flush text-break text-center">
@@ -279,24 +279,7 @@
 			</div>
 		</div>
 
-    <script>
-		const vaccineSelect = document.getElementById('vaccineSelect');
-
-		vaccineSelect.onchange = (e) => {
-			const option = e.target.selectedOptions[0];
-			const manufacturer = option.getAttribute('data-manufacturer');
-			document.getElementById('manufacturerInput').value = manufacturer;
-		};
-		
-		const tableContainer = document.getElementById('tableContainer');
-        const table = tableContainer.querySelector("table");
-		table.addEventListener('click', (e) => {
-        const tr = e.target.parentNode;
-		const batchNo = tr.getAttribute('data-row-id');
-		if (batchNo) window.location = '../batch/' + batchNo;
-		})
-	</script>
-
-    <script src="../asset/js/bootstrap.bundle.min.js"></script>
+		<script src="../asset/js/bootstrap.bundle.min.js"></script>
+		<script src="./index.js"></script>
 	</body>
 </html>

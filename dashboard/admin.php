@@ -9,7 +9,7 @@ require_once '../database/pcvs_db.php';
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../asset/css/bootstrap.min.css"/>
 		<link
 			rel="stylesheet"
 			href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
@@ -290,6 +290,6 @@ require_once '../database/pcvs_db.php';
 		})
 	</script>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../asset/js/bootstrap.bundle.min.js"></script>
 	</body>
 </html>

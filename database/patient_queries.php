@@ -2,7 +2,7 @@
 
 	require_once "classes/DatabaseHandler.php";
 
-	final class PatientDatabaseHandler extends \database\DatabaseHandler
+	final class PatientDatabaseHandler extends DatabaseHandler
 	{
 
 		/**
@@ -91,5 +91,5 @@
 			) > 0;
 		}
 
-
+		
 	}

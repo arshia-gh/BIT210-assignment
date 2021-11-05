@@ -2,23 +2,7 @@
 
 require_once "db_connection.php";
 
-function find_vaccine($vaccine_id)
-{
-	$sql = "SELECT * FROM vaccines WHERE vaccineID = '$vaccine_id'";
-	return queryOne($sql);
-}
 
-function find_vaccination($vaccination_id)
-{
-	$sql = "SELECT * FROM vaccinations WHERE vaccinationID = '$vaccination_id'";
-	return queryOne($sql);
-}
-
-function get_all_vaccines()
-{
-	$sql = "SELECT * FROM vaccines";
-	return queryAll($sql);
-}
 
 function query($sql)
 {
@@ -59,34 +43,6 @@ function increases_batch_quantity_administered($batchNo) {
 	return query($sql);
 }
 
-function find_batches_of_centre($centreName)
-{
-	$sql = "SELECT Batches.batchNo, expiryDate, vaccineName, quantityAvailable, quantityAdministered, 
-				COUNT(vaccinationID) AS quantityPending FROM Batches 
-				JOIN Vaccines ON Batches.vaccineID = Vaccines.vaccineID 
-				LEFT JOIN 
-				(SELECT batchNo, vaccinationID FROM Vaccinations WHERE status = 'pending') AS PendingVaccination 
-				ON Batches.batchNo = PendingVaccination.batchNo 
-				WHERE centreName = '$centreName'
-				GROUP BY Batches.batchNo";
-
-	return queryAll($sql);
-}
-
-function find_batch($batchNo)
-{
-	$sql = "SELECT * FROM
-		(SELECT * FROM batches WHERE batchNo = '$batchNo') AS batch,
-		(SELECT COUNT(*) AS 'quantityPending' FROM vaccinations WHERE batchNo = '$batchNo' AND status = 'pending') AS quantityPending";
-
-	return queryAll($sql);
-}
-
-function find_vaccinations_of_batch($batchNo)
-{
-	$sql = "SELECT * FROM vaccinations WHERE batchNo = '$batchNo'";
-	return queryAll($sql);
-}
 
 function confirm_appointment($vaccinationID, $batchNo) {
 	set_vaccination_status_and_remarks($vaccinationID, 'confirmed');

@@ -6,24 +6,24 @@ require_once "db_connection.php";
 
 function query($sql)
 {
-	global $db;
+	global $db_connection;
 
-	$result = mysqli_query($db, $sql);
+	$result = $db_connection->query($sql);
 
 	if ($result === false)
-		throw new ErrorException(mysqli_error($db), mysqli_errno($db));
+		throw new mysqli_sql_exception($db_connection->error, $db_connection->errno);
 
 	return $result;
 }
 
 function queryOne($sql)
 {
-	return mysqli_fetch_assoc(query($sql));
+	return (query($sql)->fetch_assoc());
 }
 
 function queryAll($sql)
 {
-	return mysqli_fetch_all(query($sql), MYSQLI_ASSOC);
+	return (query($sql)->fetch_all(MYSQLI_ASSOC));
 }
 
 function set_vaccination_status_and_remarks($vaccination_id, $status, $remarks = null)

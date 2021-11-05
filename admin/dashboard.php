@@ -67,74 +67,74 @@
 						</nav>
 					</aside>
 
-            <!--user info-->
-            <aside class="border rounded bg-white p-3 mt-3">
-                <header class="d-flex justify-content-between align-items-end">
-                <h6 class="text-muted">User Information</h6>
-                <div id="logout" class="d-none">
-                    <button id="logoutBtn" class="btn btn-warning btn-sm">logout</button>
-                </div>
-                </header>
-                <figure class="row mt-3 justify-content-center align-items-center">
-                <div class="col-lg-6 col-3">
-                    <img id="user-avatar" class="img-fluid"
-                    src="https://cdn.icon-icons.com/icons2/2643/PNG/512/male_man_people_person_avatar_white_tone_icon_159363.png"/>
-                </div>
-                <footer class="col-9 col-lg-12 mt-3">
-                    <ul id="userInfo" class="list-group list-group-flush text-break text-center">
-                    <li class="list-group-item">Not logged in</li>
-                    </ul>
-                </footer>
-                </figure>
-            </aside>
-        </div>
+				  <!--user info-->
+				<aside class="border rounded bg-white p-3 mt-3">
+					<header class="d-flex justify-content-between align-items-end">
+					<h6 class="text-muted">User Information</h6>
+					<div id="logout" class="d-none">
+						<button id="logoutBtn" class="btn btn-warning btn-sm">logout</button>
+					</div>
+					</header>
+					<figure class="row mt-3 justify-content-center align-items-center">
+					<div class="col-lg-6 col-3">
+						<img id="user-avatar" class="img-fluid"
+						src="../asset/img/male_man_people_person_avatar_white_tone_icon_159363.png"/>
+					</div>
+					<footer class="col-9 col-lg-12 mt-3">
+						<ul id="userInfo" class="list-group list-group-flush text-break text-center">
+						<li class="list-group-item">Not logged in</li>
+						</ul>
+					</footer>
+					</figure>
+				</aside>
+			</div>
 
-            <div class="col-12 col-lg-9" style="min-height: 50vh">
-                <section
-                    class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken"
-                    style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg);">
-                    <h1 id="healthcareCenterName" class="text-white">Healthcare Centre name</h1>
-                    <h5 id="healthcareCenterAddress" class="text-white fw-light fst-italic"
-                        >Healthcare Centre address</h5
-                    >
+			<div class="col-12 col-lg-9" style="min-height: 50vh">
+				<section
+					class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken"
+					style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg);">
+					<h1 id="healthcareCenterName" class="text-white">Healthcare Centre name</h1>
+					<h5 id="healthcareCenterAddress" class="text-white fw-light fst-italic"
+						>Healthcare Centre address</h5
+					>
 
-                    <article class="container bg-white rounded shadow text-dark py-3 my-5">
-                        <h3>Batches List</h3>
-                        <p class="text-muted"
-                            >Select a batch to view
-                            <button
-                                type="button"
-                                class="btn btn-primary btn-sm float-end"
-                                data-bs-toggle="modal"
-                                data-bs-target="#addBatchModal"
-                            >
-                                <span class="fa fa-plus"></span> Batch
-                            </button>
-                            <span
-                                id="batchAddedBadge"
-                                class="float-end badge bg-success mx-3 p-2"
-                            ></span>
-                        </p>
-                        <div id="tableContainer">
-                            <?php
-                            $table_headers = ['Batch Number', 'Expiry Date', 'No of Pending Appointment'];
-                            $batches = $admin_queries->find_batches_of_centre('Century Medical Centre');
+					<article class="container bg-white rounded shadow text-dark py-3 my-5">
+						<h3>Batches List</h3>
+						<p class="text-muted"
+							>Select a batch to view
+							<button
+								type="button"
+								class="btn btn-primary btn-sm float-end"
+								data-bs-toggle="modal"
+								data-bs-target="#addBatchModal"
+							>
+								<span class="fa fa-plus"></span> Batch
+							</button>
+							<span
+								id="batchAddedBadge"
+								class="float-end badge bg-success mx-3 p-2"
+							></span>
+						</p>
+						<div id="tableContainer">
+							<?php
+							$table_headers = ['Batch Number', 'Expiry Date', 'No of Pending Appointment'];
+							$batches = $admin_queries->find_batches_of_centre('Century Medical Centre');
 
-                            function onBatchSelected($batchNo) {
-                                header("Location: /batch/$batchNo");
-                            }
-                            $batches = array_map(fn($batch) => [
-                            'batchNo' => $batch['batchNo'], 
-                            'expiryDate' => $batch['expiryDate'], 
-                            'quantityPending' => $batch['quantityPending']], 
-                            $batches);
+							function onBatchSelected($batchNo) {
+								header("Location: /batch/$batchNo");
+							}
+							$batches = array_map(fn($batch) => [
+							'batchNo' => $batch['batchNo'], 
+							'expiryDate' => $batch['expiryDate'], 
+							'quantityPending' => $batch['quantityPending']], 
+							$batches);
 
-                            GenerateTable($batches, 'batchNo', $table_headers);
-                            ?>
-                        </div>
-                    </article>
-                </section>
-            </div>
+							GenerateTable($batches, 'batchNo', $table_headers);
+							?>
+						</div>
+					</article>
+				</section>
+			</div>
 		</main>
 
 		<footer class="bg-dark">
@@ -212,7 +212,7 @@
                                         <?php 
                                             $vaccines = $admin_queries->get_all_vaccines();
                                             foreach($vaccines as $vaccine) {
-                                                echo "<option value=\"{$vaccine['vaccineID']}\">{$vaccine['vaccineName']}</option>";
+                                                echo "<option value=\"{$vaccine['vaccineID']}\" data-manufacturer=\"{$vaccine['manufacturer']}\">{$vaccine['vaccineName']}</option>";
                                             }
                                         ?>
 									</select>
@@ -279,8 +279,15 @@
 			</div>
 		</div>
 
-
     <script>
+		const vaccineSelect = document.getElementById('vaccineSelect');
+
+		vaccineSelect.onchange = (e) => {
+			const option = e.target.selectedOptions[0];
+			const manufacturer = option.getAttribute('data-manufacturer');
+			document.getElementById('manufacturerInput').value = manufacturer;
+		};
+		
 		const tableContainer = document.getElementById('tableContainer');
         const table = tableContainer.querySelector("table");
 		table.addEventListener('click', (e) => {

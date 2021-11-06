@@ -32,7 +32,7 @@ class DatabaseHandler
 			$this->connections[] = &$db;
 			return $db;
 		} catch (\PDOException $e) {
-			throw new \PDOException($e->getMessage(), $e->getCode());
+			throw new \Exception($e->getMessage(), $e->getCode());
 		}
 	}
 

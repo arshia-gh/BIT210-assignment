@@ -38,7 +38,7 @@ function GenerateTable($objects, $objKey, $headers, $renderKey = true) {
 		}
 	echo '
 		</tbody>
-	<table/>';
+	</table>';
 
 	// echo "
 	// <script>

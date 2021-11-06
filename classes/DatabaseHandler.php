@@ -52,7 +52,7 @@ class DatabaseHandler
 		return $stmt;
 	}
 
-	public static function close_connection(&$connection)
+	public static function close_connection(PDO &$connection): void
 	{
 		$connection = NULL;
 	}
@@ -70,24 +70,26 @@ class DatabaseHandler
 	 */
 	public function query_one(string $query, mixed ...$args): bool|array|null
 	{
-		return $this->query($query, $args)->fetch();
+		$result = $this->query($query, $args);
+		return self::fetch_result_and_close($result, [$result, 'fetch']);
 	}
 
 	/**
 	 * @throws \Exception
 	 */
-	public function query_all(string $query, mixed ...$args)
+	public function query_all(string $query, mixed ...$args) : bool|array
 	{
-		return $this->query($query, $args)->fetchAll();
+		$result = $this->query($query, $args);
+		return self::fetch_result_and_close($result, [$result, 'fetchAll']);
 	}
 
-	//		private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : bool|array|null
-	//		{
-	//			if (is_bool($result)) return $result;
-	//			$fetched_result = $callback();
-	//			$result->closeCursor();
-	//			return $fetched_result;
-	//		}
+	private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : bool|array|null
+	{
+		if (is_bool($result)) return $result;
+		$fetched_result = $callback();
+		$result->closeCursor();
+		return $fetched_result;
+	}
 
 	public function __destruct()
 	{

@@ -62,7 +62,8 @@ class DatabaseHandler
 	 */
 	public function cud_query(string $query, mixed ...$args): int
 	{
-		return $this->query($query, $args)->rowCount();
+		$result = $this->query($query, $args);
+		return self::fetch_result_and_close($result, [$result, 'rowCount']);
 	}
 
 	/**
@@ -83,7 +84,7 @@ class DatabaseHandler
 		return self::fetch_result_and_close($result, [$result, 'fetchAll']);
 	}
 
-	private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : bool|array|null
+	private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : mixed
 	{
 		if (is_bool($result)) return $result;
 		$fetched_result = $callback();

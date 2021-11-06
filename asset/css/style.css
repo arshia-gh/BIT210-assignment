@@ -1,0 +1,49 @@
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+.breadcrumb-item a:hover {
+    color: #0d6efd;
+}
+
+.bg-filter-darken {
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    background-color: rgba(33, 37, 41, 0.8);
+    background-blend-mode: multiply;
+}
+
+.table-background-1 {
+    background-image: url(https://images.unsplash.com/photo-1605289982774-9a6fef564df8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80);
+}
+
+@media screen and (min-width: 1200px) {
+    .hero-svg-background-xl {
+        background-image: url("../svg/patternpad.svg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .blob-svg-background {
+        background-image: url("../svg/blob.svg");
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+.carousel-control-sm .carousel-control-prev-icon,
+.carousel-control-sm .carousel-control-next-icon,
+.carousel-control-sm .carousel-control-prev-icon,
+.carousel-control-sm .carousel-control-next-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}

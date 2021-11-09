@@ -1,5 +1,6 @@
 .breadcrumb-item.active {
-    color: #6c757d;
+    font-weight: 600;
+    color: black;
 }
 
 .breadcrumb-item a {
@@ -21,6 +22,10 @@
 .table-background-1 {
     background-image: url(https://images.unsplash.com/photo-1605289982774-9a6fef564df8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80);
 }
+
+/* .table-fixed {
+    table-layout: fixed;
+} */
 
 @media screen and (min-width: 1200px) {
     .hero-svg-background-xl {

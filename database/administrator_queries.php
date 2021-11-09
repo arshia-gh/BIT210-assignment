@@ -24,13 +24,13 @@ final class AdminstratorDatabaseHandler extends DatabaseHandler
 		(SELECT * FROM batches WHERE batchNo = ?) AS batch,
 		(SELECT COUNT(*) AS 'quantityPending' FROM vaccinations WHERE batchNo = ? AND status = 'pending') AS quantityPending";
 
-		return $this->query_all($sql, $batchNo, $batchNo);
+		return $this->query_one($sql, $batchNo, $batchNo);
 	}
 
 	function find_vaccinations_of_batch($batchNo)
 	{
 		$sql = "SELECT * FROM vaccinations WHERE batchNo = ?";
-		return queryAll($sql, $batchNo);
+		return $this->query_all($sql, $batchNo);
 	}
 
 }

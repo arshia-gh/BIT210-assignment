@@ -99,21 +99,42 @@ class DatabaseHandler
 		}
 	}
 
+	public function find_user($username)
+	{
+		$sql = "SELECT * FROM users WHERE username = ?";
+		return $this->query_one($sql, $username);
+	}
+
 	public function find_vaccine($vaccine_id)
 	{
-		$sql = "SELECT * FROM vaccines WHERE vaccineID = '$vaccine_id'";
-		return $this->query_all($sql);
+		$sql = "SELECT * FROM vaccines WHERE vaccineID = ?";
+		return $this->query_one($sql, $vaccine_id);
 	}
 
 	public function find_vaccination($vaccination_id)
 	{
-		$sql = "SELECT * FROM vaccinations WHERE vaccinationID = '$vaccination_id'";
-		return $this->query_all($sql);
+		$sql = "SELECT * FROM vaccinations WHERE vaccinationID = ?";
+		return $this->query_one($sql, $vaccination_id);
+	}
+
+	public function find_centre($centre_name)
+	{
+		$sql = "SELECT * FROM healthcareCentres WHERE centreName = ?";
+		return $this->query_one($sql, $centre_name);
 	}
 
 	public function get_all_vaccines()
 	{
 		$sql = "SELECT * FROM vaccines";
 		return $this->query_all($sql);
+	}
+
+	public function add_batch($batch_no, $quantity_available, $expiryDate, $vaccine_id, $centre_name)
+	{
+		$sql = "INSERT INTO Batches 
+		(batchNo, quantityAvailable, expiryDate, vaccineID, centreName)
+		VALUES (?,?,?,?,?)";
+
+		return $this->cud_query($sql, $batch_no, $quantity_available, $expiryDate, $vaccine_id, $centre_name);
 	}
 }

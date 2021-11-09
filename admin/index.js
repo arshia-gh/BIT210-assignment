@@ -7,9 +7,9 @@ vaccineSelect.onchange = (e) => {
 };
 
 const tableContainer = document.getElementById('tableContainer');
-const table = tableContainer.querySelector("table");
-table.addEventListener('click', (e) => {
+const batchTable = tableContainer.querySelector("table");
+batchTable.addEventListener('click', (e) => {
 const tr = e.target.parentNode;
 const batchNo = tr.getAttribute('data-row-id');
-if (batchNo) window.location = '../batch/' + batchNo;
+if (batchNo) window.location = 'batch.php?batchNo=' + batchNo;
 })

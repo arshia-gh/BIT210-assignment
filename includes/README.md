@@ -1,5 +1,4 @@
 # Includes Documentation
-<hr>
 &rarr; All includes utilize constants defined in app_metadata.inc.php
 
 ### footer template usage

@@ -1,15 +1,15 @@
-#Includes Documentation
+# Includes Documentation
 <hr>
 &rarr; All includes utilize constants defined in app_metadata.inc.php
 
-###footer template usage
+### footer template usage
 <pre>
 // include app metadata
 include('./includes/app_metadata.inc.php')
 // include footer template
 include('./includes/footer.inc.php')
 </pre>
-###navbar template usage
+### navbar template usage
 <pre>
 // include app metadata
 include('./includes/app_metadata.inc.php')
@@ -21,7 +21,7 @@ $nav_links = [
 // include footer template
 include('./includes/footer.inc.php')
 </pre>
-###table generator usage
+### table generator usage
 <pre>
 // todo
 </pre>

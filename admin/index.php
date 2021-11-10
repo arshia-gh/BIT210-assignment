@@ -151,9 +151,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 						</div>
 						<div class="modal-body p-4">
 							<form id="addBatchForm"  method="POST" action="./batch_submission.php">
-								<input type="hidden" name="centreName" value=<?php
-																				global $healthcare_centre;
-																				echo "\"{$healthcare_centre['centreName']}\"" ?> />
+								<input type="hidden" name="centreName" value=<?=$healthcare_centre['centreName']?> />
 
 								<select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" required name="vaccineID">
 									<option selected hidden value="">Select a vaccine</option>

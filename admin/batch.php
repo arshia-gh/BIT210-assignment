@@ -1,6 +1,7 @@
 <?php
 require_once '../includes/table_generator.php';
 require_once '../database/administrator_queries.php';
+// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 ?>
 
 <!DOCTYPE html>
@@ -112,13 +113,8 @@ require_once '../database/administrator_queries.php';
             </p>
             <div id='tableContainer'>
               <?php
-              $table_headers = ['Vaccination ID', 'Status', 'Appoinement Date'];
+              $table_headers = ['Vaccination ID', 'Status', 'Appointment Date'];
               $vaccinations = $admin_queries->find_vaccinations_of_batch($batchNo);
-
-              // function onBatchSelected($batchNo) {
-              //   header("Location: /batch/$batchNo");
-              // }
-
               $vaccinations = array_map(
                 fn ($vaccination) => [
                   'vaccinationID' => $vaccination['vaccinationID'],
@@ -127,7 +123,6 @@ require_once '../database/administrator_queries.php';
                 ],
                 $vaccinations
               );
-
               GenerateTable($vaccinations, 'vaccinationID', $table_headers);
               ?>
             </div>
@@ -156,8 +151,7 @@ require_once '../database/administrator_queries.php';
         </div>
         <div class="modal-body px-4">
           <div id="vaccinationDetailContainer"></div>
-          <div>
-            <h6 class="text-center mb-3" id="operationTitle">Operation Title</h6>
+          <!-- <div>
             <form id='manageVaccinationForm'>
               <div class="form-floating my-3">
 
@@ -178,7 +172,7 @@ require_once '../database/administrator_queries.php';
                   <button type="submit" class="btn btn-primary w-100" id='submitButton'>Submit</button>
                 </div>
             </form>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

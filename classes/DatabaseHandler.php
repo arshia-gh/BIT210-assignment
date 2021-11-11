@@ -1,6 +1,6 @@
 <?php
 
-class DatabaseHandler
+abstract class DatabaseHandler
 {
 	private string $db_server_name = 'localhost';
 	private string $db_username = 'root';
@@ -69,7 +69,7 @@ class DatabaseHandler
 	/**
 	 * @throws \Exception
 	 */
-	public function query_one(string $query, mixed ...$args): bool|array|null
+	public function query_one(string $query, mixed ...$args): bool|array
 	{
 		$result = $this->query($query, $args);
 		return self::fetch_result_and_close($result, [$result, 'fetch']);
@@ -84,7 +84,7 @@ class DatabaseHandler
 		return self::fetch_result_and_close($result, [$result, 'fetchAll']);
 	}
 
-	private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : mixed
+	private static function fetch_result_and_close(bool|\PDOStatement $result, callable $callback) : bool|array|int
 	{
 		if (is_bool($result)) return $result;
 		$fetched_result = $callback();

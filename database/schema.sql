@@ -75,8 +75,8 @@ CREATE TABLE Vaccinations
     batchNo         VARCHAR(255) NOT NULL,
 
     -- constraints -- find the easier way lmao
-    CONSTRAINT vaccinations_remarks_check CHECK (status = 'confirmed' OR status = 'administered' OR
-                                                ((status = 'accepted' OR status = 'pending') AND remarks IS NULL)),
+    CONSTRAINT vaccinations_remarks_check CHECK (status = 'rejected' OR status = 'administered' OR
+                                                ((status = 'confirmed' OR status = 'pending') AND remarks IS NULL)),
 
     -- foreign key constraints
     CONSTRAINT vaccinations_fk_user FOREIGN KEY (username) REFERENCES Users (username),

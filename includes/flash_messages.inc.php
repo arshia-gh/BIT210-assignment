@@ -33,7 +33,9 @@
 	 */
 	function format_flash_message(array $flash_message): string
 	{
-		return sprintf('<div class="alert alert-%s" role="alert" onload="setTimeout(() => this., 3000)">%s</div>',
+		return sprintf('<div class="alert alert-%s alert-dismissible fade show" role="alert">%s
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>',
 			$flash_message['type'],
 			$flash_message['message']
 		);

@@ -61,6 +61,12 @@
 		echo format_flash_message($flash_message);
 	}
 
+	function clear_flashes() {
+		if (!isset($_SESSION[FLASH::MESSAGES])) {
+			unset($_SESSION[FLASH::MESSAGES]);
+		}
+	}
+
 	/**
 	 * Display all flash messages
 	 *

@@ -1,13 +1,12 @@
 <?php
 	// default values
 	if (!isset($nav_links)) $nav_links = [];
-	if (!isset($nav_logo_src)) $nav_logo_src = '../asset/svg/logo.svg';
-	if (!isset($nav_links['Home'])) $nav_links['Home'] = ['./index.html', true]
+	if (!isset($nav_links['Home'])) $nav_links['Home'] = [PROJECT_URL . 'index.html', true];
 ?>
 
 <nav class="navbar navbar-expand-md navbar-light container-md">
 	<a class="navbar-brand d-flex align-items-center" href="<?=$nav_links['Home'][0]?>">
-		<img src="<?=$nav_logo_src?>" alt="navbar logo" class="me-1" />
+		<img src="<?=PROJECT_URL . 'asset/svg/logo.svg'?>" alt="navbar logo" class="me-1" />
 		<span class="fw-bold"><?=APP_NAME?></span>
 		<span class="align-self-stretch border-end mx-1"></span>
 		<span class="fs-6 fw-light text-secondary">

@@ -33,9 +33,17 @@
 	 */
 	function format_flash_message(array $flash_message): string
 	{
-		return sprintf('<div class="alert alert-%s alert-dismissible fade show" role="alert">%s
-			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>',
+		return sprintf('
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+			<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="toast-header bg-%s text-white">
+					<strong class="me-auto">PCVS</strong>
+					<button type="button" class="btn-close bg-white" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body bg-white"> %s </div>
+			</div>	
+		</div>
+		',
 			$flash_message['type'],
 			$flash_message['message']
 		);

@@ -69,10 +69,11 @@ abstract class DatabaseHandler
 	/**
 	 * @throws \Exception
 	 */
-	public function query_one(string $query, mixed ...$args): bool|array
+	public function query_one(string $query, mixed ...$args): null|array
 	{
 		$result = $this->query($query, $args);
-		return self::fetch_result_and_close($result, [$result, 'fetch']);
+		$fetched_result = self::fetch_result_and_close($result, [$result, 'fetch']);
+		return $fetched_result === FALSE ? null : $fetched_result;
 	}
 
 	/**
@@ -136,5 +137,13 @@ abstract class DatabaseHandler
 		VALUES (?,?,?,?,?)";
 
 		return $this->cud_query($sql, $batch_no, $quantity_available, $expiryDate, $vaccine_id, $centre_name);
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function get_all_healthcare_centres(): array|false {
+		$sql = "SELECT * FROM healthcarecentres";
+		return $this->query_all($sql);
 	}
 }

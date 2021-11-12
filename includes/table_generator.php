@@ -16,7 +16,7 @@
 // 	container.replaceChildren(table);
 // };
 
-function GenerateTable($objects, $objKey, $headers, $renderKey = true) {
+function GenerateTable(array $objects, string $objKey, array $headers, bool $renderKey = true) {
 	echo '
 	<table class="table rounded table-white overflow-hidden table-hover table-responsive shadow" id="lmao">
 		<thead class="thead table-primary">
@@ -27,14 +27,20 @@ function GenerateTable($objects, $objKey, $headers, $renderKey = true) {
 	echo '	</tr>
 		</thead>
 		<tbody>';
-		foreach($objects as $obj) {
-			echo "<tr role=\"button\" data-row-id=$obj[$objKey]>";
-			foreach($obj as $attributeName => $value) {
-				if($attributeName === $objKey && $renderKey === false) 
-					continue;
-				echo "<td>$value</td>";
+
+		if($objects === null || count($objects) === 0) {
+			echo '<tr><td colspan="' . count($headers) . '">There are no data available.</td></tr>';
+		}
+		else {
+			foreach($objects as $obj) {
+				echo "<tr role=\"button\" data-row-id=$obj[$objKey]>";
+				foreach($obj as $attributeName => $value) {
+					if($attributeName === $objKey && $renderKey === false) 
+						continue;
+					echo "<td>$value</td>";
+				}
+				echo '</>';
 			}
-			echo '</tr>';
 		}
 	echo '
 		</tbody>

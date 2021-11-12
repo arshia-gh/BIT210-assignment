@@ -1,7 +1,8 @@
 <?php
 require_once '../includes/table_generator.php';
 require_once '../database/administrator_queries.php';
-// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+require_once '../includes/app_metadata.inc.php';
+header("Cache-Control: no-store, no-cache, must-revalidate");
 ?>
 
 <!DOCTYPE html>
@@ -20,26 +21,14 @@ require_once '../database/administrator_queries.php';
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-  <header class="container-md">
-    <nav class="navbar navbar-expand-md navbar-light">
-      <a class="navbar-brand d-flex align-items-center" href="/index.html">
-        <img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
-        <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="./index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./dashboard/administrator.html">Dashboard</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <header>
+    <?php
+    $nav_links = [
+      'Home' => ['../index.php', false],
+      'Dashboard' => ['../admin/index.php', false]
+    ];
+    require_once('../includes/navbar.inc.php');
+    ?>
   </header>
 
   <main class="container flex-grow-1">
@@ -132,54 +121,10 @@ require_once '../database/administrator_queries.php';
     </div>
   </main>
 
-  <footer class="bg-dark">
-    <section class="container-md py-2 text-white text-center">
-      <h2 class="h2 m-0">PCVS</h2>
-      <p class="fs-4 fw-light m-0">Private Covid-19 Vaccination Service </p>
-      <hr />
-      <small class="text-muted">PCVS - copyright&copy; 2021</small>
-    </section>
-  </footer>
+	<?php require_once('../includes/footer.inc.php'); ?>
 
-  <!--Modal-->
-  <div class="modal fade" id="manageVaccinationModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addBatchLabel">Vaccination</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body px-4">
-          <div id="vaccinationDetailContainer"></div>
-          <!-- <div>
-            <form id='manageVaccinationForm'>
-              <div class="form-floating my-3">
-
-                <div class="btn-group w-100" role="group" aria-label="radio toggle button group" id="statusButtonGroup">
-                  <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbAccept" autocomplete="off" required>
-                  <label class="btn btn-outline-primary" for="rdbAccept">Confirm</label>
-
-                  <input type="radio" class="btn-check" name="status" value="rejected" id="rdbtn-reject" autocomplete="off">
-                  <label class="btn btn-outline-primary" for="rdbtn-reject">Reject</label>
-                </div>
-
-                <div class="form-floating my-3">
-                  <input type="text" class="form-control" placeholder="remarks" name="remarks" id="remarks-input">
-                  <label for="floatingInput">Remarks</label>
-                </div>
-
-                <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary w-100" id='submitButton'>Submit</button>
-                </div>
-            </form>
-          </div> -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="../asset/js/bootstrap.bundle.min.js"></script>
-  <script type="text/javascript" src="./batch.js"></script>
+  <script type="text/javascript" src="../asset/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="batch.js"></script>
 </body>
 
 </html>

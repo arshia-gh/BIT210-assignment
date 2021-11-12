@@ -1,7 +1,8 @@
 <?php
 require_once '../includes/table_generator.php';
 require_once '../database/administrator_queries.php';
-require_once '../includes/flash.php';
+require_once '../includes/app_metadata.inc.php';
+require_once '../includes/flash_messages.inc.php';
 
 $vaccinationID = $_GET['vaccinationID'];
 $vaccination = $admin_queries->find_vaccination($vaccinationID);
@@ -10,9 +11,7 @@ $batch = $admin_queries->find_batch($vaccination['batchNo']);
 $vaccine = $admin_queries->find_vaccine($batch['vaccineID']);
 
 $statusColor =
-    $vaccination['status'] === "pending" ? "secondary" : 
-    ($vaccination['status'] === "confirmed" ? "primary" : 
-    ($vaccination['status'] === "rejected" ? "danger" : "success"));
+    $vaccination['status'] === "pending" ? "secondary" : ($vaccination['status'] === "confirmed" ? "primary" : ($vaccination['status'] === "rejected" ? "danger" : "success"));
 // header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 ?>
 
@@ -32,26 +31,16 @@ $statusColor =
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <header class="container-md">
-        <nav class="navbar navbar-expand-md navbar-light">
-            <a class="navbar-brand d-flex align-items-center" href="/index.html">
-                <img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
-                <span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="main-navbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="./index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./dashboard/administrator.html">Dashboard</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <?php display_flash_message($vaccinationID . "UpdateMessage"); //flash if there is any message for this vaccination ?>
+
+    <header>
+        <?php
+        $nav_links = [
+            'Home' => ['../index.php', false],
+            'Dashboard' => ['../admin/index.php', false]
+        ];
+        require_once('../includes/navbar.inc.php');
+        ?>
     </header>
 
     <main class="container flex-grow-1">
@@ -91,19 +80,22 @@ $statusColor =
 
             <div class="col-12 col-lg-9" style="min-height: 50vh">
                 <section class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken" style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg);">
-                    <div class="text-white">
-                        <h3>Vaccination | <?= $vaccinationID ?></h3>
-                        <p>Appointment Date | <?= $vaccination['appointmentDate'] ?>
-                            <span class=<?= sprintf('"badge text-uppercase mx-2 bg-%s"', $statusColor) ?>>
-                                <?= $vaccination['status'] ?>
-                            </span>
-                            <a class="btn btn-warning btn-sm float-end w-25 fw-bold" href=<?= "./batch.php?batchNo=" . $vaccination['batchNo'] ?>>
+                    <h3 class="text-white">Vaccination | <?= $vaccinationID ?></h3>
+                    <div class="row text-white">
+                        <div class="col-12 col-lg-9">
+                            <p>Appointment Date | <?= $vaccination['appointmentDate'] ?>
+                                <span class=<?= sprintf('"badge text-uppercase mx-2 bg-%s"', $statusColor) ?>>
+                                    <?= $vaccination['status'] ?>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-12 col-lg-3">
+                            <a class="btn btn-warning btn-sm float-end w-100 fw-sbold" href=<?= "./batch.php?batchNo=" . $vaccination['batchNo'] ?>>
                                 Back to list</a>
-                        </p>
+                        </div>
                     </div>
 
-                    <div class="bg-white rounded shadow p-4">
-                        <?php display_flash_message("ok") ?>
+                    <div class="bg-white rounded shadow p-4 mt-2 mt-lg-0">
                         <div id="vaccinationDetails">
                             <table class="table">
                                 <thead class="table-primary">
@@ -201,27 +193,10 @@ $statusColor =
         </div>
     </main>
 
-    <footer class="bg-dark">
-        <section class="container-md py-2 text-white text-center">
-            <h2 class="h2 m-0">PCVS</h2>
-            <p class="fs-4 fw-light m-0">Private Covid-19 Vaccination Service </p>
-            <hr />
-            <small class="text-muted">PCVS - copyright&copy; 2021</small>
-        </section>
-    </footer>
+    <?php require_once('../includes/footer.inc.php'); ?>
 
     <script src="../asset/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const statusButtonGroup = document.getElementById("statusButtonGroup");
-        const rdbAccept = document.getElementById("rdbAccept");
-        const remarksInput = document.getElementById("remarksInput");
-
-        statusButtonGroup.onchange = () => {
-            const isAccepting = rdbAccept.checked;
-            remarksInput.disabled = isAccepting;
-            btnSubmit.innerHTML = (isAccepting ? "Confirm" : "Reject") + " Appointment";
-        };
-    </script>
+    <script src="manage-vaccination.js"></script>
 </body>
 
 </html>

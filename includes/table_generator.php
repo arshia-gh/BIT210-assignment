@@ -16,7 +16,7 @@
 // 	container.replaceChildren(table);
 // };
 
-function GenerateTable(array $objects, string $objKey, array $headers, bool $renderKey = true) {
+function GenerateTable(array $objects, string $objKey, array $headers, bool $renderKey = true, string $emptyMessage = null) {
 	echo '
 	<table class="table rounded table-white overflow-hidden table-hover table-responsive shadow" id="lmao">
 		<thead class="thead table-primary">
@@ -29,7 +29,8 @@ function GenerateTable(array $objects, string $objKey, array $headers, bool $ren
 		<tbody>';
 
 		if($objects === null || count($objects) === 0) {
-			echo '<tr><td colspan="' . count($headers) . '">There are no data available.</td></tr>';
+			echo sprintf('<tr><td colspan="%d"> %s </td></tr>', count($headers),
+				$emptyMessage ?? 'There are no data available.'); 
 		}
 		else {
 			foreach($objects as $obj) {

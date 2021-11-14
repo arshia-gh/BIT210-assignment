@@ -54,13 +54,9 @@ final class AdminstratorDatabaseHandler extends DatabaseHandler
 
 	public function confirm_appointment($vaccinationID, $batchNo)
 	{
-		try {
-			$affectedVaccination = $this->set_vaccination_status_and_remarks($vaccinationID, 'confirmed');
-			$affectedBatch = $this->decreases_batch_quantity_available($batchNo);
-			return $affectedVaccination && $affectedBatch;
-		} catch (Exception $ex) {
-			return $ex;
-		}
+		$affectedVaccination = $this->set_vaccination_status_and_remarks($vaccinationID, 'confirmed');
+		$affectedBatch = $this->decreases_batch_quantity_available($batchNo);
+		return $affectedVaccination && $affectedBatch;
 	}
 
 	public function reject_appointment($vaccinationID, $remarks)

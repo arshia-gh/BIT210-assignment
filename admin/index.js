@@ -1,11 +1,3 @@
-const vaccineSelect = document.getElementById('vaccineSelect');
-
-vaccineSelect.onchange = (e) => {
-    const option = e.target.selectedOptions[0];
-    const manufacturer = option.getAttribute('data-manufacturer');
-    document.getElementById('manufacturerInput').value = manufacturer;
-};
-
 const tableContainer = document.getElementById('tableContainer');
 const batchTable = tableContainer.querySelector("table");
 batchTable.addEventListener('click', (e) => {

@@ -24,7 +24,7 @@ try {
 
     if($result) {
         create_flash_message($vaccinationID . 'UpdateMessage', 
-        "Successfully marked the vaccination as <strong class=\"text-capitalize\">$status</strong>.", FLASH::SUCCESS);
+        "Successfully marked this vaccination as <strong class=\"text-capitalize\">$status</strong>.", FLASH::SUCCESS);
     }
 }
 catch (Exception $ex) {

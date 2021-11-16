@@ -3,6 +3,8 @@ require_once '../database/administrator_queries.php';
 require_once '../includes/app_metadata.inc.php';
 require_once '../includes/flash_messages.inc.php';
 
+authenticate();
+
 $vaccinationID = $_POST['vaccinationID'];
 $batchNo = $_POST['batchNo'];
 $status = $_POST['status'];

@@ -1,11 +1,10 @@
 <?php
-header("Cache-Control: no-store, no-cache, must-revalidate");
 require_once '../includes/table_generator.php';
 require_once '../database/administrator_queries.php';
 require_once '../includes/app_metadata.inc.php';
 require_once '../includes/flash_messages.inc.php';
 
-$current_admin = ['centreName' => 'Century Medical Centre'];
+$current_admin = authenticate();
 $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 ?>
 
@@ -37,34 +36,11 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 	<main class="container flex-grow-1">
 		<div class="row">
 			<div class="col-12 col-lg-3 bg-light py-3">
-				<aside class="border rounded p-3 pb-1 mt-3 bg-white">
-					<h6 class="text-muted">Location</h6>
-					<nav style="--bs-breadcrumb-divider: '➤'" aria-label="breadcrumb">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item active">Select Batches</li>
-						</ol>
-					</nav>
-				</aside>
+				<!--locations links-->
+				<?php require_once '../includes/location_breadcrumb.php'?>
 
 				<!--user info-->
-				<aside class="border rounded bg-white p-3 mt-3">
-					<header class="d-flex justify-content-between align-items-end">
-						<h6 class="text-muted">User Information</h6>
-						<div id="logout" class="d-none">
-							<button id="logoutBtn" class="btn btn-warning btn-sm">logout</button>
-						</div>
-					</header>
-					<figure class="row mt-3 justify-content-center align-items-center">
-						<div class="col-lg-6 col-3">
-							<img id="user-avatar" class="img-fluid" src="../asset/img/male_man_people_person_avatar_white_tone_icon.png" />
-						</div>
-						<footer class="col-9 col-lg-12 mt-3">
-							<ul id="userInfo" class="list-group list-group-flush text-break text-center">
-								<li class="list-group-item">Not logged in</li>
-							</ul>
-						</footer>
-					</figure>
-				</aside>
+				<?php require_once '../includes/user_info.inc.php'?>
 			</div>
 
 			<div class="col-12 col-lg-9" style="min-height: 50vh">
@@ -80,7 +56,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 							</div>
 							<div class="col-12 col-lg-3 mb-2 mb-lg-0">
 								<a href="add-batch.php" class="btn btn-primary btn-sm w-100">
-									<span class="fa fa-plus"></span> Batch
+									<span class="fa fa-plus"></span> Add Batch
 								</a>
 							</div>
 						</div>
@@ -111,78 +87,6 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 	</main>
 
 	<?php require_once('../includes/footer.inc.php'); ?>
-
-	<!--Modal-->
-	<!-- <div class="modal fade" id="addBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="row">
-					<div class="col-sm ps-5 d-none d-lg-block">
-						<div id="carouselCovid" class="carousel slide h-100 d-flex align-items-center" data-bs-ride="carousel">
-							<div class="carousel-inner">
-								<div class="carousel-item active">
-									<img src="https://image.freepik.com/free-vector/organic-flat-vaccination-campaign-illustration_23-2148955324.jpg" class="d-block w-100" alt="image of encouraging youth vaccination" />
-								</div>
-								<div class="carousel-item">
-									<img src="https://image.freepik.com/free-vector/flat-hand-drawn-doctor-injecting-vaccine-patient_23-2148872143.jpg" class="d-block w-100" alt="image of encouraging adult vaccination" />
-								</div>
-								<div class="carousel-item">
-									<img src="https://image.freepik.com/free-vector/vaccine-concept-illustration_114360-5376.jpg" class="d-block w-100" alt="image of encouraging old forks vaccination" />
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm">
-						<div class="modal-header">
-							<h5 class="modal-title" id="addBatchLabel">Add Batch</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body p-4">
-							<form id="addBatchForm" method="POST" action="./batch_submission.php">
-								<input type="hidden" name="centreName" value=<?= $healthcare_centre['centreName'] ?> />
-
-								<select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" required name="vaccineID">
-									<option selected hidden value="">Select a vaccine</option>
-									<?php
-									$vaccines = $admin_queries->get_all_vaccines();
-									foreach ($vaccines as $vaccine) {
-										echo "<option value=\"{$vaccine['vaccineID']}\" data-manufacturer=\"{$vaccine['manufacturer']}\">{$vaccine['vaccineName']}</option>";
-									}
-									?>
-								</select>
-
-								<input readonly class="form-control mt-3" id="manufacturerInput" placeholder="Manufacturer" />
-
-								<hr />
-
-								<p class="text-muted text-center">Enter Batch Details</p>
-
-								<div class="form-floating my-3">
-									<input required type="text" class="form-control" id="batchNoInput" placeholder="Batch Number" name="batchNo" />
-									<label for="floatingInput">Batch Number</label>
-								</div>
-								<div class="alert alert-danger d-none" id="duplicatedBatchAlert"></div>
-
-								<div class="form-floating my-3">
-									<input required type="number" min="1" class="form-control" id="quantityInput" placeholder="Quantity Available" name="quantityAvailable" />
-									<label for="floatingInput">Quantity Available</label>
-								</div>
-
-								<div class="form-floating mb-3">
-									<input required type="date" class="form-control" id="expiryDateInput" placeholder="Expiry Date" name="expiryDate" />
-									<label for="floatingInput">Expiry Date</label>
-								</div>
-
-								<div class="d-flex justify-content-center">
-									<button type="submit" class="btn btn-primary w-100" id="submitButton">Add</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 	<script type="text/javascript" src="../asset/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="index.js"></script>

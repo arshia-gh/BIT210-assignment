@@ -4,6 +4,7 @@
 		const ERROR = 'danger';
 		const WARNING = 'warning';
 		const INFO = 'info';
+		const PRIMARY = 'primary';
 		const SUCCESS = 'success';
 	}
 

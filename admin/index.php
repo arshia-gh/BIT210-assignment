@@ -1,6 +1,10 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate");
 require_once '../includes/table_generator.php';
 require_once '../database/administrator_queries.php';
+require_once '../includes/app_metadata.inc.php';
+require_once '../includes/flash_messages.inc.php';
+
 $current_admin = ['centreName' => 'Century Medical Centre'];
 $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 ?>
@@ -20,27 +24,15 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<nav class="navbar navbar-expand-md navbar-light container-md">
-		<a class="navbar-brand d-flex align-items-center" href="/index.html">
-			<img src="../asset/svg/logo.svg" alt="navbar logo" class="me-1" />
-			<span class="fw-bold">PCVS</span><span class="align-self-stretch border-end mx-1"></span><span class="fs-6 fw-light text-secondary">Private Covid-19 Vaccination Service</span>
-		</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle main navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse justify-content-end" id="main-navbar">
-			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" href="../index.html">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link active" href="./administrator.html" aria-current="page">
-						Dashboard
-					</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
+	<?php
+	display_flash_message('AddBatchMessage');
+
+	$nav_links = [
+		'Home' => ['../index.php', false],
+		'Dashboard' => ['../admin/index.php', true]
+	];
+	require_once('../includes/navbar.inc.php');
+	?>
 
 	<main class="container flex-grow-1">
 		<div class="row">
@@ -77,17 +69,21 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 
 			<div class="col-12 col-lg-9" style="min-height: 50vh">
 				<section class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken" style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg);">
-					<h1 id="healthcareCenterName" class="text-white">Healthcare Centre name</h1>
-					<h5 id="healthcareCenterAddress" class="text-white fw-light fst-italic">Healthcare Centre address</h5>
+					<h1 id="healthcareCenterName" class="text-white"><?= $healthcare_centre['centreName'] ?></h1>
+					<h5 id="healthcareCenterAddress" class="text-white fw-light fst-italic"><?= $healthcare_centre['address'] ?></h5>
 
 					<article class="container bg-white rounded shadow text-dark py-3 my-5">
 						<h3>Batches List</h3>
-						<p class="text-muted">Select a batch to view
-							<button type="button" class="btn btn-primary btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addBatchModal">
-								<span class="fa fa-plus"></span> Batch
-							</button>
-							<span id="batchAddedBadge" class="float-end badge bg-success mx-3 p-2"></span>
-						</p>
+						<div class="row">
+							<div class=" col-12 col-lg-9">
+								<p class="text-muted">Select a batch to view </p>
+							</div>
+							<div class="col-12 col-lg-3 mb-2 mb-lg-0">
+								<a href="add-batch.php" class="btn btn-primary btn-sm w-100">
+									<span class="fa fa-plus"></span> Batch
+								</a>
+							</div>
+						</div>
 						<div id="tableContainer">
 							<?php
 							$table_headers = ['Batch Number', 'Expiry Date', 'No of Pending Appointment'];
@@ -114,18 +110,10 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 			</div>
 	</main>
 
-	<footer class="bg-dark">
-		<section class="container-md py-2 text-white text-center">
-			<h2 class="h2 m-0">PCVS</h2>
-			<p class="fs-4 fw-light m-0">Private Covid-19 Vaccination Service </p>
-			<hr />
-			<small class="text-muted">PCVS - copyright&copy; 2021</small>
-		</section>
-	</footer>
-
+	<?php require_once('../includes/footer.inc.php'); ?>
 
 	<!--Modal-->
-	<div class="modal fade" id="addBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
+	<!-- <div class="modal fade" id="addBatchModal" tabindex="-1" aria-labelledby="addBatchLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="row">
@@ -150,8 +138,8 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body p-4">
-							<form id="addBatchForm"  method="POST" action="./batch_submission.php">
-								<input type="hidden" name="centreName" value=<?=$healthcare_centre['centreName']?> />
+							<form id="addBatchForm" method="POST" action="./batch_submission.php">
+								<input type="hidden" name="centreName" value=<?= $healthcare_centre['centreName'] ?> />
 
 								<select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" required name="vaccineID">
 									<option selected hidden value="">Select a vaccine</option>
@@ -194,30 +182,10 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
-	<script src="../asset/js/bootstrap.bundle.min.js"></script>
-	<script src="./index.js"></script>
-
-	<script>
-		// const tableContainer = document.getElementById('tableContainer');
-		// const vaccinationTable = tableContainer.querySelector("table");
-
-		// vaccinationTable.addEventListener('click', (e) => {
-		// 	const tr = e.target.parentNode;
-		// 	const vaccinationID = tr.getAttribute('data-row-id');
-		// 	URLSearchParams.append('vaccinationID', vaccinationID);
-		// 	alert(URLSearchParams.arguments['vaccinationID'])
-		// 	// <?php
-		// 		// if( ) 
-		// 		// 	$vaccination = $admin_queries->find_vaccination('123');
-
-		// 		// 
-		// 		?>
-		// 	// showManageVaccinationModal(
-		// 	// 	);
-		// })
-	</script>
+	<script type="text/javascript" src="../asset/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>

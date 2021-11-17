@@ -34,22 +34,23 @@
 	}
 
 	function display_alert(string $msg, string $type, ?string $icon_type = NULL,
-	                       bool $dismissible = FALSE, string $class = '', ?string $id = null
-	) {
+	                       bool   $dismissible = FALSE
+	)
+	{
 		$alert_class = get_alert_class($dismissible, $type);
 		$dismissible_btn = get_dismissible_btn($dismissible);
-		$id = is_null($id) ? '' : "id=\"$id\"";
 		$icon = get_alert_icon($icon_type);
 		echo <<<ALERT
-			<div class="$alert_class $class" $id>
+			<div class="$alert_class">
 				$icon
-				<span class="ms-2">$msg</span>
+				<span class="ms-md-2">$msg</span>
 				$dismissible_btn
 			</div>
 		ALERT;
 	}
 
-	function display_fatal_error($error_code) {
+	function display_fatal_error($error_code)
+	{
 		display_alert_with_body(
 			"An <strong>ERROR</strong> occurred, please contact an administrator",
 			"Please report the following error code: <strong>ERR_$error_code</strong>",
@@ -58,19 +59,18 @@
 		);
 	}
 
-	function display_alert_with_body(string $title, string $msg, string $type,
-	                                 ?string $icon_type = NULL, bool $dismissible = FALSE,
-	                                 string $class = '', ?string $id = null
-	) {
+	function display_alert_with_body(string  $title, string $msg, string $type,
+	                                 ?string $icon_type = NULL, bool $dismissible = FALSE
+	)
+	{
 		$alert_class = get_alert_class($dismissible, $type);
 		$dismissible_btn = get_dismissible_btn($dismissible);
-		$id = is_null($id) ? '' : "id=\"$id\"";
 		$icon = get_alert_icon($icon_type);
 		echo <<<ALERT
-			<div class="$alert_class $class" $id>
+			<div class="$alert_class">
 				<div class="alert-heading">
 					$icon
-					<span class="ms-2">$title</span>
+					<span class="ms-md-2">$title</span>
 					$dismissible_btn
 				</div>
 				<hr>

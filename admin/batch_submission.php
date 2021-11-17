@@ -3,6 +3,8 @@ require_once '../database/administrator_queries.php';
 require_once '../includes/app_metadata.inc.php';
 require_once '../includes/flash_messages.inc.php';
 
+authenticate(); //make sure the request is coming from actual admin
+
 $batchNo = $_POST['batchNo'];
 $quantityAvailable = $_POST['quantityAvailable'];
 $expiryDate = $_POST['expiryDate'];

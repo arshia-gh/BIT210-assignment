@@ -4,15 +4,20 @@ require_once '../database/administrator_queries.php';
 require_once '../includes/app_metadata.inc.php';
 require_once '../includes/flash_messages.inc.php';
 
+$current_admin = authenticate();
+
 $vaccinationID = $_GET['vaccinationID'];
 $vaccination = $admin_queries->find_vaccination($vaccinationID);
 $patient = $admin_queries->find_user($vaccination['username']);
 $batch = $admin_queries->find_batch($vaccination['batchNo']);
 $vaccine = $admin_queries->find_vaccine($batch['vaccineID']);
 
+if($batch['centreName'] !== $current_admin['centreName']) { //checks if the current admin have access to this vaccination
+    redirect_to_login_form();
+}
+
 $statusColor =
     $vaccination['status'] === "pending" ? "secondary" : ($vaccination['status'] === "confirmed" ? "primary" : ($vaccination['status'] === "rejected" ? "danger" : "success"));
-// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +36,8 @@ $statusColor =
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <?php display_flash_message($vaccinationID . "UpdateMessage"); //flash if there is any message for this vaccination ?>
+    <?php display_flash_message($vaccinationID . "UpdateMessage"); //flash if there is any message for this vaccination 
+    ?>
 
     <header>
         <?php
@@ -46,36 +52,19 @@ $statusColor =
     <main class="container flex-grow-1">
         <div class="row">
             <div class="col-12 col-lg-3 bg-light py-3">
-                <aside class="border rounded p-3 pb-1 mt-3 bg-white">
-                    <h6 class="text-muted">Location</h6>
-                    <nav style="--bs-breadcrumb-divider: '➤';" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item col-lg-12"><a href="./">Select Batches</a></li>
-                            <li class="breadcrumb-item"><a href=<?= "./batch.php?batchNo=" . $vaccination['batchNo'] ?>>Select Vaccination</a></li>
-                            <li class="breadcrumb-item active">Manage Vaccination</li>
-                        </ol>
-                    </nav>
-                </aside>
+                <!--location links-->
+                <?php
+                $locations =
+                    [
+                        'Select Vaccination' => "batch.php?batchNo=" . $vaccination['batchNo'],
+                        'Manage Vaccination' => null
+                    ];
+
+                require_once '../includes/location_breadcrumb.php'
+                ?>
 
                 <!--user info-->
-                <aside class="border rounded bg-white p-3 mt-3">
-                    <header class="d-flex justify-content-between align-items-end">
-                        <h6 class="text-muted">User Information</h6>
-                        <div id="logout" class="d-none">
-                            <button id="logoutBtn" class="btn btn-warning btn-sm">logout</button>
-                        </div>
-                    </header>
-                    <figure class="row mt-3 justify-content-center align-items-center">
-                        <div class="col-lg-6 col-3">
-                            <img id="user-avatar" class="img-fluid" src="../asset/img/male_man_people_person_avatar_white_tone_icon.png" />
-                        </div>
-                        <footer class="col-9 col-lg-12 mt-3">
-                            <ul id="userInfo" class="list-group list-group-flush text-break text-center">
-                                <li class="list-group-item">Not logged in</li>
-                            </ul>
-                        </footer>
-                    </figure>
-                </aside>
+                <?php require_once '../includes/user_info.inc.php' ?>
             </div>
 
             <div class="col-12 col-lg-9" style="min-height: 50vh">

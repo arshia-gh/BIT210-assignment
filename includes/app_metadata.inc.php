@@ -61,3 +61,12 @@
 		}
 		return NULL;
 	}
+
+	function statusToColor($status) {
+		switch ($status) {
+			case "pending": return "secondary"; break;
+			case "confirmed": return "primary"; break;
+			case "rejected": return "danger"; break;
+			case "administered": return "success"; break;
+		}
+	}

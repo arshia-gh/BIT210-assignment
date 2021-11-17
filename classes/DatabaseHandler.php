@@ -133,7 +133,7 @@
 			return $this->query_one($sql, $centre_name);
 		}
 
-		public function get_available_vaccines()
+		public function get_all_vaccines()
 		{
 			$sql = "SELECT * FROM vaccines";
 			return $this->query_all($sql);

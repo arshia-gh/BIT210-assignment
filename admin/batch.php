@@ -84,17 +84,19 @@ authenticate(); //make sure the request is coming from actual admin
             </p>
             <div id='tableContainer'>
               <?php
-              $table_headers = ['Vaccination ID', 'Status', 'Appointment Date'];
+              $table_headers = ['Vaccination ID', 'Appointment Date', 'Status'];
               $vaccinations = $admin_queries->find_vaccinations_of_batch($batchNo);
               $vaccinations = array_map(
                 fn ($vaccination) => [
                   'vaccinationID' => $vaccination['vaccinationID'],
                   'appointmentDate' => $vaccination['appointmentDate'],
-                  'status' => $vaccination['status']
+                  'status' => sprintf('<span class="badge bg-%s"> %s </span>', 
+                  statusToColor($vaccination['status']), strtoupper($vaccination['status']))
                 ],
                 $vaccinations
               );
-              GenerateTable($vaccinations, 'vaccinationID', $table_headers);
+              GenerateTable($vaccinations, 'vaccinationID', $table_headers, 
+              true, 'There are no vaccination appointment currently.');
               ?>
             </div>
           </div>

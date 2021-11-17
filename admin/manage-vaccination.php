@@ -16,8 +16,8 @@ if($batch['centreName'] !== $current_admin['centreName']) { //checks if the curr
     redirect_to_login_form();
 }
 
-$statusColor =
-    $vaccination['status'] === "pending" ? "secondary" : ($vaccination['status'] === "confirmed" ? "primary" : ($vaccination['status'] === "rejected" ? "danger" : "success"));
+$statusColor = statusToColor($vaccination['status']);
+
 ?>
 
 <!DOCTYPE html>

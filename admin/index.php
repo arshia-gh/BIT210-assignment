@@ -25,6 +25,8 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 <body class="d-flex flex-column min-vh-100">
 	<?php
 	display_flash_message('AddBatchMessage');
+	display_flash_message('login_result');
+	display_flash_message('database error');
 
 	$nav_links = [
 		'Home' => ['../index.php', false],
@@ -37,10 +39,10 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 		<div class="row">
 			<div class="col-12 col-lg-3 bg-light py-3">
 				<!--locations links-->
-				<?php require_once '../includes/location_breadcrumb.php'?>
+				<?php require_once '../includes/location_breadcrumb.php' ?>
 
 				<!--user info-->
-				<?php require_once '../includes/user_info.inc.php'?>
+				<?php require_once '../includes/user_info.inc.php' ?>
 			</div>
 
 			<div class="col-12 col-lg-9" style="min-height: 50vh">

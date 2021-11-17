@@ -39,7 +39,7 @@
 		return NULL;
 	}
 
-	function redirect_to_login_form() : void
+	function redirect_to_login_form()
 	{
 		header('Location: ' . PROJECT_URL . 'users/login-form.php');
 		exit();

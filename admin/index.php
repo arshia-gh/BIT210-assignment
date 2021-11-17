@@ -64,7 +64,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 						</div>
 						<div id="tableContainer">
 							<?php
-							$table_headers = ['Batch Number', 'Expiry Date', 'No of Pending Appointment'];
+							$table_headers = ['Batch Number', 'Vaccine Name', 'No of Pending Appointment'];
 							$batches = $admin_queries->find_batches_of_centre($current_admin['centreName']);
 
 							function onBatchSelected($batchNo)
@@ -74,7 +74,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 							$batches = array_map(
 								fn ($batch) => [
 									'batchNo' => $batch['batchNo'],
-									'expiryDate' => $batch['expiryDate'],
+									'vaccineName' => $batch['vaccineName'],
 									'quantityPending' => $batch['quantityPending']
 								],
 								$batches

@@ -1,22 +1,42 @@
 <?php
 
-	require_once "classes/DatabaseHandler.php";
+	include_once 'classes/DatabaseHandler.php';
 
 	final class PatientDatabaseHandler extends DatabaseHandler
 	{
 
 		/**
-		 * Retrieves vaccines that have at least one unexpired batch
-		 *
-		 * @return array an associative array containing all vaccines with their respective columns
-		 * @throws \Exception if the database connection is not established
+		 * Retrieves all vaccines with their availability status
 		 */
-		public function get_available_vaccines() : array
+		public function get_available_vaccines() : Exception|array
 		{
-			$sql = "SELECT * FROM vaccines 
-			WHERE (SELECT COUNT(*) FROM batches WHERE batches.vaccineID = vaccines.vaccineID AND expiryDate > current_date) > 0
-			";
-			return $this->query_all($sql);
+			try {
+				$sql = "SELECT vaccines.vaccineID, vaccineName, manufacturer, COUNT(batchNo) > 0 as available FROM vaccines
+				LEFT JOIN (SELECT * FROM batches WHERE quantityAvailable > 0 AND expiryDate > current_date) as batches 
+				    ON batches.vaccineID = vaccines.vaccineID
+					GROUP BY vaccines.vaccineID
+				";
+				return $this->query_all($sql);
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
+
+		/**
+		 * Retrieves a vaccine with the provided id with its availability status
+		 */
+		public function get_vaccine(string $vaccineID) : Exception|array|null
+		{
+			try {
+				$sql = "SELECT vaccines.vaccineID, vaccineName, manufacturer, COUNT(batchNo) > 0 as available FROM vaccines 
+    			LEFT JOIN (SELECT * FROM batches WHERE quantityAvailable > 0 AND expiryDate > current_date) as batches
+					ON vaccines.vaccineID = batches.vaccineID
+				WHERE vaccines.vaccineID =?
+				GROUP BY vaccines.vaccineID";
+				return $this->query_one($sql, $vaccineID);
+			} catch (Exception $e) {
+				return $e;
+			}
 		}
 
 		/**
@@ -26,19 +46,45 @@
 		 *
 		 * @param string $vaccine_id
 		 *
-		 * @return array an associative array containing all healthcare centres that offer the specified vaccine
-		 * @throws \Exception if the database connection is not established or statement fails
+		 * @return \Exception|array an associative array containing all healthcare centres that offer the specified
+		 *                          vaccine
 		 */
-		public function get_available_healthcare_centre(string $vaccine_id) : array
+		public function get_available_healthcare_centres(string $vaccine_id) : Exception|array
 		{
-			$sql = "SELECT * FROM healthcarecentres 
-			WHERE 
-			      (SELECT COUNT(*) FROM batches 
-			      WHERE vaccineID =? AND expiryDate > current_date 
-			        AND quantityAvailable > 0 
-			        AND batches.centreName = healthcarecentres.centreName) > 0
-			";
-			return $this->query_all($sql, $vaccine_id);
+			try {
+				$sql = "SELECT healthcarecentres.centreName, address,
+       						SUM(quantityAvailable) AS quantityAvailable
+						FROM healthcarecentres
+							LEFT JOIN(SELECT quantityAvailable, centreName
+    									FROM batches WHERE vaccineID =? AND expiryDate > CURRENT_DATE 
+    									               AND quantityAvailable > 0) AS batches
+							ON healthcarecentres.centreName = batches.centreName
+						WHERE quantityAvailable > 0
+						GROUP BY healthcarecentres.centreName
+						ORDER BY quantityAvailable";
+				return $this->query_all($sql, $vaccine_id);
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
+
+		public function get_healthcare_centre($vaccineID, $centreName) : Exception|array|null
+		{
+			try {
+			$sql = "SELECT healthcarecentres.centreName, address,
+       						SUM(quantityAvailable) AS quantityAvailable
+						FROM healthcarecentres
+							LEFT JOIN(SELECT quantityAvailable, centreName
+    									FROM batches WHERE vaccineID =? AND expiryDate > CURRENT_DATE 
+    									               AND quantityAvailable > 0) AS batches
+							ON healthcarecentres.centreName = batches.centreName
+						WHERE quantityAvailable > 0 AND healthcarecentres.centreName =?
+						GROUP BY healthcarecentres.centreName
+						ORDER BY quantityAvailable";
+				return $this->query_one($sql, $vaccineID, $centreName);
+			} catch (Exception $e) {
+				return $e;
+			}
 		}
 
 		/**
@@ -49,47 +95,92 @@
 		 * @param string $centre_name
 		 * @param string $vaccine_id
 		 *
-		 * @return array an associative array containing all batches offered by specified
+		 * @return \Exception|array an associative array containing all batches offered by specified
 		 * healthcare centre and are of type of specified vaccine
-		 * @throws \Exception if the database connection is not established or statement fails
 		 */
-		public function get_available_batches(string $centre_name, string $vaccine_id) : array
+		public function get_available_batches(string $centre_name, string $vaccine_id) : Exception|array
 		{
-			$sql = "SELECT * FROM batches
-			WHERE centreName =? 
-			  AND vaccineID =? 
-			  AND expiryDate > current_date 
-			  AND quantityAvailable > 0
-			";
-			return $this->query_all($sql, $centre_name, $vaccine_id);
+			try {
+				$sql = "SELECT * FROM batches
+							WHERE centreName =? 
+			  						AND vaccineID =? 
+			 						AND expiryDate > current_date 
+			  						AND quantityAvailable > 0";
+				return $this->query_all($sql, $centre_name, $vaccine_id);
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
+
+		/**
+		 * @param string $centre_name
+		 * @param string $vaccine_id
+		 *
+		 * @return \Exception|array|null
+		 */
+		public function get_batch(string $vaccine_id, string $centre_name, string $batchNo) : Exception|array|null {
+			try {
+				$sql = "SELECT * FROM batches
+							WHERE vaccineID =?
+							    AND centreName =? 
+			  					AND batchNo =? 
+			 					AND expiryDate > current_date 
+			  					AND quantityAvailable > 0";
+				return $this->query_one($sql, $vaccine_id, $centre_name, $batchNo);
+			} catch (Exception $e) {
+				return $e;
+			}
 		}
 
 		/**
 		 * @throws \Exception
 		 */
-		public function login(string $username, string $password) : array
+		public function login(string $username, string $password) : null|array
 		{
-			$sql = "SELECT fullName, username, email, ICPassport, userType FROM users WHERE username =? AND password =?";
-			return $this->query_one($sql, $username, $password);
+			$sql = "SELECT * FROM users WHERE username =? AND password =?";
+			$result = $this->query_one($sql, $username, $password);
+			return is_null($result) ? $result : array_filter($result, fn ($el) => !is_null($el));
 		}
 
 		/**
 		 * @throws \Exception
 		 */
-		public function sing_up(string $username, string $password, string $email, string $full_name, string $IC_passport, bool $is_patient) : bool
+		public function sign_up(string $username, string $password, string $email, string $full_name, string $IC_passport, bool $is_patient) : bool
 		{
 			$sql = "INSERT INTO users(username, password, email, fullName, ICPassport, userType) 
 			VALUES (?, ?, ?, ?, ?, ?);
 			";
 			return $this->cud_query($sql,
-				$username,
-				$password,
-				$email,
-				$full_name,
-				$IC_passport,
-				$is_patient ? 'patient' : 'administrator'
-			) > 0;
+					$username,
+					$password,
+					$email,
+					$full_name,
+					$IC_passport,
+					$is_patient ? 'patient' : 'administrator'
+				) > 0;
 		}
 
-		
+		public function get_user_vaccinations(string $username) : Exception|PDOStatement
+		{
+			try {
+				$sql = "SELECT status, appointmentDate, remarks FROM vaccinations WHERE username =? 
+				ORDER BY (SELECT expiryDate FROM batches WHERE vaccinations.batchNo=batches.batchNo);";
+				return $this->raw_query($sql, $username);
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
+
+		public function save_vaccination(string $vaccinationID, string $appointmentDate, string $username, string $batchNo
+		): Exception|int {
+			try {
+				$sql = "INSERT INTO vaccinations(vaccinationID, appointmentDate, username, batchNo, remarks, status)
+						VALUES (?, ?, ?, ?, null, 'pending')";
+				return $this->cud_query($sql, $vaccinationID, $appointmentDate, $username, $batchNo);
+			} catch (Exception $e) {
+				return $e;
+			}
+		}
 	}
+
+	$patient_queries = new PatientDatabaseHandler();

@@ -45,6 +45,8 @@ $statusColor = statusToColor($vaccination['status']);
             'Home' => ['../index.php', false],
             'Dashboard' => ['../admin/index.php', false]
         ];
+
+        //generates the nav bar
         require_once('../includes/navbar.inc.php');
         ?>
     </header>
@@ -60,6 +62,7 @@ $statusColor = statusToColor($vaccination['status']);
                         'Manage Vaccination' => null
                     ];
 
+                //generates the location breadcrumb
                 require_once '../includes/location_breadcrumb.php'
                 ?>
 
@@ -69,6 +72,8 @@ $statusColor = statusToColor($vaccination['status']);
 
             <div class="col-12 col-lg-9" style="min-height: 50vh">
                 <section class="p-4 rounded-3 shadow-sm h-75 bg-filter-darken" style="background-image: url(https://image.freepik.com/free-vector/flat-hand-drawn-hospital-reception-scene_52683-54613.jpg);">
+                   
+                    <!--Vaccination information-->
                     <h3 class="text-white">Vaccination | <?= $vaccinationID ?></h3>
                     <div class="row text-white">
                         <div class="col-12 col-lg-9">
@@ -78,12 +83,15 @@ $statusColor = statusToColor($vaccination['status']);
                                 </span>
                             </p>
                         </div>
+
+                        <!--"Back to list" button-->
                         <div class="col-12 col-lg-3">
                             <a class="btn btn-warning btn-sm float-end w-100 fw-sbold" href=<?= "./batch.php?batchNo=" . $vaccination['batchNo'] ?>>
                                 Back to list</a>
                         </div>
                     </div>
 
+                    <!--Other infomation such as Patient, Batch and Vaccine-->
                     <div class="bg-white rounded shadow p-4 mt-2 mt-lg-0">
                         <div id="vaccinationDetails">
                             <table class="table">
@@ -141,6 +149,7 @@ $statusColor = statusToColor($vaccination['status']);
 
                             <form method="POST" action="update-vaccination.php">
                                 <div class="form-floating my-3">
+                                    <!--show confirm/reject control if status is pending-->
                                     <?php if ($vaccination['status'] === 'pending') : ?>
                                         <div class="btn-group w-100" role="group" aria-label="radio toggle button group" id="statusButtonGroup">
                                             <input type="radio" class="btn-check" name="status" value="confirmed" id="rdbAccept" autocomplete="off" required />
@@ -153,8 +162,7 @@ $statusColor = statusToColor($vaccination['status']);
                                         <input type="hidden" name="status" value="administered" />
                                     <?php endif ?>
 
-
-
+                                    <!--Do not show remarks input and submit button if status is already rejected or administered-->
                                     <?php if ($vaccination['status'] === 'pending' || $vaccination['status'] === 'confirmed') : ?>
                                         <div class="form-floating my-3">
                                             <input type="text" class="form-control" placeholder="remarks" name="remarks" id="remarksInput" />
@@ -166,15 +174,12 @@ $statusColor = statusToColor($vaccination['status']);
                                     <?php else : ?>
                                         <p><strong>Remarks | </strong> <?= $vaccination['remarks'] ?? 'No remarks recorded' ?></p>
                                     <?php endif ?>
+
+                                    <!--hidden input for extra POST method information-->
                                     <input type="hidden" name="batchNo" value=<?= $batch['batchNo'] ?>>
                                     <input type="hidden" name="vaccinationID" value=<?= $vaccinationID ?>>
                                 </div>
                             </form>
-
-                            <div class="d-flex justify-content-center">
-
-                            </div>
-
                         </div>
                     </div>
                 </section>
@@ -182,6 +187,7 @@ $statusColor = statusToColor($vaccination['status']);
         </div>
     </main>
 
+    <!--footer-->
     <?php require_once('../includes/footer.inc.php'); ?>
 
     <script src="../asset/js/bootstrap.bundle.min.js"></script>

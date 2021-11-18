@@ -45,6 +45,8 @@ try {
         "expiryDate"=>$expiryDate,
         "vaccineID"=>$vaccineID);
 
+    //store the current form data in the cookies to 
+    //fill back the form data in add-batch form later
     setcookie("addBatch_formData", json_encode($addBatch_formData), time() + 30); //set the expiry time same as default timeout which is 30 seconds
 
     header("Location: " . $_SERVER['HTTP_REFERER']); //go back to the add batch form

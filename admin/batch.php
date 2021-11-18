@@ -86,6 +86,8 @@ authenticate(); //make sure the request is coming from actual admin
               <?php
               $table_headers = ['Vaccination ID', 'Appointment Date', 'Status'];
               $vaccinations = $admin_queries->find_vaccinations_of_batch($batchNo);
+
+              //map the vaccinations into the intended format to show
               $vaccinations = array_map(
                 fn ($vaccination) => [
                   'vaccinationID' => $vaccination['vaccinationID'],
@@ -95,6 +97,8 @@ authenticate(); //make sure the request is coming from actual admin
                 ],
                 $vaccinations
               );
+
+              //generates the vaccination table
               GenerateTable($vaccinations, 'vaccinationID', $table_headers, 
               true, 'There are no vaccination appointment currently.');
               ?>
@@ -105,6 +109,7 @@ authenticate(); //make sure the request is coming from actual admin
     </div>
   </main>
 
+  <!--footer-->
 	<?php require_once('../includes/footer.inc.php'); ?>
 
   <script type="text/javascript" src="../asset/js/bootstrap.bundle.min.js"></script>

@@ -6,5 +6,7 @@ vaccinationTable.onclick = (e) => {
 
   const tr = e.target.parentNode;
   const vaccinationID = tr.getAttribute("data-row-id");
-  if (vaccinationID) window.location = 'manage-vaccination.php?vaccinationID=' + vaccinationID;
+
+  if (vaccinationID) 
+    window.location = 'manage-vaccination.php?vaccinationID=' + vaccinationID;
 }

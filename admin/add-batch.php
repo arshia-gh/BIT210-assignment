@@ -32,6 +32,7 @@ if (isset($_COOKIE['addBatch_formData'])) {
     <?php
     display_flash_message('AddBatchMessage');
 
+    //nav bar
     $nav_links = [
         'Home' => ['../index.php', false],
         'Dashboard' => ['../admin/index.php', false]
@@ -65,8 +66,12 @@ if (isset($_COOKIE['addBatch_formData'])) {
 
                                     <option selected hidden value="">Select a vaccine</option>
                                     <?php
+                                    //fetch all vaccine from database and render as html select <option>
                                     $vaccines = $admin_queries->get_all_vaccines();
-                                    $prevVaccineID = $prevFormData['vaccineID'] ?? null;
+                                    
+                                    //in case the batch did not added sucessfully, prevFormData will 
+                                    //be used for filling back the form data upon page refresh 
+                                    $prevVaccineID = $prevFormData['vaccineID'] ?? null; 
 
                                     foreach ($vaccines as $vaccine) {
                                         echo sprintf(
@@ -109,6 +114,7 @@ if (isset($_COOKIE['addBatch_formData'])) {
                             </form>
                         </div>
 
+                        <!--bootstrap carousel-->
                         <div class="col-sm d-none d-lg-block">
                             <div id="carouselCovid" class="carousel slide h-100 mx-3 d-flex align-items-center" data-bs-ride="carousel">
                                 <div class="carousel-inner">
@@ -124,6 +130,7 @@ if (isset($_COOKIE['addBatch_formData'])) {
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </section>
             </div>

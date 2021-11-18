@@ -66,11 +66,8 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 							<?php
 							$table_headers = ['Batch Number', 'Vaccine Name', 'No of Pending Appointment'];
 							$batches = $admin_queries->find_batches_of_centre($current_admin['centreName']);
-
-							function onBatchSelected($batchNo)
-							{
-								header("Location: /batch/$batchNo");
-							}
+							
+							//map the batches into the intended format to show
 							$batches = array_map(
 								fn ($batch) => [
 									'batchNo' => $batch['batchNo'],
@@ -88,6 +85,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 			</div>
 	</main>
 
+	<!--footer-->
 	<?php require_once('../includes/footer.inc.php'); ?>
 
 	<script type="text/javascript" src="../asset/js/bootstrap.bundle.min.js"></script>

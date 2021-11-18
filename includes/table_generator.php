@@ -1,6 +1,16 @@
 <?php
-
-function GenerateTable(
+/**
+ * generates a html table with the given parameter
+ * 
+ * @return String html <table>
+ * 
+ * @param array $objects the array of object whose attribute will be used for generate the table row
+ * @param string $objKey the primary key of each table row, which will generate as value of data-row-id attribute
+ * @param array $headers the array of header which corresponds to each columns
+ * @param bool $renderKey a boolean to specify whether to generate the primary key column or not 
+ * @param string $emptyMessage the message to display when there is no objects to generate as table row 
+ */
+function generate_table(
 	array $objects,
 	string $objKey,
 	array $headers,

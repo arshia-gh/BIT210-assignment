@@ -99,7 +99,7 @@ authenticate(); //make sure the request is coming from actual admin
               );
 
               //generates the vaccination table
-              GenerateTable($vaccinations, 'vaccinationID', $table_headers, 
+              generate_table($vaccinations, 'vaccinationID', $table_headers, 
               true, 'There are no vaccination appointment currently.');
               ?>
             </div>

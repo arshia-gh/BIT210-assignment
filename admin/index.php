@@ -77,7 +77,7 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 								$batches
 							);
 
-							GenerateTable($batches, 'batchNo', $table_headers);
+							generate_table($batches, 'batchNo', $table_headers);
 							?>
 						</div>
 					</article>

@@ -103,7 +103,7 @@ VALUES ('Century Medical Centre',
 -- insert administrator
 INSERT INTO Users(username, password, email, fullName, userType, staffID, centreName)
 VALUES ('averyreed', 'avery12345678', 'avery@email.com', 'Avery Reed', 'administrator', 'B250060',
-        'Century Medical Centre')
+        'Century Medical Centre'),
        ('clinton', 'clinton12345678', 'clinton@email.com', 'Clinton', 'administrator', 'B123450',
         'Century Medical Centre'),
        ('carrick', 'carrick12345678', 'carrick@email.com', 'Carrick', 'administrator', 'B900600',

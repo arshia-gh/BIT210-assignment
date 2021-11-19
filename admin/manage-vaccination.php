@@ -42,8 +42,8 @@ $statusColor = statusToColor($vaccination['status']);
     <header>
         <?php
         $nav_links = [
-            'Home' => ['../index.php', false],
-            'Dashboard' => ['../admin/index.php', false]
+            'Home' => ['index.php', false],
+            'Dashboard' => ['admin/index.php', false]
         ];
 
         //generates the nav bar

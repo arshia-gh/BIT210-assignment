@@ -5,39 +5,19 @@
 	include_once 'includes/alert_messages.inc.php';
 	include_once 'patient/partials.php';
 
-	$current_patient = authenticate(FALSE);
-
-//	// set the healthcare centre through string query if it's null
-//	if (is_null($_SESSION['vaccination_details']['healthcareCentre']) || isset(STRING_QUERY['centreName'])) {
-//		$retrieved_hc = $patient_queries->get_healthcare_centre(
-//					$_SESSION['vaccination_details']['vaccine']['vaccineID'] ?? '', STRING_QUERY['centreName'] ?? ''
-//		);
-//		if ($retrieved_hc instanceof Exception) {
-//			display_fatal_error($retrieved_hc->getCode());
-//		} else if (is_null($retrieved_hc)) {
-//			create_flash_message(
-//						'healthcare_centre_not_selected',
-//						'Please select a valid <strong class="text-uppercase">healthcare centre</strong> before proceeding',
-//						FLASH::ERROR
-//			);
-//			header('Location: ' . PROJECT_URL . 'patient/select-healthcare-centre.php');
-//			exit();
-//		} else {
-//			$_SESSION['vaccination_details']['healthcareCentre'] = $retrieved_hc;
-//		}
-//	}
-
-	$selected_vaccine = get_selection('vaccineID',
-				'vaccine',
-				'select-vaccine',
-				[$patient_queries, 'get_vaccine']);
-
-	$selected_hc = get_selection('centreName',
-				'healthcare centre',
-				'select-healthcare-centre',
-				[$patient_queries, 'get_healthcare_centre'], $selected_vaccine);
+	// retrieve required information form previous selections
+	try {
+		$selected_vaccine = save_or_get_pk_from_cookie('vaccineID', 'vaccine', [$patient_queries, 'get_vaccine']);
+		$selected_hc = save_or_get_pk_from_cookie('centreName', 'healthcare centre',
+					[$patient_queries, 'get_healthcare_centre'], $selected_vaccine
+		);
+	} catch(Exception $e) {
+		redirect_with_database_error($e->getCode());
+	}
 
 	$selected_batch = $_COOKIE['batchNo'] ?? null;
+	// get current patient
+	$current_patient = authenticate(FALSE);
 ?>
 
 <!DOCTYPE html>
@@ -61,8 +41,8 @@
 <body class="d-flex flex-column min-vh-100">
 	<!-- display login flash -->
 	<?php
-		display_flash_message('login_result');
-		display_flash_message('batch_not_selected');
+		!is_null($current_patient) && display_flash_message("${current_patient['username']} login result");
+		display_flash_message('batch not selected');
 	?>
 
 	<!-- navbar -->
@@ -79,7 +59,7 @@
 				<?php include 'includes/user_info.inc.php'; ?>
 
 			</aside>
-			<div class="col-12 col-lg-9 min-vh-50">
+			<div class="col-12 col-lg-9 min-vh-50 mt-lg-0 mt-2">
 				<section class="p-4 rounded-3 shadow-sm h-75 background-1 bg-filter-darken">
 					<h1 class="h2 text-white">Request Vaccination</h1>
 					<article class="rounded shadow bg-white p-4 mt-5">

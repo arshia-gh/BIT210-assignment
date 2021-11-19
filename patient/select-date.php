@@ -5,22 +5,19 @@
 	include_once 'includes/alert_messages.inc.php';
 	include_once 'patient/partials.php';
 
+	try {
+		$selected_vaccine = save_or_get_pk_from_cookie('vaccineID', 'vaccine', [$patient_queries, 'get_vaccine']);
+		$selected_hc = save_or_get_pk_from_cookie('centreName', 'healthcare centre',
+					[$patient_queries, 'get_healthcare_centre'], $selected_vaccine
+		);
+		$selected_batch = save_or_get_pk_from_cookie('batchNo', 'batch',
+					[$patient_queries, 'get_batch'], $selected_vaccine, $selected_hc);
+	} catch(Exception $e) {
+		redirect_with_database_error($e->getCode());
+	}
+
+	// get current patient
 	$current_patient = authenticate();
-
-	$selected_vaccine = get_selection('vaccineID',
-				'vaccine',
-				'select-vaccine',
-				[$patient_queries, 'get_vaccine']);
-
-	$selected_hc = get_selection('centreName',
-				'healthcare centre',
-				'select-healthcare-centre',
-				[$patient_queries, 'get_healthcare_centre'], $selected_vaccine);
-
-	$selected_batch = get_selection('batchNo',
-				'batch',
-				'select-batch',
-				[$patient_queries, 'get_batch'], $selected_vaccine, $selected_hc);
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +41,8 @@
 <body class="d-flex flex-column min-vh-100">
 	<!-- display login flash -->
 	<?php
-		display_flash_message('login_result');
-		display_flash_message('date not selected');
+		!is_null($current_patient) && display_flash_message("${current_patient['username']} login result");
+		display_flash_message('appointment date not selected');
 	?>
 
 	<!-- navbar -->
@@ -62,7 +59,7 @@
 				<?php include 'includes/user_info.inc.php'; ?>
 
 			</aside>
-			<div class="col-12 col-lg-9 min-vh-50">
+			<div class="col-12 col-lg-9 min-vh-50 mt-lg-0 mt-2">
 				<section class="p-4 rounded-3 shadow-sm h-75 background-1 bg-filter-darken">
 					<h1 class="h2 text-white">Request Vaccination</h1>
 					<article class="rounded shadow bg-white p-4 mt-5">
@@ -76,6 +73,9 @@
 								       id="appointmentDate" min="<?= $current_date ?>"
 								       placeholder="2002-06-20">
 								<label for="appointmentDate">Appointment Date</label>
+								<input name="vaccineID" value="<?=$selected_vaccine?>" hidden aria-hidden="true">
+								<input name="centreName" value="<?=$selected_hc?>" hidden aria-hidden="true">
+								<input name="batchNo" value="<?=$selected_batch?>" hidden aria-hidden="true">
 							</div>
 							<?php
 								display_controls(

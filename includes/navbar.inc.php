@@ -4,7 +4,7 @@
 	if (!isset($nav_links['Home'])) $nav_links['Home'] = ['index.php', TRUE];
 ?>
 
-<nav class="navbar navbar-expand-md navbar-light container-md">
+<nav class="navbar navbar-expand-md navbar-light container-md <?= isset($nav_class) ? $nav_class : '' ?>">
 	<a class="navbar-brand d-flex align-items-center" href="<?= PROJECT_URL . $nav_links['Home'][0] ?>">
 		<img src="<?= PROJECT_URL . 'asset/svg/logo.svg' ?>" alt="navbar logo" class="me-1" />
 		<span class="fw-bold"><?= APP_NAME ?></span>

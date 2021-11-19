@@ -11,7 +11,7 @@
 	define('PROJECT_PATH', "{$_SERVER['DOCUMENT_ROOT']}/" . PROJECT_DIR);
 	define('PROJECT_URL', "http://{$_SERVER['HTTP_HOST']}/" . PROJECT_DIR);
 	const COPYRIGHT_TEXT = 'PCVS - copyright&copy; 2021';
-	const APP_SLOGAN = 'Private Covid-19 Vaccination Service ';
+	const APP_SLOGAN = 'Private Covid-19 Vaccination Service';
 	const APP_NAME = 'PCVS';
 
 	set_include_path(PROJECT_PATH);

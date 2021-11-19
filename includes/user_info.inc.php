@@ -1,5 +1,6 @@
 <?php
 	$found_user = $_SESSION['current_user'] ?? NULL;
+	$redirect_url = basename(dirname($_SERVER['PHP_SELF'])) . '/' . basename($_SERVER['PHP_SELF']);
 ?>
 	<aside class="border rounded bg-white p-3 mt-3">
 		<header class="d-flex justify-content-between align-items-end">
@@ -7,7 +8,7 @@
 			<?php if (!is_null($found_user)): ?>
 				<a class="btn btn-warning btn-sm" href="../users/logout.php">logout</a>
 			<?php else: ?>
-				<a class="btn btn-primary btn-sm" href="../users/login-form.php">login</a>
+				<a class="btn btn-primary btn-sm" href="../users/login-form.php?redirectUrl=<?= $redirect_url ?>">login</a>
 			<?php endif; ?>
 		</header>
 		<figure class="row mt-3 justify-content-center align-items-center">

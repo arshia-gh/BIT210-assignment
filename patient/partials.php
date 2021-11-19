@@ -1,23 +1,13 @@
 <?php
-	function reset_vaccination_details() {
-		setcookie('vaccineID', null, -1, '/');
-		setcookie('centreName', null, -1, '/');
-		setcookie('batchNo', null, -1, '/');
-	}
-
-	function get_formatted_column_names(PDOStatement $result) : array
+	function reset_vaccination_details()
 	{
-		$columns = [];
-		for ($i = 0; $i < $result->columnCount(); $i++) {
-			array_push(
-				$columns,
-				ucwords(implode(' ', preg_split('/(?=[A-Z])/', $result->getColumnMeta($i)['name'])))
-			);
-		}
-		return $columns;
+		setcookie('vaccineID', NULL, -1, '/');
+		setcookie('centreName', NULL, -1, '/');
+		setcookie('batchNo', NULL, -1, '/');
 	}
 
-	function display_progress_bar(int $now) {
+	function display_progress_bar(int $now)
+	{
 		echo <<<PROG
 		<p class="text-muted h6">Request Vaccination</p>
 		<div class="progress">
@@ -34,7 +24,8 @@
 		PROG;
 	}
 
-	function display_controls(string $back_btn_url, string $tool_tip_title, bool $submit_btn_disabled, string $submit_btn_text = 'Confirm') {
+	function display_controls(string $back_btn_url, string $tool_tip_title, bool $submit_btn_disabled, string $submit_btn_text = 'Confirm')
+	{
 		$disabled = $submit_btn_disabled ? 'disabled' : '';
 		echo <<<CONTROLS
 			<p class="m-0 mt-3 d-flex justify-content-between p-2 bg-light border border-1 rounded" style="border-color: var(--bs-gray-200)">
@@ -51,48 +42,126 @@
 		CONTROLS;
 	}
 
-	function get_selection(string $key, string $label, string $script_name, callable $query_method, string ...$args) {
-		// if there string query contains the key
-		if (isset(STRING_QUERY[$key])) {
-			// push the new key to the args
-			array_push($args, STRING_QUERY[$key]);
-			// query the database with given key and args
-			$query_result = $query_method(...$args);
-			// if there is an exception trigger a fatal error
-			if ($query_result instanceof Exception) {
-				display_fatal_error($query_result->getCode());
-				return null;
-			}
-			// otherwise, save the query result
-			if (!is_null($query_result)) {
-				setcookie($key, $query_result[$key], time() + 86400, '/');
-				$_COOKIE[$key] = $query_result[$key];
-			}
+	/**
+	 * Invokes the given query supplier and saves the retrieved PK in a cookie
+	 *
+	 * @param mixed  $query_supplier
+	 * @param string $key            used as an identifier when saving the data
+	 * @param string ...$args        used when invoking the query supplier
+	 *
+	 * @return bool true on success and false on failure
+	 * @throws \Exception
+	 */
+	function save_pk_in_cookie(mixed $query_supplier, string $key, string...$args) : bool
+	{
+		$query_result = $query_supplier(...$args);
+
+		if ($query_result instanceof Exception) {
+			throw new $query_result;
 		}
-		// redirect and throw an error to user if the selection is not set
-		if (!isset($_COOKIE[$key])) {
-			redirect_with_error($label, $script_name);
+		if (is_null($query_result) || (is_array($query_result) && count($query_result) < 1)) {
+			return FALSE;
 		}
-		// otherwise, return selection
-		return $_COOKIE[$key];
+
+		setcookie($key, $query_result[$key], time() + 86400, '/');
+		$_COOKIE[$key] = $query_result[$key];
+		return TRUE;
 	}
 
 	/**
-	 * @param $label string used to construct the flash id and message
-	 * @param $script_name string the script name to redirect to
+	 * Gets the cookie value using the given key <br>
+	 *
+	 * @param string    $key              used to search for cookie
+	 * @param ?callable $failure_callback invoked on failure (ex: result is null)
+	 *
+	 * @return string|null found cookie value
 	 */
-	function redirect_with_error(string $label, string $script_name)
+	function get_pk_from_cookie(string $key, ?callable $failure_callback = NULL) : ?string
 	{
-		create_flash_message(
-			"${label} not selected",
-			"Please select a valid <strong class=\"text-uppercase\">$label</strong> before proceeding",
-			FLASH::ERROR
-		);
-		header('Location: ' . PROJECT_URL . "patient/$script_name.php");
+		$found_value = $_COOKIE[$key] ?? NULL;
+
+		if (is_null($found_value) && !is_null($failure_callback)) {
+			$failure_callback();
+		}
+
+		return $found_value;
+	}
+
+	/**
+	 * Saves the retrieved value from query string using the given key <br>
+	 * - redirect the user on failure <br>
+	 *
+	 * @param string   $key            used to search for cookie
+	 * @param string   $redirect_label label used to generate the error and the redirect url
+	 * @param callable $query_supplier used to retrieve the PK
+	 * @param string   ...$args
+	 *
+	 * @return string|null retrieved cookie value
+	 * @throws \Exception
+	 */
+	function save_or_get_pk_from_cookie(string $key, string $redirect_label, callable $query_supplier, string ...$args) : ?string
+	{
+		// if string query contains the key, save the key
+		if (isset($_GET[$key])) {
+			array_push($args, $_GET[$key]);
+			save_pk_in_cookie($query_supplier, $key, ...$args);
+		}
+
+		$script_name = label_to_script_name($redirect_label);
+		// redirect and throw an error to user if the selection is not set
+		// otherwise, return selection
+		return get_pk_from_cookie($key, fn () => redirect_with_selection_error($redirect_label, $script_name));
+	}
+
+	/**
+	 * Converts label to script name (internal usage)
+	 * @param string $label
+	 * @return string script name
+	 */
+	function label_to_script_name(string $label) : string
+	{
+		return 'select-' .preg_replace('/\s/', '-', $label) . '.php';
+	}
+
+	/**
+	 * redirect the user to a script under patient directory with a flash error
+	 *
+	 * @param $id string flash id
+	 * @param $script_name string the script name to redirect to
+	 * @param $msg string a custom msg
+	 */
+	function redirect_with_error(string $id, string $script_name, $msg) {
+		create_flash_message($id, $msg, FLASH::ERROR);
+		header('Location: ' . PROJECT_URL . "patient/$script_name");
 		exit();
 	}
 
-	function str_eval($data): string {
+
+	/**
+	 * redirect the user to a script under patient directory with a flash selection error
+	 * @param string $label used to construct the flash id and msg
+	 * @param string $script_name the script name to redirect to
+	 */
+	function redirect_with_selection_error(string $label, string $script_name)
+	{
+		redirect_with_error("$label not selected", $script_name,
+			"Please select a valid <strong class=\"text-uppercase\">$label</strong> before proceeding"
+		);
+	}
+
+	/**
+	 * redirect the user to an index.php under patient directory with a flash database error
+	 * @param int $err_code
+	 */
+	function redirect_with_database_error(int $err_code) {
+		redirect_with_error('database error', 'index.php',
+			"An error occurred!\nError code: <strong>ERR_$err_code</strong>"
+		);
+	}
+
+	function str_eval($data) : string
+	{
 		return $data;
 	}
+
 	$str_eval = 'str_eval';

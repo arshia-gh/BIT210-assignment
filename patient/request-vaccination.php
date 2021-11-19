@@ -4,49 +4,74 @@
 	include_once 'includes/flash_messages.inc.php';
 	include_once 'patient/partials.php';
 
-	$current_user = authenticate();
+	function redirect_to(string $label)
+	{
+		redirect_with_selection_error($label, label_to_script_name($label));
+	}
+
+	/**
+	 * redirects the user if the passed value is null
+	 * @param mixed $value
+	 * @param       $label
+	 */
+	function redirect_if_null(mixed $value, $label)
+	{
+		if (!is_null($value)) return;
+		redirect_to($label);
+	}
+
 	try {
-		$selected_vaccine = get_selection('vaccineID',
-			'vaccine',
-			'select-vaccine',
-			[$patient_queries, 'get_vaccine']);
+		$selected_vaccine = NULL;
+		$selected_hc = NULL;
+		$selected_batch = NULL;
 
-		$selected_hc = get_selection('centreName',
-			'healthcare centre',
-			'select-healthcare-centre',
-			[$patient_queries, 'get_healthcare_centre'], $selected_vaccine);
+		// check for selections
+		if (isset($_POST['vaccineID'])) {
+			$req_vaccine_id = htmlspecialchars($_POST['vaccineID']);
+			$selected_vaccine = $patient_queries->get_vaccine($req_vaccine_id);
+		}
+		redirect_if_null($selected_vaccine, 'vaccine');
 
-		$selected_batch = get_selection('batchNo',
-			'batch',
-			'select-batch',
-			[$patient_queries, 'get_batch'], $selected_vaccine, $selected_hc);
+		if (isset($_POST['centreName'])) {
+			$req_centre_name = htmlspecialchars($_POST['centreName']);
+			$selected_hc = $patient_queries->get_healthcare_centre($selected_vaccine['vaccineID'], $req_centre_name);
+		}
+		redirect_if_null($selected_hc, 'healthcare centre');
+
+		if (isset($_POST['batchNo'])) {
+			$req_batch_no = htmlspecialchars($_POST['batchNo']);
+			$selected_batch = $patient_queries->get_batch(
+				$selected_vaccine['vaccineID'],
+				$selected_hc['centreName'],
+				$req_batch_no
+			);
+		}
+		redirect_if_null($selected_batch, 'batch');
+
+		$current_user = authenticate();
 
 		if (isset($_POST['appointment_date'])) {
 			$appointment_date = htmlspecialchars($_POST['appointment_date']);
+
+			// check if it is a valid date
 			if ($converted_date = strtotime($appointment_date)) {
+				// create a new vaccination
 				$insert_result = $patient_queries->save_vaccination(
-					mt_rand(10_000_000, 99_999_999),
 					date('Y-m-d', $converted_date),
-					$current_user['username'], $selected_batch);
+					$current_user['username'],
+					$selected_batch['batchNo']
+				);
+
 				flash('vaccination created',
-					"Vaccination appointment was successfully booked for <strong class='text-uppercase'>{$current_user['fullName']}</strong>",
+					"Vaccination appointment was successfully booked for <strong class=\"text-uppercase\">{$current_user['fullName']}</strong>",
 					FLASH::SUCCESS
 				);
 				header('Location: ' . PROJECT_URL . 'patient/index.php');
 				return;
-
 			}
 		}
-		flash('date not selected',
-			"Please select a valid <strong class='text-uppercase'>appointment date</strong> before proceeding",
-			FLASH::ERROR
-		);
-		header('Location: ' . PROJECT_URL . 'patient/select-date.php');
+
+		redirect_with_selection_error('appointment date', 'select-date.php');
 	} catch (Exception $e) {
-		$error_code = $e->getCode();
-		flash('database error',
-			"An error occurred, <strong class='text-uppercase'>ERR_${$error_code}</strong>",
-			FLASH::ERROR
-		);
-		header('Location: ' . PROJECT_URL . 'patient/index.php');
+		redirect_with_database_error($e->getCode());
 	}

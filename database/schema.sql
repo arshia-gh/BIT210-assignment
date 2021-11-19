@@ -102,18 +102,18 @@ VALUES ('Century Medical Centre',
 
 -- insert administrator
 INSERT INTO Users(username, password, email, fullName, userType, staffID, centreName)
-VALUES ('clinton', 'clinton123456', 'clinton@email.com', 'Clinton', 'administrator', 'B100100',
+VALUES ('clinton', 'clinton12345678', 'clinton@email.com', 'Clinton', 'administrator', 'B100100',
         'Century Medical Centre'),
-       ('carrick', 'carrick123456', 'carrick@email.com', 'Carrick', 'administrator', 'B900600',
+       ('carrick', 'carrick12345678', 'carrick@email.com', 'Carrick', 'administrator', 'B900600',
         'Klinik Impian Care 24 jam'),
-       ('michael', 'michael123456', 'michael@email.com', 'Michael Wijaya', 'administrator', 'B100200',
+       ('michael', 'michael12345678', 'michael@email.com', 'Michael Wijaya', 'administrator', 'B100200',
         'Healthcare Dialysis Centre Sdn Bhd');
 
 -- insert patient
 INSERT INTO Users(username, password, email, fullName, userType, ICPassport)
-VALUES ('john_banana', 'john123456', 'john_banana@email.com', 'John Banana', 'patient', 'H400100'),
-       ('papaya_tyler', 'papaya123456', 'papaya_tyler@email.com', 'Papaya Tyler', 'patient', 'H800200'),
-       ('kiwi_swift', 'kiwi123456', 'kiwi_swift@email.com', 'Kiwi Swift', 'patient', 'H400300');
+VALUES ('john_banana', 'john12345678', 'john_banana@email.com', 'John Banana', 'patient', 'H400100'),
+       ('papaya_tyler', 'papaya12345678', 'papaya_tyler@email.com', 'Papaya Tyler', 'patient', 'H800200'),
+       ('kiwi_swift', 'kiwi12345678', 'kiwi_swift@email.com', 'Kiwi Swift', 'patient', 'H400300');
 
 -- insert batch
 INSERT INTO Batches(batchNo, expiryDate, quantityAvailable, vaccineID, centreName)

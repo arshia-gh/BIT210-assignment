@@ -6,7 +6,8 @@
 	include_once 'patient/partials.php';
 
 	// retrieve the selected vaccine (null if no vaccine is selected)
-	$selected_vaccine = $_COOKIE['vaccineID'] ?? null;
+	$selected_vaccine = $_COOKIE['vaccineID'] ?? NULL;
+	$current_patient = authenticate(FALSE);
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@
 <body class="d-flex flex-column min-vh-100">
 	<!-- display login flash -->
 	<?php
-		display_flash_message('login_result');
+		!is_null($current_patient) && display_flash_message("${current_patient['username']} login result");
 		display_flash_message('vaccine not selected');
 	?>
 
@@ -48,7 +49,7 @@
 				<?php include 'includes/user_info.inc.php'; ?>
 
 			</aside>
-			<div class="col-12 col-lg-9 min-vh-50">
+			<div class="col-12 col-lg-9 min-vh-50 mt-lg-0 mt-2">
 				<section class="p-4 rounded-3 shadow-sm h-75 background-1 bg-filter-darken">
 					<h1 class="h2 text-white">Request Vaccination</h1>
 					<article class="rounded shadow bg-white p-4 mt-5">

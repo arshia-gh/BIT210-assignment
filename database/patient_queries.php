@@ -71,7 +71,7 @@
 		public function get_healthcare_centre($vaccineID, $centreName) : Exception|array|null
 		{
 			try {
-			$sql = "SELECT healthcarecentres.centreName, address,
+				$sql = "SELECT healthcarecentres.centreName, address,
        						SUM(quantityAvailable) AS quantityAvailable
 						FROM healthcarecentres
 							LEFT JOIN(SELECT quantityAvailable, centreName
@@ -118,7 +118,8 @@
 		 *
 		 * @return \Exception|array|null
 		 */
-		public function get_batch(string $vaccine_id, string $centre_name, string $batchNo) : Exception|array|null {
+		public function get_batch(string $vaccine_id, string $centre_name, string $batchNo) : Exception|array|null
+		{
 			try {
 				$sql = "SELECT * FROM batches
 							WHERE vaccineID =?
@@ -145,9 +146,10 @@
 		/**
 		 * @throws \Exception
 		 */
-		public function sign_up(string $username, string $password, string $email, string $full_name, string $IC_passport, bool $is_patient) : bool
+		public function register(string $username, string $password, string $email, string $full_name, string $special_field, string $userType) : bool
 		{
-			$sql = "INSERT INTO users(username, password, email, fullName, ICPassport, userType) 
+			$user_special_field = $userType === 'administrator' ? 'staffID' : 'ICPassport';
+			$sql = "INSERT INTO users(username, password, email, fullName, $user_special_field, userType) 
 			VALUES (?, ?, ?, ?, ?, ?);
 			";
 			return $this->cud_query($sql,
@@ -155,30 +157,77 @@
 					$password,
 					$email,
 					$full_name,
-					$IC_passport,
-					$is_patient ? 'patient' : 'administrator'
+					$special_field,
+					$userType
 				) > 0;
 		}
 
-		public function get_user_vaccinations(string $username) : Exception|PDOStatement
+		/**
+		 * @throws \Exception
+		 */
+		public function isUniqueField(string $field, string $value) : bool
+		{
+			$sql = "SELECT * FROM users WHERE $field = ?";
+			return $this->cud_query($sql, $value) < 1;
+		}
+
+		/**
+		 * @throws \Exception
+		 */
+		public function isUniqueEmail($value) {
+			$this->isUniqueField('email', $value);
+		}
+
+		/**
+		 * @throws \Exception
+		 */
+		public function isUniqueUsername($value) {
+			$this->isUniqueField('username', $value);
+		}
+
+		/**
+		 * @throws \Exception
+		 */
+		public function isUniqueStaffID($value) {
+			$this->isUniqueField('staffID', $value);
+		}
+
+		public function get_user_vaccinations(string $username) : Exception|array
 		{
 			try {
-				$sql = "SELECT status, appointmentDate, remarks FROM vaccinations WHERE username =? 
-				ORDER BY (SELECT expiryDate FROM batches WHERE vaccinations.batchNo=batches.batchNo);";
-				return $this->raw_query($sql, $username);
+				$sql = "SELECT vaccinationID, status, appointmentDate, vaccineName, remarks FROM vaccinations 
+    					JOIN (SELECT vaccineName, batchNo 
+    							FROM batches JOIN vaccines 
+    							    ON batches.vaccineID = vaccines.vaccineID
+    					    ) as batches
+							ON batches.batchNo = vaccinations.batchNo
+						WHERE username =? 
+						ORDER BY status";
+				return $this->query_all($sql, $username);
 			} catch (Exception $e) {
 				return $e;
 			}
 		}
 
-		public function save_vaccination(string $vaccinationID, string $appointmentDate, string $username, string $batchNo
-		): Exception|int {
+		public function save_vaccination(string $appointmentDate, string $username, string $batchNo) : Exception|int
+		{
 			try {
 				$sql = "INSERT INTO vaccinations(vaccinationID, appointmentDate, username, batchNo, remarks, status)
 						VALUES (?, ?, ?, ?, null, 'pending')";
-				return $this->cud_query($sql, $vaccinationID, $appointmentDate, $username, $batchNo);
+				return $this->cud_query($sql, $this->get_rand_id(8), $appointmentDate, $username, $batchNo);
 			} catch (Exception $e) {
 				return $e;
+			}
+		}
+
+		private function get_rand_id(int $len) : string
+		{
+			$min_range = intval(1 . (str_repeat(0, $len - 1)));
+			$max_range = intval(str_repeat(9, $len));
+			try {
+				return strval(random_int($min_range, $max_range));
+			} catch (Exception $e) {
+				return strval(mt_rand($min_range, $max_range));
 			}
 		}
 	}

@@ -92,13 +92,14 @@ function getBoundInputs(form, schema) {
 				},
 			}, {
 				set(target, property, value) {
-					if (property !== 'value' && property !== 'hidden') return false;
+					if (property !== 'value' && property !== 'hidden' && property !== 'readOnly') return false;
 					if (property === 'value') {
 						target[property] = value;
 						target['element'].value = value;
-					} else {
-						console.log(target['element'])
+					} else if (property === 'hidden') {
 						target['element'].parentElement.hidden = value;
+					} else {
+						target['element'].readOnly = value;
 					}
 					return true;
 				}

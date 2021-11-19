@@ -68,10 +68,13 @@
 
 						<form method="post" action="./request-vaccination.php" id="documentForm">
 							<div class="form-floating">
-								<?php $current_date = date('Y-m-d', time()); ?>
+								<?php
+									$current_date = date('Y-m-d', time());
+									$found_batch = $patient_queries->get_batch($selected_vaccine, $selected_hc, $selected_batch);
+								?>
 								<input type="date" class="form-control" value="<?= $current_date ?>" name="appointment_date"
-								       id="appointmentDate" min="<?= $current_date ?>"
-								       placeholder="2002-06-20">
+								       id="appointmentDate" min="<?= $current_date ?>" max="<?= $found_batch['expiryDate'] ?>"
+								       placeholder="2002-06-20" >
 								<label for="appointmentDate">Appointment Date</label>
 								<input name="vaccineID" value="<?=$selected_vaccine?>" hidden aria-hidden="true">
 								<input name="centreName" value="<?=$selected_hc?>" hidden aria-hidden="true">

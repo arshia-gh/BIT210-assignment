@@ -32,8 +32,10 @@
 			// save the current user in the session
 			$_SESSION['current_user'] = $found_user;
 
+
 			$user_dashboard_url = ($found_user['userType'] === 'administrator' ? 'admin' : 'patient') . '/index.php';
-			$final_redirect_url = PROJECT_URL . (is_null($redirect_url) ? $user_dashboard_url : $redirect_url);
+			$final_redirect_url = PROJECT_URL . (is_null($redirect_url) || $found_user['userType'] === 'administrator'
+					? $user_dashboard_url : $redirect_url);
 
 			// redirect the user
 			header("Location: $final_redirect_url");

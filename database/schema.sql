@@ -117,12 +117,12 @@ VALUES ('john_banana', 'john12345678', 'john_banana@email.com', 'John Banana', '
 
 -- insert batch
 INSERT INTO Batches(batchNo, expiryDate, quantityAvailable, vaccineID, centreName)
-VALUES ('PF01', '2021-12-15', 100, 'PF', 'Century Medical Centre'),
-       ('SI03', '2021-11-20', 200, 'SI', 'Century Medical Centre'),
-       ('PF05', '2021-10-12', 150, 'PF', 'Klinik Impian Care 24 jam');
+VALUES ('PF01', '2021-12-25', 100, 'PF', 'Century Medical Centre'),
+       ('SI03', '2022-01-20', 200, 'SI', 'Century Medical Centre'),
+       ('PF05', '2022-01-12', 150, 'PF', 'Klinik Impian Care 24 jam');
 
 -- insert vaccination
 INSERT INTO Vaccinations(vaccinationID, appointmentDate, username, batchNo)
-VALUES ('16346668', '2021-08-20', 'john_banana', 'PF01'),
+VALUES ('16346668', '2021-08-20', 'john_banana', 'PF05'),
        ('20341010', '2021-09-28', 'papaya_tyler', 'SI03'),
-       ('50345030', '2021-08-22', 'kiwi_swift', 'PF01');
+       ('50345030', '2021-08-22', 'kiwi_swift', 'PF05');

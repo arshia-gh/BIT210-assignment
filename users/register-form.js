@@ -32,9 +32,13 @@ const init = () => {
 		}
 	})
 
-	form.element.addEventListener('change', function ({target}) {
+	form.element.addEventListener('input', function ({target}) {
 		if (target.name === 'userType') {
 			changeUserType(target.value === 'administrator');
+		} else if (target.name === 'healthcareName') {
+			const selectedOption = target.list.querySelector(`option[value='${target.value}']`);
+			form.inputs.healthcareAddress.value = selectedOption != null ? selectedOption.value : '';
+			form.inputs.healthcareAddress.readOnly = !!selectedOption;
 		}
 	})
 

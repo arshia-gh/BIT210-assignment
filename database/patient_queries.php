@@ -146,19 +146,23 @@
 		/**
 		 * @throws \Exception
 		 */
-		public function register(string $username, string $password, string $email, string $full_name, string $special_field, string $userType) : bool
+		public function register(string $username, string $password, string $email, string $full_name,
+		                         string $user_type, string $special_field, string $centre_name=null
+		) : bool
 		{
-			$user_special_field = $userType === 'administrator' ? 'staffID' : 'ICPassport';
-			$sql = "INSERT INTO users(username, password, email, fullName, $user_special_field, userType) 
-			VALUES (?, ?, ?, ?, ?, ?);
-			";
+			$sql = $user_type === 'administrator' ?
+				"INSERT INTO users(username, password, email, fullName, staffID, centreName, userType) 
+						VALUES (?, ?, ?, ?, ?, ?, $user_type)" :
+				//else will be patient
+				"INSERT INTO users(username, password, email, fullName, ICPassport, centreName, userType) 
+						VALUES (?, ?, ?, ?, ?, ?, 'patient')";
 			return $this->cud_query($sql,
 					$username,
 					$password,
 					$email,
 					$full_name,
 					$special_field,
-					$userType
+					empty($centre_name) ? null : $centre_name
 				) > 0;
 		}
 
@@ -174,21 +178,24 @@
 		/**
 		 * @throws \Exception
 		 */
-		public function isUniqueEmail($value) {
+		public function isUniqueEmail($value)
+		{
 			$this->isUniqueField('email', $value);
 		}
 
 		/**
 		 * @throws \Exception
 		 */
-		public function isUniqueUsername($value) {
+		public function isUniqueUsername($value)
+		{
 			$this->isUniqueField('username', $value);
 		}
 
 		/**
 		 * @throws \Exception
 		 */
-		public function isUniqueStaffID($value) {
+		public function isUniqueStaffID($value)
+		{
 			$this->isUniqueField('staffID', $value);
 		}
 

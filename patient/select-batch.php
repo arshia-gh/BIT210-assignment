@@ -11,11 +11,11 @@
 		$selected_hc = save_or_get_pk_from_cookie('centreName', 'healthcare centre',
 					[$patient_queries, 'get_healthcare_centre'], $selected_vaccine
 		);
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 		redirect_with_database_error($e->getCode());
 	}
 
-	$selected_batch = $_COOKIE['batchNo'] ?? null;
+	$selected_batch = $_COOKIE['batchNo'] ?? NULL;
 	// get current patient
 	$current_patient = authenticate(FALSE);
 ?>
@@ -64,7 +64,13 @@
 					<h1 class="h2 text-white">Request Vaccination</h1>
 					<article class="rounded shadow bg-white p-4 mt-5">
 
-						<?php display_alert('Please select a batch to continue', ALERT::INFO, ALERT::INFO_ICON); ?>
+						<?php
+							if (is_null($current_patient)) {
+							display_alert('Please login before selecting a batch', ALERT::WARNING, ALERT::WARNING_ICON);
+						} else {
+							display_alert('Please select a batch to continue', ALERT::INFO, ALERT::INFO_ICON);
+						}
+						?>
 
 						<form action="./select-date.php" id="documentForm">
 							<?php

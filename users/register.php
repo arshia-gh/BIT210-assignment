@@ -30,6 +30,8 @@
 		return TRUE;
 	}
 
+
+
 	// sanitize the inputs
 	function sanitize_inputs($array) : array
 	{
@@ -58,7 +60,15 @@
 
 			// add the special field depending on the userType
 			if ($userType === 'administrator') {
+				$healthcare_centre = $patient_queries->find_healthcare_centre($inputs['healthcareName']);
+
+				if (is_null($healthcare_centre)) {
+					$insert_result = $patient_queries->add_healthcare_centre($inputs['healthcareName'], $inputs['healthcareAddress']);
+					$healthcare_centre = $patient_queries->find_healthcare_centre($inputs['healthcareName']);
+				}
+
 				$query_fields[] = $inputs['staffID'];
+				$query_fields[] = $healthcare_centre['centreName'];
 			} else if ($userType === 'patient') {
 				$query_fields[] = $inputs['ICPassport'];
 			// redirect if the user type is invalid (the error will be caught and user will be redirected)
@@ -82,10 +92,9 @@
 				);
 				header("Location: $login_form_url");
 				return;
+			} else {
+				throw new Exception('registration failed');
 			}
-
-			// if somehow the user was not added redirect them
-			throw new Error ('registration failed');
 		} catch (Exception $e) {
 			// catch any error and redirect the user to registration form
 			$final_redirect_url = $register_form_url . (is_null($redirect_url) ? '' : "?redirectUrl=$redirect_url");
@@ -93,5 +102,6 @@
 			header("Location: $final_redirect_url");
 		}
 	} else {
-		header("Location: $register_form_url");
+//		header("Location: $register_form_url");
+		print_r($_POST);
 	}

@@ -38,7 +38,12 @@
 		display_flash_message('database error');
 	?>
 	<!-- navbar -->
-	<?php include 'includes/navbar.inc.php' ?>
+	<?php
+		$nav_links = [
+					'Home' => ['index.php', false],
+		];
+		include 'includes/navbar.inc.php'
+	?>
 
 	<main class="container-md flex-grow-1">
 		<div class="row mb-4">

@@ -25,8 +25,8 @@ authenticate(); //make sure the request is coming from actual admin
   <header>
     <?php
     $nav_links = [
-      'Home' => ['../index.php', false],
-      'Dashboard' => ['../admin/index.php', false]
+      'Home' => ['index.php', false],
+      'Dashboard' => ['admin/index.php', false]
     ];
     require_once('../includes/navbar.inc.php');
     ?>

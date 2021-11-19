@@ -29,8 +29,8 @@ $healthcare_centre = $admin_queries->find_centre($current_admin['centreName']);
 	display_flash_message('database error');
 
 	$nav_links = [
-		'Home' => ['../index.php', false],
-		'Dashboard' => ['../admin/index.php', true]
+		'Home' => ['index.php', false],
+		'Dashboard' => ['admin/index.php', true]
 	];
 	require_once('../includes/navbar.inc.php');
 	?>

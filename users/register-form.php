@@ -3,6 +3,7 @@
 	include_once('../includes/flash_messages.inc.php');
 	include_once('../database/patient_queries.php');
 
+	// get the healthcare centres for datalist used in form
 	$healthcare_centres = [];
 	try {
 		$healthcare_centres = $patient_queries->get_all_healthcare_centres();
@@ -10,8 +11,27 @@
 		create_flash_message('RegisterFormQueryFailed', $e->getMessage(), FLASH::ERROR);
 	}
 
+	// get the previous form submission
+	$prev_form_data = null;
+	// convert the json cookie to assoc array
+	if (isset($_COOKIE['registrationFormData'])) {
+		$prev_form_data = json_decode($_COOKIE['registrationFormData'], true);
+	}
+
+	// delete the cookie (in case user cancels the use case)
+	setcookie('registrationFormData', null, -1, '/');
+
+	// get the redirect url
 	$redirect_url = $_GET['redirectUrl'] ?? NULL;
+	// format the redirect url to a query string
 	$formatted_redirect_url = !is_null($redirect_url) ? 'redirectUrl=' . $_GET['redirectUrl'] : '';
+
+	// safely retrieve existing keys from $prev_form_data
+	// returns an empty string if the key doesn't exist
+	function safe_get($key) {
+		global $prev_form_data;
+		return $prev_form_data[$key] ?? '';
+	}
 ?>
 
 <!doctype html>
@@ -72,12 +92,12 @@
 							<legend class="fs-4 fw-light">Healthcare Center Information</legend>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input type="text" class="form-control" id="healthcareNameInput" name="healthcareName"
-								       placeholder="Healthcare Center" list="healthcareDatalist" />
+								       placeholder="Healthcare Center" list="healthcareDatalist" value="<?= safe_get('healthcareName') ?>"/>
 								<label for="healthcareNameInput" class="ps-4">Healthcare Center Name</label>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input type="text" class="form-control" id="healthcareAddressInput" name="healthcareAddress"
-								       placeholder="Healthcare Center" />
+								       placeholder="Healthcare Center" value="<?= safe_get('healthcareAddress') ?>"/>
 								<label for="healthcareAddressInput" class="ps-4">Healthcare Center Address</label>
 							</p>
 							<span class="form-text">
@@ -96,7 +116,7 @@
 							<legend class="fs-4 fw-light">User information</legend>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input type="text" class="form-control" id="usernameInput" placeholder="username" name="username"
-								       pattern="^[a-zA-Z_]{3,}$" />
+								       value="<?= safe_get('username') ?>" />
 								<label for="usernameInput" class="ps-4">Username</label>
 								<span class="form-text">
 									* username must be unique <br />
@@ -106,7 +126,7 @@
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input type="password" class="form-control" id="passwordInput" name="password" placeholder="password"
-								       pattern="^(?=.*[A-Z]+).{12,}$" />
+								       value="<?= safe_get('password') ?>" />
 								<label for="passwordInput" class="ps-4">Password</label>
 								<span class="form-text">
 									* password must contain at least one uppercase letter <br />
@@ -120,23 +140,23 @@
 							<legend class="fs-4 fw-light">Personal Information</legend>
 							<p class="form-floating mb-3 col-12 col-lg-6">
 								<input type="text" class="form-control" id="fullNameInput" name="fullName"
-								       placeholder="Michael Jackson" />
+								       placeholder="Michael Jackson" value="<?= safe_get('fullName') ?>"  />
 								<label for="fullNameInput" class="ps-4">Name</label>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6" id="ICPassport_form_control">
 								<input type="text" class="form-control" id="ICPassportInput" name="ICPassport" placeholder="H9609867"
-								/>
+								       value="<?= safe_get('ICPassport') ?>" />
 								<label for="ICPassportInput" class="ps-4">IC / Passport</label>
 							</p>
 							<p class="form-floating mb-3 col-12 col-lg-6" id="staff_id_form_control">
 								<input type="text" class="form-control" id="staffIDInput" placeholder="ST2000" name="staffID"
-								       aria-hidden="true"
+								       value="<?= safe_get('staffID') ?>"
 								/>
 								<label for="staffIDInput" class="ps-4">Staff ID</label>
 							</p>
 							<p class="form-floating mb-3 col-12">
 								<input type="email" class="form-control" id="emailInput" name="emailAddress"
-								       placeholder="name@example.com"
+								       placeholder="name@example.com" value="<?= safe_get('emailAddress') ?>"
 								/>
 								<label for="emailInput" class="ps-4">Email address</label>
 							</p>

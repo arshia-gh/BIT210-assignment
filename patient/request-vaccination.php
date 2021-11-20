@@ -25,27 +25,33 @@
 		$selected_hc = NULL;
 		$selected_batch = NULL;
 
-		// check for selections
-		if (isset($_POST['vaccineID'])) {
-			$req_vaccine_id = htmlspecialchars($_POST['vaccineID']);
+		// validate the existence of the vaccine
+		if (isset($_POST['vaccineID']) || isset($_COOKIE['vaccineID'])) {
+			$req_vaccine_id = htmlspecialchars($_POST['vaccineID'] ?? $_COOKIE['vaccineID']);
 			$selected_vaccine = $patient_queries->get_vaccine($req_vaccine_id);
 		}
+		// otherwise, redirect the user to select-vaccine.php
 		redirect_if_null($selected_vaccine, 'vaccine');
 
-		if (isset($_POST['centreName'])) {
-			$req_centre_name = htmlspecialchars($_POST['centreName']);
+		// validate the existence of the healthcare centre
+		if (isset($_POST['centreName']) || isset($_COOKIE['centreName'])) {
+			$req_centre_name = htmlspecialchars($_POST['centreName'] ?? $_COOKIE['centreName']);
 			$selected_hc = $patient_queries->get_healthcare_centre($selected_vaccine['vaccineID'], $req_centre_name);
 		}
+		// otherwise, redirect the user to select-healthcare-centre.php
 		redirect_if_null($selected_hc, 'healthcare centre');
 
-		if (isset($_POST['batchNo'])) {
-			$req_batch_no = htmlspecialchars($_POST['batchNo']);
+
+		// validate the existence of the batch
+		if (isset($_POST['batchNo']) || isset($_COOKIE['batchNo'])) {
+			$req_batch_no = htmlspecialchars($_POST['batchNo'] ?? $_COOKIE['batchNo']);
 			$selected_batch = $patient_queries->get_batch(
 				$selected_vaccine['vaccineID'],
 				$selected_hc['centreName'],
 				$req_batch_no
 			);
 		}
+		// otherwise, redirect the user to select-batch.php
 		redirect_if_null($selected_batch, 'batch');
 
 		$current_user = authenticate();

@@ -33,7 +33,7 @@
 				<hr />
 				<div class="flex-column d-flex">
 					<div id="carouselCovid" class="carousel slide h-100 mx-3 d-flex align-items-center" data-bs-ride="carousel"
-					     data-bs-interval="1000">
+					     data-bs-interval="2000">
 						<div class="carousel-inner">
 							<div class="carousel-item active">
 								<img src="https://image.freepik.com/free-vector/organic-flat-vaccination-campaign-illustration_23-2148955324.jpg"
@@ -49,9 +49,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="d-flex m-3 gap-2 flex-column">
-						<a href="users/login-form.php" class="btn btn-primary w-100">Login</a>
-						<a href="patient/index.php" class="btn btn-success w-100">Request Vaccination</a>
+					<div class="d-flex flex-column m-3 gap-2">
+						<a href="users/login-form.php" class="btn btn-primary">Login</a>
+						<a href="patient/index.php" class="btn btn-success ">Request Vaccination</a>
 					</div>
 				</div>
 			</section>

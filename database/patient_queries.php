@@ -2,11 +2,12 @@
 
 	include_once 'classes/DatabaseHandler.php';
 
+	// handler for patient related queries
 	final class PatientDatabaseHandler extends DatabaseHandler
 	{
 
 		/**
-		 * Retrieves all vaccines with their availability status
+		 * @return \Exception|array
 		 */
 		public function get_available_vaccines() : Exception|array
 		{
@@ -147,12 +148,12 @@
 		 * @throws \Exception
 		 */
 		public function register(string $username, string $password, string $email, string $full_name,
-		                         string $user_type, string $special_field, string $centre_name=null
+		                         string $special_field, ?string $centre_name, string $user_type
 		) : bool
 		{
 			$sql = $user_type === 'administrator' ?
 				"INSERT INTO users(username, password, email, fullName, staffID, centreName, userType) 
-						VALUES (?, ?, ?, ?, ?, ?, $user_type)" :
+						VALUES (?, ?, ?, ?, ?, ?, 'administrator')" :
 				//else will be patient
 				"INSERT INTO users(username, password, email, fullName, ICPassport, centreName, userType) 
 						VALUES (?, ?, ?, ?, ?, ?, 'patient')";
@@ -162,41 +163,48 @@
 					$email,
 					$full_name,
 					$special_field,
-					empty($centre_name) ? null : $centre_name
+					$user_type === 'administrator' ? $centre_name : null
 				) > 0;
 		}
 
 		/**
+		 * queries the database and checks if the user.email is unique
 		 * @throws \Exception
 		 */
-		public function isUniqueField(string $field, string $value) : bool
+		public function isUniqueEmail(string $email) : bool
 		{
-			$sql = "SELECT * FROM users WHERE $field = ?";
-			return $this->cud_query($sql, $value) < 1;
+			$sql = "SELECT * FROM users WHERE email = ?";
+			return $this->cud_query($sql, $email) < 1;
 		}
 
 		/**
+		 * queries the database and checks if the user.username is unique
 		 * @throws \Exception
 		 */
-		public function isUniqueEmail($value)
+		public function isUniqueUsername(string $username) : bool
 		{
-			$this->isUniqueField('email', $value);
+			$sql = "SELECT * FROM users WHERE username = ?";
+			return $this->cud_query($sql, $username) < 1;
 		}
 
 		/**
+		 * queries the database and checks if the user.staffID is unique
 		 * @throws \Exception
 		 */
-		public function isUniqueUsername($value)
+		public function isUniqueStaffID(string $staffID) : bool
 		{
-			$this->isUniqueField('username', $value);
+			$sql = "SELECT * FROM users WHERE staffID = ?";
+			return $this->cud_query($sql, $staffID) < 1;
 		}
 
 		/**
+		 * queries the database and checks if the user.ICPassport is unique
 		 * @throws \Exception
 		 */
-		public function isUniqueStaffID($value)
+		public function isUniqueICPassport(string $ICPassport) : bool
 		{
-			$this->isUniqueField('staffID', $value);
+			$sql = "SELECT * FROM users WHERE ICPassport = ?";
+			return $this->cud_query($sql, $ICPassport) < 1;
 		}
 
 		public function get_user_vaccinations(string $username) : Exception|array

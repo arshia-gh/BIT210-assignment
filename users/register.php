@@ -3,6 +3,8 @@
 	include_once 'includes/flash_messages.inc.php';
 	include_once 'database/patient_queries.php';
 
+	// required fields (includes both administrator and patient fields)
+	// form is required to send all the fields regardless of the user type
 	$required_fields = [
 		'username',
 		'password',
@@ -48,42 +50,86 @@
 		try {
 			// sanitize the inputs
 			$inputs = sanitize_inputs($required_fields);
+
+			// save current form data. if the data is not valid,
+			// the form data will rollbacks to the value of this cookie
+			setcookie('registrationFormData', json_encode($inputs), time() + 86400, '/');
 			$userType = $inputs['userType'];
 
-			// common fields between patient and administrator
-			$query_fields = [
-					$inputs['username'],
-					$inputs['password'],
-					$inputs['emailAddress'],
-					$inputs['fullName']
-			];
+			// ICPassport or staffID
+			$special_field = null;
+			$centreName = null;
 
-			// add the special field depending on the userType
+			// set the special field depending on the userType
 			if ($userType === 'administrator') {
+				// this cookie is used to set the form user type
+				setcookie('userType', 'administrator', time() + 86400, '/');
+
+				// check if the staffID is unique
+				if (!$patient_queries->isUniqueStaffID($inputs['staffID'])) {
+					$msg = "An account with selected staff id (<strong>${inputs['staffID']}</strong>) is already registered. 
+						    Kindly enter a new one";
+					throw new Exception($msg);
+				}
+
 				$healthcare_centre = $patient_queries->find_healthcare_centre($inputs['healthcareName']);
 
+				// create the healthcare centre if it doesn't exist
 				if (is_null($healthcare_centre)) {
 					$insert_result = $patient_queries->add_healthcare_centre($inputs['healthcareName'], $inputs['healthcareAddress']);
 					$healthcare_centre = $patient_queries->find_healthcare_centre($inputs['healthcareName']);
 				}
 
-				$query_fields[] = $inputs['staffID'];
-				$query_fields[] = $healthcare_centre['centreName'];
+				$special_field = $inputs['staffID'];
+				$centreName = $healthcare_centre['centreName'];
+
 			} else if ($userType === 'patient') {
-				$query_fields[] = $inputs['ICPassport'];
+				$special_field = $inputs['ICPassport'];
+				setcookie('userType', 'patient', time() + 86400, '/');
+
+				// check if the ICPassport is unique
+				if (!$patient_queries->isUniqueICPassport($inputs['ICPassport'])) {
+					$msg = "An account with selected IC/Passport (<strong>${inputs['ICPassport']}</strong>) is already registered. 
+						    Kindly enter a new one";
+					throw new Exception($msg);
+				}
 			// redirect if the user type is invalid (the error will be caught and user will be redirected)
 			} else {
 				throw new Exception('Invalid user type, please try again');
 			}
 
-			// add userType as the last field
-			$query_fields[] = $userType;
+			// check for unique fields
+			if (!$patient_queries->isUniqueUsername($inputs['username'])) {
+				$msg = "An account with selected username (<strong>${inputs['username']}</strong>) is already registered. 
+						Kindly enter a new one";
+				throw new Exception($msg);
+			}
+
+			// check for unique fields
+			if (!$patient_queries->isUniqueEmail($inputs['emailAddress'])) {
+				$msg = "An account with selected email address (<strong>${inputs['emailAddress']}</strong>) is already registered. 
+						Kindly enter a new one";
+				throw new Exception($msg);
+			}
+
 			// insert the data into the database
-			$isAdded = $patient_queries->register(...$query_fields);
+			$isAdded = $patient_queries->register(
+				$inputs['username'],
+				$inputs['password'],
+				$inputs['emailAddress'],
+				$inputs['fullName'],
+				$special_field,
+				$centreName,
+				$userType
+			);
 
 			// if the query is successful $isAdded will be true
 			if ($isAdded) {
-				// redirect the message with a confirmation message
+				// destroy the userType cookie
+				setcookie('userType', null, -1, '/');
+				// destroy prev form data cookie
+				setcookie('registrationFormData', null, -1, '/');
+				// redirect the user with a confirmation flash
 				create_flash_message(
 					'registration result',
 					"<strong class='text-uppercase'>$userType</strong> account was successfully created for 
@@ -95,6 +141,7 @@
 			} else {
 				throw new Exception('registration failed');
 			}
+
 		} catch (Exception $e) {
 			// catch any error and redirect the user to registration form
 			$final_redirect_url = $register_form_url . (is_null($redirect_url) ? '' : "?redirectUrl=$redirect_url");
@@ -102,6 +149,5 @@
 			header("Location: $final_redirect_url");
 		}
 	} else {
-//		header("Location: $register_form_url");
-		print_r($_POST);
+		header("Location: $register_form_url");
 	}

@@ -160,7 +160,7 @@
 		/**
 		 * @throws \Exception
 		 */
-		public function find_healthcare_centre($centreName)
+		public function find_healthcare_centre($centreName) : ?array
 		{
 			$sql = "SELECT * FROM healthcarecentres WHERE centreName =?";
 			return $this->query_one($sql, $centreName);

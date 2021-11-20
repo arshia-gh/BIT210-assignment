@@ -50,18 +50,6 @@
 	define('STRING_QUERY', $temp_str_query_assoc);
 	unset($temp_str_query_assoc);
 
-	function first_valid_redirect_url(string $key, ?string ...$rollbacks) : null|string
-	{
-		parse_str($_SERVER['QUERY_STRING'], $string_query_assoc);
-		if (isset($string_query_assoc[$key])) return PROJECT_URL . $string_query_assoc[$key];
-		foreach ($rollbacks as $url) {
-			if (!is_null($url)) {
-				return $url;
-			}
-		}
-		return NULL;
-	}
-
 	function statusToColor($status) {
 		switch ($status) {
 			case "pending": return "secondary"; break;

@@ -8,7 +8,7 @@
 
 	include_once '../includes/app_metadata.inc.php';
 	include_once '../includes/flash_messages.inc.php';
-
+	
 	$redirect_url = $_GET['redirectUrl'] ?? NULL;
 	$formatted_redirect_url = !is_null($redirect_url) ? 'redirectUrl=' . $_GET['redirectUrl'] : '';
 ?>

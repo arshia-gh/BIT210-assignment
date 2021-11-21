@@ -42,7 +42,7 @@ CREATE TABLE Users
     fullName   VARCHAR(255)        NOT NULL,
 
     -- indicates the type of user
-    userType   VARCHAR(255)        NOT NULL,
+    userType   VARCHAR(15)        NOT NULL,
 
     -- admin uncommon columns
     staffID    VARCHAR(255) UNIQUE,

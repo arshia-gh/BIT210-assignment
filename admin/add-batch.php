@@ -62,9 +62,10 @@ if (isset($_COOKIE['addBatch_formData'])) {
                                 <p class="text-muted text-center">Select Vaccine</p>
                                 <input type="hidden" name="centreName" value=<?= sprintf('"%s"', $healthcare_centre['centreName']) ?> />
 
-                                <select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" required name="vaccineID" value=<?= $prevFormData['vaccineID'] ?>>
+                                <select class="form-select" id="vaccineSelect" aria-label="Vaccine ID" name="vaccineID" required
+                                    <?php  if($prevFormData != null) echo sprintf('value="%s"', $prevFormData['vaccineID']);?>>
 
-                                    <option selected hidden value="">Select a vaccine</option>
+                                    <option selected hidden value>Select a vaccine</option>
                                     <?php
                                     //fetch all vaccine from database and render as html select <option>
                                     $vaccines = $admin_queries->get_all_vaccines();
@@ -93,7 +94,7 @@ if (isset($_COOKIE['addBatch_formData'])) {
 
                                 <div class="form-floating my-3">
                                     <input required type="text" class="form-control" id="batchNoInput" placeholder="Batch Number" name="batchNo" 
-                                        style="text-transform: uppercase" minlength="3" pattern="^[a-zA-Z0-9]+$"
+                                        style="text-transform: uppercase" minlength="3" pattern="^[a-zA-Z0-9]+$" title="Batch number should only contains number or characters"
                                         <?= $prevFormData == null ? '' : 'autofocus'
                                         //autofocus if previous formData exist because it means containing duplicated batchNo 
                                         ?> />

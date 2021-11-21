@@ -21,7 +21,7 @@ const init = () => {
 		password: isString().required().minLen(12).pattern(/^(?=.*[A-Z]+).*$/),
 		healthcareAddress: isString('centre address', isAdmin).required(),
 		healthcareName: isString('centre name', isAdmin).required(),
-		fullName: isString('name').required().minLen(3).pattern(/[a-zA-Z\s]*/),
+		fullName: isString('name').required().minLen(3).pattern(/^[a-zA-Z\s]*$/),
 		ICPassport: isString('IC/Passport', isPatient).required(),
 		emailAddress: isString('email address').required().pattern(email_regexp),
 		staffID: isString('staff ID', isAdmin).required()

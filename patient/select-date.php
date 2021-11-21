@@ -18,7 +18,7 @@
 	}
 
 	// get the current patient
-	$current_patient = authenticate();
+	$current_patient = authenticate(FALSE);
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +92,7 @@
 								display_controls(
 											'./select-batch.php',
 											'Choose another healthcare centre',
-											is_null($selected_batch),
+											is_null($current_patient),
 											'Submit'
 								);
 							?>

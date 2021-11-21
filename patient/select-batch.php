@@ -118,12 +118,23 @@
 										}
 									}
 									echo '</ul>';
+									$disabled = is_null($current_patient) || is_null($selected_batch) ? 'disabled' : '';
+									?>
 
-									display_controls(
-												'./select-healthcare-centre.php',
-												'Choose another healthcare centre',
-												is_null($selected_batch),
-									);
+									 <p class="m-0 mt-3 d-flex justify-content-between p-2 bg-light border border-1 rounded" style="border-color: var(--bs-gray-200)">
+										 <a class="btn btn-warning" href="./select-healthcare-centre.php" data-bs-toggle="tooltip"
+										    data-bs-placement="bottom"
+										    title="Select a different healthcare centre">
+											 <i class="fa-solid fa-angle-left"></i>
+											 Back
+										 </a>
+
+										 <button class="ms-auto btn btn-primary" type="submit" id="submitBtn" <?= $disabled ?>>
+											 Confirm
+											 <i class="fa-solid fa-angle-right"></i>
+										 </button>
+									 </p>
+								<?php
 								// if query failed due to exception, display a fatal error
 								} else {
 									display_fatal_error($batch_result->getCode());

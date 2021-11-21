@@ -93,7 +93,7 @@ if (isset($_COOKIE['addBatch_formData'])) {
 
                                 <div class="form-floating my-3">
                                     <input required type="text" class="form-control" id="batchNoInput" placeholder="Batch Number" name="batchNo" 
-                                        style="text-transform: uppercase" minlength="3"
+                                        style="text-transform: uppercase" minlength="3" pattern="^[a-zA-Z0-9]+$"
                                         <?= $prevFormData == null ? '' : 'autofocus'
                                         //autofocus if previous formData exist because it means containing duplicated batchNo 
                                         ?> />

@@ -60,21 +60,18 @@
 							// for more details please refer to the database/patient-queries.php
 							$vaccines_result = $patient_queries->get_available_vaccines();
 
-							if (!$vaccines_result instanceof Exception):
-							if (count($vaccines_result) > 0):
-							display_alert('Please select a vaccine to continue', ALERT::INFO, ALERT::INFO_ICON);
-						?>
+							if (!$vaccines_result instanceof Exception) {
+								echo '<form action="./select-healthcare-centre.php" id="documentForm">';
+								if (count($vaccines_result) > 0) {
+									display_alert('Please select a vaccine to continue', ALERT::INFO, ALERT::INFO_ICON);
+									echo '	<ul class="list-group">';
 
-						<form action="./select-healthcare-centre.php" id="documentForm">
-							<?php
-								echo '<ul class="list-group">';
+									foreach ($vaccines_result as $vaccine) {
+										$is_available = $vaccine['available'];
+										$is_selected = !is_null($selected_vaccine)
+										&& $selected_vaccine === $vaccine['vaccineID'] ? 'checked' : '';
 
-								foreach ($vaccines_result as $vaccine) {
-									$is_available = $vaccine['available'];
-									$is_selected = !is_null($selected_vaccine)
-									&& $selected_vaccine === $vaccine['vaccineID'] ? 'checked' : '';
-
-									echo <<<LI
+										echo <<<LI
 											<li class="list-group-item list-group-item-action d-flex align-items-start {$str_eval(!$is_available ? 'disabled bg-light' : '')}">
 												<label class="form-check-label me-3">
 														<input class="form-check-input" name="vaccineID" type="radio"
@@ -89,25 +86,25 @@
 												</span>
 											</li>
 										LI;
-								}
-								echo '</ul>';
-								else:
+									}
+									echo '	</ul>';
+								} else {
 									display_alert(
 												'No vaccine was found, please consider contacting an administrator',
 												ALERT::WARNING,
 												ALERT::WARNING_ICON
 									);
-								endif;
+								};
 								display_controls(
 											'./index.php',
 											'View your vaccination(s)',
 											is_null($selected_vaccine)
 								);
-								else:
-									display_fatal_error($vaccines_result->getCode());
-								endif;
-							?>
-						</form>
+								echo '</form>';
+							} else {
+								display_fatal_error($vaccines_result->getCode());
+							}
+						?>
 					</article>
 				</section>
 			</div>

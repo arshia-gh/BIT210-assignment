@@ -70,7 +70,7 @@ const disableElement = (element, cond) => {
  * @param callback {function}
  */
 const addListItemListener = (callback) => {
-	const listItems = document.querySelectorAll("li");
+	const listItems = document.getElementsByTagName("li");
 	Array.from(listItems).forEach(li => {
 		const input = li.querySelector('input[type=radio]');
 		if (input != null) {

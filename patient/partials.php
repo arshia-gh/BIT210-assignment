@@ -1,4 +1,8 @@
 <?php
+	/**
+	 * resets the vaccination selection cookies
+	 * by setting them to an expired date.
+	 */
 	function reset_vaccination_details()
 	{
 		setcookie('vaccineID', NULL, -1, '/');
@@ -6,6 +10,10 @@
 		setcookie('batchNo', NULL, -1, '/');
 	}
 
+	/**
+	 * displays a progress bar
+	 * @param int $now the current progress percentage
+	 */
 	function display_progress_bar(int $now)
 	{
 		echo <<<PROG
@@ -24,6 +32,13 @@
 		PROG;
 	}
 
+	/**
+	 * displays two buttons, used to control the vaccination process
+	 * @param string $back_btn_url the back button url
+	 * @param string $tool_tip_title the back btn tool tip text
+	 * @param bool   $submit_btn_disabled indicates if the confirmation (submit) btn should be disabled
+	 * @param string $submit_btn_text sets the text in between submit button
+	 */
 	function display_controls(string $back_btn_url, string $tool_tip_title, bool $submit_btn_disabled, string $submit_btn_text = 'Confirm')
 	{
 		$disabled = $submit_btn_disabled ? 'disabled' : '';

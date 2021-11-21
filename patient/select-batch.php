@@ -5,7 +5,7 @@
 	include_once 'includes/alert_messages.inc.php';
 	include_once 'patient/partials.php';
 
-	// retrieve required information form previous selections
+	// retrieve required information from previous selections
 	try {
 		$selected_vaccine = save_or_get_pk_from_cookie('vaccineID', 'vaccine', [$patient_queries, 'get_vaccine']);
 		$selected_hc = save_or_get_pk_from_cookie('centreName', 'healthcare centre',
@@ -15,8 +15,9 @@
 		redirect_with_database_error($e->getCode());
 	}
 
+	// get the current selected batchNo through query string
 	$selected_batch = $_COOKIE['batchNo'] ?? NULL;
-	// get current patient
+	// get the current patient
 	$current_patient = authenticate(FALSE);
 ?>
 
@@ -41,6 +42,7 @@
 <body class="d-flex flex-column min-vh-100">
 	<!-- display login flash -->
 	<?php
+		// display flash message of user login results
 		!is_null($current_patient) && display_flash_message("${current_patient['username']} login result");
 		display_flash_message('batch not selected');
 	?>
@@ -51,6 +53,7 @@
 	<main class="container-md flex-grow-1">
 		<div class="row mb-4">
 			<aside class="col-12 col-lg-3 p-3 bg-light rounded">
+				<!-- progress bar -->
 				<aside class="border rounded p-3 bg-white">
 					<?php display_progress_bar(50); ?>
 				</aside>
@@ -74,18 +77,18 @@
 
 						<form action="./select-date.php" id="documentForm">
 							<?php
-								// query the database for available vaccines
-								// - query contains an available field indicating whether the vaccine is available
-								// for more details please refer to the database/patient-queries.php
+								// query the database for available batches in respect to selected HC and vaccine
 								$batch_result = $patient_queries->get_available_batches($selected_hc, $selected_vaccine);
 								if (!$batch_result instanceof Exception) {
 									echo '<ul class="list-group">';
 
+									// loop through the result of the query
 									foreach ($batch_result as $batch) {
 										$formatted_date = date_format(date_create($batch['expiryDate']), 'jS F Y');
 
 										$is_selected = !is_null($selected_batch)
 										&& $selected_batch === $batch['batchNo'] ? 'checked' : '';
+										// if the user is not authenticated print only the batchNo without any inputs
 										if (is_null($current_patient)) {
 											echo <<<LI
 											<li class="list-group-item list-group-item-action">
@@ -94,6 +97,7 @@
 												</div>
 											</li>
 											LI;
+										// otherwise, print all the required information and include the input
 										} else {
 											echo <<<LI
 												<li class="list-group-item list-group-item-action d-flex align-items-start">
@@ -114,11 +118,13 @@
 										}
 									}
 									echo '</ul>';
+
 									display_controls(
 												'./select-healthcare-centre.php',
 												'Choose another healthcare centre',
 												is_null($selected_batch),
 									);
+								// if query failed due to exception, display a fatal error
 								} else {
 									display_fatal_error($batch_result->getCode());
 								}

@@ -5,6 +5,7 @@
 	include_once 'includes/alert_messages.inc.php';
 	include_once 'patient/partials.php';
 
+	// retrieve required information from previous selections
 	try {
 		$selected_vaccine = save_or_get_pk_from_cookie('vaccineID', 'vaccine', [$patient_queries, 'get_vaccine']);
 		$selected_hc = save_or_get_pk_from_cookie('centreName', 'healthcare centre',
@@ -16,7 +17,7 @@
 		redirect_with_database_error($e->getCode());
 	}
 
-	// get current patient
+	// get the current patient
 	$current_patient = authenticate();
 ?>
 
@@ -41,6 +42,7 @@
 <body class="d-flex flex-column min-vh-100">
 	<!-- display login flash -->
 	<?php
+		// display flash message of user login results
 		!is_null($current_patient) && display_flash_message("${current_patient['username']} login result");
 		display_flash_message('appointment date not selected');
 	?>
@@ -69,16 +71,22 @@
 						<form method="post" action="./request-vaccination.php" id="documentForm">
 							<div class="form-floating">
 								<?php
+									// format the current dame to accepted date format for HTML
 									$current_date = date('Y-m-d', time());
+									// query the database and get the current selected batch,
+									// as we need its expiry date
 									$found_batch = $patient_queries->get_batch($selected_vaccine, $selected_hc, $selected_batch);
 								?>
+
 								<input type="date" class="form-control" value="<?= $current_date ?>" name="appointment_date"
 								       id="appointmentDate" min="<?= $current_date ?>" max="<?= $found_batch['expiryDate'] ?>"
 								       placeholder="2002-06-20" >
 								<label for="appointmentDate">Appointment Date</label>
-								<input name="vaccineID" value="<?=$selected_vaccine?>" hidden aria-hidden="true">
-								<input name="centreName" value="<?=$selected_hc?>" hidden aria-hidden="true">
-								<input name="batchNo" value="<?=$selected_batch?>" hidden aria-hidden="true">
+								<!-- add additional required information
+								 by request-vaccination.php as hidden inputs -->
+								<input name="vaccineID" value="<?=$selected_vaccine?>" type="hidden">
+								<input name="centreName" value="<?=$selected_hc?>" type="hidden">
+								<input name="batchNo" value="<?=$selected_batch?>" type="hidden">
 							</div>
 							<?php
 								display_controls(

@@ -65,9 +65,7 @@
 
 						<form action="./select-batch.php" id="documentForm">
 							<?php
-								// query the database for available vaccines
-								// - query contains an available field indicating whether the vaccine is available
-								// for more details please refer to the database/patient-queries.php
+								// query the database for available healthcare centres of specified vaccine
 								$hc_result = $patient_queries->get_available_healthcare_centres($selected_vaccine);
 
 								if (!$hc_result instanceof Exception) {

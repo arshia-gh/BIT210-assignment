@@ -7,7 +7,8 @@
 	{
 
 		/**
-		 * @return \Exception|array
+		 * get all vaccines with an extra field containing their availability status
+		 * @return \Exception|array the query result, exception if the query failed to due db errors
 		 */
 		public function get_available_vaccines() : Exception|array
 		{
@@ -69,6 +70,14 @@
 			}
 		}
 
+		/**
+		 * returns a healthcare centre that offers a specified vaccine
+		 *
+		 * @param $vaccineID
+		 * @param $centreName
+		 *
+		 * @return \Exception|array|null
+		 */
 		public function get_healthcare_centre($vaccineID, $centreName) : Exception|array|null
 		{
 			try {
@@ -114,8 +123,12 @@
 		}
 
 		/**
-		 * @param string $centre_name
+		 * Retrieves a batch with specified vaccinesID, centreName, and batchNo
+		 *
 		 * @param string $vaccine_id
+		 *
+		 * @param string $centre_name
+		 * @param string $batchNo
 		 *
 		 * @return \Exception|array|null
 		 */
@@ -135,6 +148,10 @@
 		}
 
 		/**
+		 * @param string $username user username
+		 * @param string $password user password
+		 *
+		 * @return array|null the current user object
 		 * @throws \Exception
 		 */
 		public function login(string $username, string $password) : null|array
@@ -145,6 +162,16 @@
 		}
 
 		/**
+		 * Registers an user
+		 * @param string      $username
+		 * @param string      $password
+		 * @param string      $email
+		 * @param string      $full_name
+		 * @param string      $special_field staffID or ICPassport depending on the userType
+		 * @param string|null $centre_name
+		 * @param string      $user_type
+		 *
+		 * @return bool if the registration was successful
 		 * @throws \Exception
 		 */
 		public function register(string $username, string $password, string $email, string $full_name,
@@ -207,6 +234,12 @@
 			return $this->cud_query($sql, $ICPassport) < 1;
 		}
 
+		/**
+		 * Retrieves all the vaccinations of a given user
+		 * @param string $username
+		 *
+		 * @return \Exception|array
+		 */
 		public function get_user_vaccinations(string $username) : Exception|array
 		{
 			try {
@@ -224,6 +257,14 @@
 			}
 		}
 
+		/**
+		 * Insert a new vaccination
+		 * @param string $appointmentDate
+		 * @param string $username
+		 * @param string $batchNo
+		 *
+		 * @return \Exception|int
+		 */
 		public function save_vaccination(string $appointmentDate, string $username, string $batchNo) : Exception|int
 		{
 			try {
@@ -235,6 +276,12 @@
 			}
 		}
 
+		/**
+		 * A random id generator mainly used in save_vaccination function
+		 * @param int $len
+		 *
+		 * @return string
+		 */
 		private function get_rand_id(int $len) : string
 		{
 			$min_range = intval(1 . (str_repeat(0, $len - 1)));
